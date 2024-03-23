@@ -8,7 +8,7 @@ function TituloLogin(props){
         <View style = {styles.container}>
             <View style={styles.beRealContainer}>
                 <StyledText titleText>
-                    Quest                     
+                    Don't Be Real                    
                 </StyledText>
             </View>   
         </View>
