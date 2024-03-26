@@ -48,6 +48,7 @@ function LoginScreen({navigation}){
         setCredencialesIncorrectas(true);
       }
       */
+      navigation.navigate('challenge');
     };
 
     const handleSignUpButton = () => {
