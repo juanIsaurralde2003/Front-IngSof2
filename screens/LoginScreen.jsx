@@ -54,6 +54,7 @@ function LoginScreen({navigation}){
     const handleSignUpButton = () => {
       setIsSignUpLoading(true);
       //navigation.navigate('sign-up');
+      navigation.navigate('feed');
     }
     return(
       <ScrollView style={styles.container} keyboardDismissMode="on-drag">
