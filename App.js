@@ -7,8 +7,6 @@ import AppNavigationContainer from './navigation/NavigationContainer';
 
 
 const Stack = createNativeStackNavigator();
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import FeedComponent from './components/FeedComponent';
 
 export default function App() {
   return (
