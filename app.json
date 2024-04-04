@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": {
+      "Quicksand": "./assets/fonts/Quicksand-VariableFont_wght.ttf"
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

@@ -52,6 +52,9 @@ function LoginScreen({navigation}){
     
   };
 
+      */
+      navigation.navigate('challenge');
+    };
 
   const handleSignUpButton = () => {
     try{
