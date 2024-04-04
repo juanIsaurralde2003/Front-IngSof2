@@ -18,7 +18,7 @@ function LoginScreen({navigation}){
 
   }
   const handleLoginButton = async () => {
-    navigation.navigate('profile')
+    navigation.navigate('challenge');
     setIsLoginLoading(true);
     const url = 'http://endpoint/login'
     data = {
@@ -49,6 +49,8 @@ function LoginScreen({navigation}){
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoginLoading(false);
     }
     
   };

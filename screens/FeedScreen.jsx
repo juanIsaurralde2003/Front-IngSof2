@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FeedComponentWithActionSheet from '../components/FeedComponent';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 const FeedScreen = () => {
    
+  const navigation = useNavigation();
+
     const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
 
     const scrollOffsetY = useRef(new Animated.Value(0)).current;
@@ -16,6 +19,7 @@ const FeedScreen = () => {
     const handleProfilePress = () => {
       console.log('Image pressed');
       console.log('Navegar al perfil');
+      navigation.navigate('profile');
     }
 
     const handleLupaPress = () => {
