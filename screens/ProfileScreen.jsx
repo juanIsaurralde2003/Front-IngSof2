@@ -25,7 +25,7 @@ function ProfileScreen(){
 const styles= {
     lista:{
         marginTop:-75,
-        flex:1
+        flex:1,
     },
 }
 

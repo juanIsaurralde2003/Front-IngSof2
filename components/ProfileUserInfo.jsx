@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet,View,Image,Text} from "react-native";
-import { Icon, ListItem} from 'react-native-elements';
+import { StyleSheet,View,Image,Text,TouchableOpacity} from "react-native";
 import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
+import { MaterialIcons,Entypo } from '@expo/vector-icons';
+import { Rating } from 'react-native-ratings';
 
 
 function ProfileUserInfo(){
@@ -10,11 +11,11 @@ function ProfileUserInfo(){
     return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
-                <TouchableOpacity onPress={onPressHandler}>
-                    <Image
-                        source={{ uri: 'https://tusitio.com/tu-imagen.jpg' }} // Asegúrate de reemplazar esta URL por la dirección de tu imagen
-                        style={{ width: 100, height: 100 }} // Ajusta el tamaño de la imagen según necesites
-                    />
+                <TouchableOpacity onPress={()=>{}} style={styles.buttonStyle}>
+                    <Entypo name={'menu'} size={30} color={'black'}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{}} style={styles.buttonStyle}>
+                    <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>
             <Image 
@@ -24,10 +25,16 @@ function ProfileUserInfo(){
             <View style={styles.usernameTextContainer}>
                 <StyledText usernameText>@usuario</StyledText>
             </View>
-            
-            <Image
-
+            <View style={styles.raitingContainer}>
+            <Rating
+                readonly={true}
+                type='star'
+                ratingCount={5}
+                imageSize={30}
+                onFinishRating={this.ratingCompleted}
+                
             />
+            </View>
             <View style={styles.textoRetosTotalesContainer}>
                 <StyledText retosText> 15</StyledText>
                 <StyledText>  retos</StyledText>
@@ -43,8 +50,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop:130,
-        marginBottom:50
+        marginBottom:50,
+        backgroundColor:'white'
         
+    },
+    raiting:{
+        marginTop:20
     },
     optionsContainer: {
         flex:1,
@@ -61,16 +72,25 @@ const styles = StyleSheet.create({
     usernameTextContainer:{
         marginTop:20,
     },
+    raitingContainer:{ 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        marginTop:10
+    },
     textoRetosTotalesContainer:{
         marginTop:30,
+        marginRight:5
     },
     buttonStyle:{
-        backgroundColor: "#fff",
         borderColor: "transparent",
         borderWidth: 0,
         borderRadius: 30,
-        marginRight:300,
+        marginRight:140,
+        marginLeft:150,
+        marginTop:10
       }
+
     });
 
 
