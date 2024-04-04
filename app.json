@@ -1,5 +1,6 @@
 {
   "expo": {
+
     "name": "IngenieriaDeSoftware2",
     "slug": "IngenieriaDeSoftware2",
     "version": "1.0.0",
@@ -10,6 +11,8 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+      
+
     },
     "assetBundlePatterns": [
       "**/*"
@@ -25,9 +28,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "fonts": {
-      "Quicksand": "./assets/fonts/Quicksand-VariableFont_wght.ttf"
     },
     "plugins": [
       "expo-font"

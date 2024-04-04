@@ -3,9 +3,9 @@ import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndica
 import StyledText from "../components/StyledText";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
+import { useFonts } from 'expo-font';
 
 function LoginScreen({navigation}){
-
   const {token, loading, signIn, signOut} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
@@ -18,6 +18,7 @@ function LoginScreen({navigation}){
 
   }
   const handleLoginButton = async () => {
+    navigation.navigate('profile')
     setIsLoginLoading(true);
     const url = 'http://endpoint/login'
     data = {
@@ -51,10 +52,6 @@ function LoginScreen({navigation}){
     }
     
   };
-
-      */
-      navigation.navigate('challenge');
-    };
 
   const handleSignUpButton = () => {
     try{
@@ -162,7 +159,8 @@ const styles = StyleSheet.create({
       fontSize: 14,
       fontFamily: 'Quicksand', // Asegúrate de que esta fuente está disponible o usa una por defecto
       marginTop:10,
-      width:300
+      width:300,
+      
     },
   loginButton: {
       backgroundColor: '#390294', // Color de fondo del botón
@@ -193,6 +191,7 @@ const styles = StyleSheet.create({
         
     },
     loginText: {
+      fontFamily:'Quicksand-Bold',
       color: '#FFFFFF',           // Color del texto
       fontSize: 16,               // Tamaño del texto
       fontWeight: 'bold',         // Negrita para el texto
@@ -200,12 +199,14 @@ const styles = StyleSheet.create({
       
     },
     signUpText:{
+      fontFamily:'Quicksand-Bold',
       color: '#390294',           // Color del texto
       fontSize: 16,               // Tamaño del texto
       fontWeight: 'bold',         // Negrita para el texto
       textAlign: 'center',
     },
     forgotPswText:{
+      fontFamily:'Quicksand',
       color:'#191970',
       alignSelf:'center',
       marginVertical:17
@@ -230,6 +231,7 @@ const styles = StyleSheet.create({
       marginHorizontal:10,
       },
       dividerText: {
+        fontFamily:'Quicksand',
         color:'#191970',
         marginHorizontal: 5,
         ...Platform.select({
