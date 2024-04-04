@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet,View,Image,Text} from "react-native";
+import { StyleSheet,View,Image,Text, TouchableOpacity} from "react-native";
 import { Icon, ListItem} from 'react-native-elements';
 import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
@@ -10,7 +10,7 @@ function ProfileUserInfo(){
     return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
-                <TouchableOpacity onPress={onPressHandler}>
+                <TouchableOpacity /*onPress={onPressHandler}*/>
                     <Image
                         source={{ uri: 'https://tusitio.com/tu-imagen.jpg' }} // Asegúrate de reemplazar esta URL por la dirección de tu imagen
                         style={{ width: 100, height: 100 }} // Ajusta el tamaño de la imagen según necesites

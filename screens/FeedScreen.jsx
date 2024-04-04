@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FeedComponentWithActionSheet from '../components/FeedComponent';
 import { MaterialIcons } from '@expo/vector-icons';
-import Header from '../components/Header';
 
 const FeedScreen = () => {
    
@@ -58,6 +57,11 @@ const FeedScreen = () => {
       )
     }
 
+    const feedData = [
+      { imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: '@usuario', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo.jpg') },
+      { imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: '@usuario2', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo2.jpg') }
+    ];
+
     return (
       <SafeAreaView style={{backgroundColor: '#e5e5e5'}}>
         <DynamicHeader value={scrollOffsetY}/>
@@ -71,8 +75,14 @@ const FeedScreen = () => {
             useNativeDriver: false,
           })}
         >
-          <FeedComponentWithActionSheet imagenURL={require('../assets/imagenFeedComponentEjemplo.png')} perfil={'@usuario'}  imagenPerfilURL={require('../assets/imagenUsuarioEjemplo.jpg')}  />
-          <FeedComponentWithActionSheet imagenURL={require('../assets/imagenFeedComponentEjemplo2.png')} perfil={'@usuario2'}  imagenPerfilURL={require('../assets/imagenUsuarioEjemplo2.jpg')}  />
+          {feedData.map((item, index) => (
+            <FeedComponentWithActionSheet 
+              key={index}
+              imagenURL={item.imagenURL}
+              perfil={item.perfil}
+              imagenPerfilURL={item.imagenPerfilURL}
+            />
+          ))}
         </ScrollView>
       </SafeAreaView>
   );
