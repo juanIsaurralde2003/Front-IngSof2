@@ -4,14 +4,18 @@ import StyledText from "../components/StyledText";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { useFonts } from 'expo-font';
+import { SERVER } from "../utils/utils";
+import { useNavigation } from "@react-navigation/native";
 
-function LoginScreen({navigation}){
+function LoginScreen(){
   const {token, loading, signIn, signOut} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
+
+  const navigation = useNavigation();
 
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
@@ -20,10 +24,12 @@ function LoginScreen({navigation}){
   const handleLoginButton = async () => {
     navigation.navigate('challenge');
     setIsLoginLoading(true);
-    const url = 'http://endpoint/login'
+    
+    //const url = `${SERVER}/auth/login`
+    
     data = {
-      usuario: username,
-      clave: password
+      username: username,
+      password: password
     }
 
     try {
@@ -35,17 +41,17 @@ function LoginScreen({navigation}){
         body: JSON.stringify(data),
       });
   
-      if (respuesta.ok) {
+      if (respuesta.status === 201) { //Cambiar a 200 después
         const JWT = await respuesta.json(); 
-        signIn(JWT);
-        navigator.navigate('feed');
+        console.log(JWT);
+        //signIn(JWT);
+        navigation.navigate('feed');
 
-      }
-      else if(respuesta.status === 300){
+      } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
-      }
-      else {
+      } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
