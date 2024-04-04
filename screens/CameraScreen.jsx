@@ -1,9 +1,12 @@
 // CameraScreen.jsx
-import React from 'react';
+/*import React, { useState } from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-const CameraScreen = ({ setImagen }) => {
+const CameraScreen = () => {
+
+  const [imagen, setImagen] = useState(null);
+
   const takePhoto = async () => {
     try {
       await ImagePicker.requestCameraPermissionsAsync();
@@ -21,6 +24,51 @@ const CameraScreen = ({ setImagen }) => {
     } catch (error) {
       console.log('Ocurrió un error:', error);
     }
+  };
+
+  const handleSavePost = async () => {
+
+    const username = '@user';
+
+    const url = `${SERVER}/posts/${username}`;
+
+    const data = new FormData();
+
+    if (imagen) {
+      const uriParts = imagen.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+
+      const nombreArchivo = `nombre_imagen`;
+
+      data.append('', {
+        uri: imagen,
+        name: `${nombreArchivo}.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    }
+    
+    // data = {
+    //   imageURL: '', //url de la imagen
+    // }
+
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: data,
+      });
+  
+      if (respuesta.status === 201) {
+        
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoginLoading(false);
+    }
+    
   };
 
   return (
@@ -88,3 +136,45 @@ const CameraScreen = () => {
 
 export default CameraScreen;
 */
+
+import React, { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { useNavigation } from '@react-navigation/native';
+
+const CameraScreen = ({ onCapture, setImage, setIsCameraOpen }) => {
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const takePhoto = async () => {
+      try {
+        await ImagePicker.requestCameraPermissionsAsync();
+        let result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 1,
+        });
+        if (!result.canceled) {
+          console.log('Capturé imagen')
+          setImage(result.assets[0].uri);
+          onCapture(result.assets[0].uri);          
+        } else {
+          setIsCameraOpen(false);
+        }
+      } catch (error) {
+        console.log('Ocurrió un error:', error);
+      }
+    };
+    takePhoto(); // Llama a takePhoto automáticamente al montar la pantalla
+  }, [onCapture]);
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={{ color: 'white', fontSize: 20 }}>Abriendo la cámara...</Text>
+    </View>
+  );
+};
+
+export default CameraScreen;

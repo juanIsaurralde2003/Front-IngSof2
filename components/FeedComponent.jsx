@@ -4,6 +4,7 @@ import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, 
 import { Rating } from 'react-native-ratings';
 import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
 import { MaterialIcons } from '@expo/vector-icons';
+import CustomRating from './Rating';
 
 const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
 
@@ -13,6 +14,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   const [loadingImage, setLoadingImage] = useState(true);
   const [error, setError] = useState(false);
   const [rating, setRating] = useState(0);
+  const [initialRating, setInitialRating] = useState(3);
 
   let [fontsLoaded] = useFonts({
     'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -21,6 +23,8 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   if (!fontsLoaded) {
     return null; // Esperando a que se carguen las fuentes
   }
+
+  const star_image = require('../assets/star.png')
 
   const ratingCompleted = (rating) => {
     setRating(rating);
@@ -52,6 +56,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
       {
         options: options,
         cancelButtonIndex: options.length - 1,
+        cancelButtonTintColor: 'red',
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {
@@ -99,14 +104,11 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
         )}
       </View>
       <View style={styles.ratingContainer}>
-        <Rating
-          startingValue={0}
-          onFinishRating={ratingCompleted}
-          fractions={0}
-          type='star'
-          imageSize={30}
-          ratingColor='gold'
-        />
+          <CustomRating
+            maxRating={5}
+            defaultRating={initialRating}
+            onRatingChange={ratingCompleted}
+          />
         <TouchableOpacity onPress={showActionSheet}>
          <MaterialIcons name={'report-problem'} size={30} color={'black'} />
         </TouchableOpacity>
@@ -119,7 +121,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#e5e5e5',
     paddingVertical: 10,
   },
   headerContainer: {
@@ -165,9 +167,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 10,
-  },
-  reportButton: {
-    color: 'blue',
   },
 });
 

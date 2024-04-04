@@ -3,50 +3,117 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { Camera } from 'expo-camera';
 import Header from '../components/Header';
+import { useNavigation } from '@react-navigation/native';
+import CameraScreen from './CameraScreen';
+import { SERVER } from '../utils/utils';
 
 const ChallengeScreen = () => {
-    const [challengeData, setChallengeData] = useState(null);
-    const [isCameraOpen, setIsCameraOpen] = React.useState(false);
-    const [hasPermission, setHasPermission] = React.useState(null);
-    const cameraRef = React.useRef(null);
+
+  const navigation = useNavigation();
+
+  const [challengeData, setChallengeData] = useState(null);
+  const [isCameraOpen, setIsCameraOpen] = React.useState(false);
+  const [image, setImage] = useState(null);
+  const [hasPermission, setHasPermission] = React.useState(null);
+  const cameraRef = React.useRef(null);
 
   
-    useEffect(() => {
-      // Simulación de la solicitud de datos del reto desde un endpoint
-      const fetchChallengeData = async () => {
-        
-        // Por ahora, simulamos la obtención de datos
-        const challengeData = {
-          name: 'foto artistica',
-          description: 'Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.',
-        };
-        setChallengeData(challengeData);
+  useEffect(() => {
+    // Simulación de la solicitud de datos del reto desde un endpoint
+    const fetchChallengeData = async () => {
+      
+      // Por ahora, simulamos la obtención de datos
+      const challengeData = {
+        name: 'foto artística',
+        description: 'Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.',
       };
-  
-      fetchChallengeData();
+      setChallengeData(challengeData);
+    };
 
-    }, []);
+    fetchChallengeData();
 
-    const handlePressCamera = async () => {
-        
-        const { status } = await Camera.requestCameraPermissionsAsync();
-        if (status === 'granted') {
+  }, []);
+
+  const handlePressCamera = async () => {
+      //navigation.navigate('camera');
+      // const { status } = await Camera.requestCameraPermissionsAsync();
+      // if (status === 'granted') {
           setIsCameraOpen(true);
-        } else {
-          alert('Se requiere permiso para acceder a la cámara.');
-        }
-      };
+      // } else {
+      //   alert('Se requiere permiso para acceder a la cámara.');
+      // }
+  };
 
-    return (
-        <View style={styles.container}>
-          <Header userProfilePic="https://cdn-icons-png.freepik.com/512/64/64572.png" />
-           {isCameraOpen ? (
-        <Camera
-          ref={cameraRef}
-          style={styles.camera}
-          type={Camera.Constants.Type.front} // Usar la cámara frontal
-          ratio="16:9" // Ratio de aspecto
-        />
+  const handleCaptureImage = () => {
+    console.log('Imagen capturada');
+    setIsCameraOpen(false);
+    console.log(image);
+    handleSavePost();
+
+    //navigation.navigate('feed');
+  }
+
+  const handleSavePost = async () => {
+
+    const username = 'santi';
+
+    //const url = `${SERVER}/posts/${username}`;
+
+    const data = new FormData();
+    data.append('imageURL', 'Hola');
+
+    console.log(data);
+
+    if (image) {
+      console.log('Entro a image')
+      const uriParts = image.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+
+      const nombreArchivo = `image_user`;
+
+      data.append('image', {
+        uri: image,
+        name: `${nombreArchivo}.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    }
+    
+    // data = {
+    //   imageURL: '', //url de la imagen
+    // }
+
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: data,
+      });
+  
+      if (respuesta.ok) {
+        console.log('Hecho');
+      } else {
+        console.error('Algo salió mal');
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+      
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header userProfilePic="https://cdn-icons-png.freepik.com/512/64/64572.png" />
+      
+      {isCameraOpen ? (
+        // <Camera
+        //   ref={cameraRef}
+        //   style={styles.camera}
+        //   type={Camera.Constants.Type.front} // Usar la cámara frontal
+        //   ratio="16:9" // Ratio de aspecto
+        // />
+        <CameraScreen onCapture={handleCaptureImage} setImage={setImage} setIsCameraOpen={setIsCameraOpen} />
       ) : (
         <View style={styles.content}>
           <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
