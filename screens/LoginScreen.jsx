@@ -57,6 +57,7 @@ function LoginScreen({navigation}){
     try{
       setIsSignUpLoading(true);
       //navigation.navigate('sign-up');
+      navigation.navigate('feed');
     }
     catch(error){
       console.error('Algo no funciona adecuadamente',error);

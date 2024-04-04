@@ -102,7 +102,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
         <Rating
           startingValue={0}
           onFinishRating={ratingCompleted}
-          fractions={2}
+          fractions={0}
           type='star'
           imageSize={30}
           ratingColor='gold'
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     justifyContent: 'center',
+    backgroundColor: 'white',
     paddingVertical: 10,
   },
   headerContainer: {
