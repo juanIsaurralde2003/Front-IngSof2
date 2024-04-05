@@ -5,25 +5,21 @@ import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
-import { useNavigation } from "@react-navigation/native";
 
-function LoginScreen(){
+function LoginScreen({navigation}){
   const {token, loading, signIn, signOut} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
-
-  const navigation = useNavigation();
-
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
   const handleLoginButton = async () => {
-    navigation.navigate('challenge');
-    setIsLoginLoading(true);
+    navigation.navigate('profile');
+    /*setIsLoginLoading(true);
     
     //const url = `${SERVER}/auth/login`
     
@@ -57,7 +53,7 @@ function LoginScreen(){
       console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoginLoading(false);
-    }
+    }*/
     
   };
 

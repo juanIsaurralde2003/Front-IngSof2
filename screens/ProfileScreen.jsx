@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet,View,Image,Text } from "react-native";
 import ProfileUserInfo from "../components/ProfileUserInfo";
 
-function ProfileScreen(){
+function ProfileScreen({navigation}){
 
     const publicaciones = [
         {username:"@username", raiting:4, image: "publicacion1", consigna:"Sube una foto que muestre formas geómetricas en lugares de la vida cotidiana.",fecha:"23/05/2017"},
@@ -12,7 +12,7 @@ function ProfileScreen(){
     return(
         <FlatList 
             style={styles.lista}
-            ListHeaderComponent={ProfileUserInfo}
+            ListHeaderComponent={()=><ProfileUserInfo navigation={navigation}/>}
             data={publicaciones}
             renderItem={({item})=>(
                 <Text>{item.consigna}</Text>

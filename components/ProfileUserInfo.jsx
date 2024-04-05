@@ -1,20 +1,39 @@
 import React from "react";
-import { StyleSheet,View,Image,Text,TouchableOpacity} from "react-native";
+import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS} from "react-native";
 import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
 import { MaterialIcons,Entypo } from '@expo/vector-icons';
 import { Rating } from 'react-native-ratings';
+import StarRating from "./StarRating";
 
 
-function ProfileUserInfo(){
+function ProfileUserInfo({navigation}){
+
+    const showActionSheet = () => {
+        ActionSheetIOS.showActionSheetWithOptions(
+          {
+            options: ['Editar Perfil', 'Cerrar Sesión'],
+            cancelButtonIndex: 0,
+            destructiveButtonIndex: 1,
+          },
+          buttonIndex => {
+            if (buttonIndex === 0) {
+               navigation.navigate()
+            } else if (buttonIndex === 1) {
+              // Código para 'Cerrar Sesión'
+            }
+          }
+        );
+      };
+    
 
     return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
-                <TouchableOpacity onPress={()=>{}} style={styles.buttonStyle}>
+                <TouchableOpacity onPress={showActionSheet} style={styles.buttonStyle}>
                     <Entypo name={'menu'} size={30} color={'black'}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{}} style={styles.buttonStyle}>
+                <TouchableOpacity onPress={()=>{navigation.navigate("feed")}} style={styles.buttonStyle}>
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>
@@ -26,18 +45,14 @@ function ProfileUserInfo(){
                 <StyledText usernameText>@usuario</StyledText>
             </View>
             <View style={styles.raitingContainer}>
-            <Rating
-                readonly={true}
-                type='star'
-                ratingCount={5}
-                imageSize={30}
-                onFinishRating={this.ratingCompleted}
-                
+            <StarRating
+                rating={3}
+                maxRating={5}
             />
             </View>
             <View style={styles.textoRetosTotalesContainer}>
                 <StyledText retosText> 15</StyledText>
-                <StyledText>  retos</StyledText>
+                <StyledText retosText>  retos</StyledText>
             </View>
         </View>
 
@@ -51,7 +66,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop:130,
         marginBottom:50,
-        backgroundColor:'white'
         
     },
     raiting:{
@@ -80,14 +94,14 @@ const styles = StyleSheet.create({
     },
     textoRetosTotalesContainer:{
         marginTop:30,
-        marginRight:5
+        marginRight:7
     },
     buttonStyle:{
         borderColor: "transparent",
         borderWidth: 0,
         borderRadius: 30,
         marginRight:140,
-        marginLeft:150,
+        marginLeft:140,
         marginTop:10
       }
 

@@ -16,6 +16,7 @@ export default function App() {
     'Quicksand': require('./assets/fonts/Quicksand-VariableFont_wght.ttf'),
     'Quicksand-Bold':require('./assets/fonts/Quicksand-Bold.ttf'),
     'Noto-Sans': require('./assets/fonts/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf'),
+    'Roboto': require('./assets/fonts/Roboto/Roboto-Bold.ttf')
      
   });
   if (!fontsLoaded) {

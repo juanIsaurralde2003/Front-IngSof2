@@ -19,7 +19,7 @@ const styles = {
     retosText: {
         color: '#000000',
         fontSize: 14,
-        fontFamily: 'Roboto',
+        fontFamily: 'Quicksand',
         lineHeight: 16,
         textAlign: 'center',
       },
