@@ -53,8 +53,7 @@ function LoginScreen({navigation}){
 
     const handleSignUpButton = () => {
       setIsSignUpLoading(true);
-      //navigation.navigate('sign-up');
-      navigation.navigate('feed');
+      navigation.navigate('signup');
     }
     return(
       <ScrollView style={styles.container} keyboardDismissMode="on-drag">
@@ -151,7 +150,7 @@ const styles = StyleSheet.create({
         elevation: 3, // equivalente a boxShadow en Android para efecto de elevación
         backgroundColor: '#f2f2f2',
         fontSize: 14,
-        fontFamily: 'Quicksand', // Asegúrate de que esta fuente está disponible o usa una por defecto
+        fontFamily: 'Quicksand-Regular', // Asegúrate de que esta fuente está disponible o usa una por defecto
         marginTop:10,
         width:300
       },

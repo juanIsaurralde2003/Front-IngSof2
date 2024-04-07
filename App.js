@@ -11,7 +11,8 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    Quicksand: require('./assets/fonts/Quicksand-VariableFont_wght.ttf'), 
+    'Quicksand-Bold': require('./assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Regular': require('./assets/fonts/Quicksand-Regular.ttf'),
   });
   if (!fontsLoaded) {
     return null;
