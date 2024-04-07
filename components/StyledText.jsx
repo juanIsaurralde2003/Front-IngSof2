@@ -16,12 +16,13 @@ const styles = {
         lineHeight: 31,
         textAlign: 'center',
   },
-    retosText: {
+    ffrText: {
         color: '#000000',
         fontSize: 14,
         fontFamily: 'Quicksand',
         lineHeight: 16,
         textAlign: 'center',
+        paddingTop:3
       },
     usernamePostText:{
         color: '#000000',
@@ -31,26 +32,26 @@ const styles = {
     },
     consignaText:{
         color: '#000000',
-        fontSize: 12,
+        fontSize: 13,
         fontFamily: 'Quicksand',
         fontWeight: '500',
         lineHeight: 16,
     },
     dateText:{
-        color: '#424242',
-        fontSize: 14,
-        fontFamily: 'Roboto',
+        color: '#656262',
+        fontSize: 12,
         lineHeight: 16,
+        fontWeight:'300'
     },
     
     
 };
 
-const StyledText = ({style,titleText,usernameText,retosText,usernamePostText,dateText,consignaText,children}) => {
+const StyledText = ({style,titleText,usernameText,ffrText,usernamePostText,dateText,consignaText,children}) => {
     const textStyles=[
         titleText && styles.titleText,
         usernameText && styles.usernameText,
-        retosText && styles.retosText,
+        ffrText && styles.ffrText,
         usernamePostText && styles.usernamePostText,
         dateText && styles.dateText,
         consignaText && styles.consignaText,

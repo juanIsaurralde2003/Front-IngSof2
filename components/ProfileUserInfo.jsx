@@ -4,16 +4,19 @@ import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
 import { MaterialIcons,Entypo } from '@expo/vector-icons';
 import { Rating } from 'react-native-ratings';
-import StarRating from "./StarRating";
+import { useAuth } from "./AuthContext";
+import ProfileStats from "./ProfileStats";
+import CustomRating from "./Rating";
 
 
 function ProfileUserInfo({navigation}){
 
+    const {token, loading, signIn, signOut} = useAuth();
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions(
           {
-            options: ['Editar Perfil', 'Cerrar Sesión'],
-            cancelButtonIndex: 0,
+            options: ['Editar Perfil', 'Cerrar Sesión','Cancelar'],
+            cancelButtonIndex:2,
             destructiveButtonIndex: 1,
           },
           buttonIndex => {
@@ -21,6 +24,10 @@ function ProfileUserInfo({navigation}){
                navigation.navigate()
             } else if (buttonIndex === 1) {
               // Código para 'Cerrar Sesión'
+            }
+            if(buttonIndex === 1){
+                signOut();
+                navigation.navigate('login');
             }
           }
         );
@@ -30,10 +37,10 @@ function ProfileUserInfo({navigation}){
     return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
-                <TouchableOpacity onPress={showActionSheet} style={styles.buttonStyle}>
+                <TouchableOpacity onPress={showActionSheet} style={styles.menuStyle}>
                     <Entypo name={'menu'} size={30} color={'black'}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate("feed")}} style={styles.buttonStyle}>
+                <TouchableOpacity onPress={()=>{navigation.navigate("feed")}} style={styles.closeStyle}>
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>
@@ -45,14 +52,16 @@ function ProfileUserInfo({navigation}){
                 <StyledText usernameText>@usuario</StyledText>
             </View>
             <View style={styles.raitingContainer}>
-            <StarRating
-                rating={3}
-                maxRating={5}
+                <CustomRating
+                    defaultRating={3}
+                    readOnly={true}
+                    maxRating={5}
+                />
+            <ProfileStats
+                seguidores={20}
+                seguidos={10}
+                retos={15}
             />
-            </View>
-            <View style={styles.textoRetosTotalesContainer}>
-                <StyledText retosText> 15</StyledText>
-                <StyledText retosText>  retos</StyledText>
             </View>
         </View>
 
@@ -65,7 +74,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop:130,
-        marginBottom:50,
+        paddingBottom:20
         
     },
     raiting:{
@@ -76,7 +85,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         justifyContent:'space-between',
         alignItems:'flex-start',
-        marginBottom:40
+        marginBottom:40,
     },  
     profilePicture: {
         width: 200, // Ajusta el ancho como necesites
@@ -90,19 +99,21 @@ const styles = StyleSheet.create({
         flex: 1, 
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop:10
+        marginTop:7
     },
-    textoRetosTotalesContainer:{
-        marginTop:30,
-        marginRight:7
-    },
-    buttonStyle:{
+    menuStyle:{
         borderColor: "transparent",
         borderWidth: 0,
         borderRadius: 30,
-        marginRight:140,
-        marginLeft:140,
-        marginTop:10
+        marginTop:10,
+        paddingHorizontal:160
+      },
+      closeStyle:{
+        borderColor: "transparent",
+        borderWidth: 0,
+        borderRadius: 30,
+        marginTop:10,
+        paddingHorizontal:160
       }
 
     });

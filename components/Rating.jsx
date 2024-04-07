@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CustomRating = ({ maxRating, defaultRating, onRatingChange }) => {
+const CustomRating = ({ maxRating, defaultRating, onRatingChange, readOnly}) => {
   const [rating, setRating] = useState(defaultRating);
 
   const handleRating = (rate) => {
@@ -14,9 +14,12 @@ const CustomRating = ({ maxRating, defaultRating, onRatingChange }) => {
     let stars = [];
     for (let i = 1; i <= maxRating; i++) {
       stars.push(
-        <TouchableOpacity key={i} onPress={() => handleRating(i)}>
-          <Icon name="star" size={30} color={i <= rating ? 'gold' : 'gray'} />
-        </TouchableOpacity>
+        readOnly ?
+          <Icon name="star" key={i} size={24} color={i <= rating ? 'gold' : '#A9A6A6'} />    
+        :
+          <TouchableOpacity key={i} onPress={() => handleRating(i)}>
+            <Icon name="star" size={24} color={i <= rating ? 'gold' : '#A9A6A6'} />
+          </TouchableOpacity>
       );
     }
     return stars;
