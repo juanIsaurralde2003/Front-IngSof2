@@ -142,7 +142,7 @@ import { View, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
 
-const CameraScreen = ({ onCapture, setImage, setIsCameraOpen }) => {
+const CameraScreen = ({ onCapture, setIsCameraOpen }) => {
 
   const navigation = useNavigation();
 
@@ -158,17 +158,15 @@ const CameraScreen = ({ onCapture, setImage, setIsCameraOpen }) => {
         });
         if (!result.canceled) {
           console.log('Capturé imagen')
-          setImage(result.assets[0].uri);
           onCapture(result.assets[0].uri);          
-        } else {
-          setIsCameraOpen(false);
         }
+        setIsCameraOpen(false);
       } catch (error) {
         console.log('Ocurrió un error:', error);
       }
     };
-    takePhoto(); // Llama a takePhoto automáticamente al montar la pantalla
-  }, [onCapture]);
+    takePhoto();
+  }, []);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>

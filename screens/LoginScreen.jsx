@@ -18,7 +18,7 @@ function LoginScreen({navigation}){
 
   }
   const handleLoginButton = async () => {
-    navigation.navigate('profile');
+    navigation.navigate('challenge');
     /*setIsLoginLoading(true);
     
     //const url = `${SERVER}/auth/login`
@@ -59,7 +59,7 @@ function LoginScreen({navigation}){
 
   const handleSignUpButton = () => {
     try{
-      setIsSignUpLoading(true);
+      //setIsSignUpLoading(true);
       //navigation.navigate('sign-up');
       navigation.navigate('feed');
     }

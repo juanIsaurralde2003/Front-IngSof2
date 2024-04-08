@@ -3,10 +3,36 @@ import { Animated, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableO
 import FeedComponentWithActionSheet from '../components/FeedComponent';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { SERVER } from '../utils/utils';
 
 const FeedScreen = () => {
    
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const getPosts = async () => {
+
+      const url = `${SERVER}/posts`;
+
+      try {
+        const response = await fetch(url,  {
+          method: 'GET'});
+        
+        if (response.ok) {
+          const data = await response.json();
+  
+          console.log(data);
+        } else {
+          console.error('Error al obtener posts');
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+      } 
+    };
+
+    getPosts();
+  }, []);
+
 
     const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
 
@@ -82,7 +108,7 @@ const FeedScreen = () => {
           {feedData.map((item, index) => (
             <FeedComponentWithActionSheet 
               key={index}
-              imagenURL={item.imagenURL}
+              imagenURL={'https://www.lavanguardia.com/files/content_image_mobile_filter/uploads/2022/06/13/62a75ae9bb6d9.jpeg'}
               perfil={item.perfil}
               imagenPerfilURL={item.imagenPerfilURL}
             />

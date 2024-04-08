@@ -12,6 +12,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   const [loadingImage, setLoadingImage] = useState(true);
+  //const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState(false);
   const [rating, setRating] = useState(0);
   const [initialRating, setInitialRating] = useState(3);
@@ -83,12 +84,12 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ width: width}}>
+      <View style={{ width: width, height: 100}}>
         <Image
-          source={imagenURL}
+          source={{uri: imagenURL}}
           style={[styles.imageFeed]}
-          onLoadStart={handleLoadStart}
-          onLoadEnd={handleLoadEnd}
+          //onLoadStart={handleLoadStart}
+          //onLoadEnd={handleLoadEnd}
           onError={handleLoadError}
           resizeMode='cover'
         />
@@ -132,7 +133,8 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
   },
-  imageFeed: {},
+  imageFeed: {
+  },
   profileImage: {
     width: 50,
     height: 50,
