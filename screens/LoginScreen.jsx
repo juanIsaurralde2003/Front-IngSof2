@@ -1,4 +1,4 @@
-import React, {useState } from "react";
+import React, {useState, useEffect } from "react";
 import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView} from "react-native";
 import StyledText from "../components/StyledText";
 import TituloLogin from "../components/TituloLogin";
@@ -13,15 +13,15 @@ function LoginScreen({navigation}){
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
   const [username,setUsername] = useState('');
   const [password,setPassword] = useState('');
+
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
   const handleLoginButton = async () => {
+    setIsLoginLoading(true);
     navigation.navigate('profile');
-    /*setIsLoginLoading(true);
-    
-    //const url = `${SERVER}/auth/login`
+    const url = `${SERVER}/auth/login`
     
     data = {
       username: username,
@@ -53,9 +53,15 @@ function LoginScreen({navigation}){
       console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoginLoading(false);
-    }*/
+    }
     
   };
+
+  useEffect(() => {
+    if (token) {
+      console.log(token); 
+    }
+  }, [token]); 
 
   const handleSignUpButton = () => {
     try{

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext } from "react";
-import * as Keychain from 'react-native-keychain';
+import * as SecureStore from 'expo-secure-store';
 
 
 const AuthContext = React.createContext();
@@ -11,11 +11,10 @@ export const AuthProvider = ({children}) => {
 
     const loadToken = async ()=>{
         try {
-            if(token){
-                const credentials = await Keychain.getGenericPassword();
-                if (credentials) {
-                setToken(credentials.password);
-                }
+            
+            const credentials = await SecureStore.getItemAsync('userToken');
+            if (credentials) {
+                setToken(credentials);
             }
         } 
         catch (error) {
@@ -32,7 +31,7 @@ export const AuthProvider = ({children}) => {
         
     const signIn = async (newToken) => {
         try{
-            await Keychain.setGenericPassword('userToken',newToken);
+            await SecureStore.setItemAsync('userToken',newToken);
             setToken(newToken);
         }
         catch(error){
@@ -41,7 +40,7 @@ export const AuthProvider = ({children}) => {
     }
     const signOut = async () => {
         try {
-          await Keychain.resetGenericPassword();
+          await SecureStore.deleteItemAsync('userToken')
           setToken(null);
         }
         catch (error) {

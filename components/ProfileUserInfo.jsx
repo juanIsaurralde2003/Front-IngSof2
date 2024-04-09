@@ -9,7 +9,7 @@ import ProfileStats from "./ProfileStats";
 import CustomRating from "./Rating";
 
 
-function ProfileUserInfo({navigation}){
+function ProfileUserInfo({navigation,usuario,imageURI,seguidores,seguidos,retos,rating}){
 
     const {token, loading, signIn, signOut} = useAuth();
     const showActionSheet = () => {
@@ -23,10 +23,7 @@ function ProfileUserInfo({navigation}){
             if (buttonIndex === 0) {
                navigation.navigate()
             } else if (buttonIndex === 1) {
-              // Código para 'Cerrar Sesión'
-            }
-            if(buttonIndex === 1){
-                signOut();
+                signOut();  //REVISAR ASINCRONÍA
                 navigation.navigate('login');
             }
           }
@@ -45,22 +42,22 @@ function ProfileUserInfo({navigation}){
                 </TouchableOpacity>
             </View>
             <Image 
-                source = {profilePicture}
+                source = {profilePicture}     //CAMBIAR POR URL DE LA BD
                 style = {styles.profilePicture}
             />
             <View style={styles.usernameTextContainer}>
-                <StyledText usernameText>@usuario</StyledText>
+                <StyledText usernameText>{usuario}</StyledText>
             </View>
             <View style={styles.raitingContainer}>
                 <CustomRating
-                    defaultRating={3}
+                    defaultRating={rating}
                     readOnly={true}
                     maxRating={5}
                 />
             <ProfileStats
-                seguidores={20}
-                seguidos={10}
-                retos={15}
+                seguidores={seguidores}
+                seguidos={seguidos}
+                retos={retos}
             />
             </View>
         </View>

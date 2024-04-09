@@ -8,9 +8,10 @@ import { useAuth } from "../components/AuthContext";
 function ProfileScreen({navigation}){
     const {token} = useAuth()
     const [publicaciones, setPublicaciones] = useState(null);
+    //const [profileUserInfo,setProfileUserInfo] = useState(null);
     const getPublicaciones = async () => {
         try {
-          const url = 'https://tuapi.com/publicaciones';
+          const url = 'https://api.com/publicaciones';
           const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -29,8 +30,35 @@ function ProfileScreen({navigation}){
           console.error('Hubo un problema con la solicitud fetch:', error);
         }
       };
+    
+    /*const getProfileUserInfo = async () => {
+      try {
+        const url = 'http://miurl.com/profileInfo'
+        const response = await fetch(url,{
+          method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+        });
+        if(!response.ok){
+          throw new Error('Error en la solicitud: ' + response.statusText);
+        }
+      }
+      catch (error) {
+        console.error('Hubo un error en la petición',error);
+      }
+    }*/
 
-    useEffect(getPublicaciones(),[]);
+    
+    const profileUserInfo = {
+      rating: 3,
+      usuario: "@usuario",
+      seguidores:500,
+      seguidos:120,
+      retos:15,
+
+    }
 
     const publicacionesHC = [
       { fecha: "January 5, 2020", consigna: "Sacar una foto de unas plantas y unas sillas marrones en un balcón...", rating: 3, imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: '@usuario', imagenPerfilURL: require('../assets/profile_picture.png') },
@@ -40,8 +68,17 @@ function ProfileScreen({navigation}){
     return(
             <FlatList 
                 style={styles.lista}
-                ListHeaderComponent={()=><ProfileUserInfo navigation={navigation}/>}
-                data={publicaciones}
+                ListHeaderComponent={()=><ProfileUserInfo 
+                                          navigation={navigation}
+                                          rating={profileUserInfo.rating}
+                                          usuario={profileUserInfo.usuario}
+                                          imageURI={profileUserInfo.imageURI}
+                                          seguidores={profileUserInfo.seguidores}
+                                          seguidos={profileUserInfo.seguidos}
+                                          retos={profileUserInfo.retos}
+                                    
+                                          />}
+                data={publicacionesHC}
                 renderItem={({item,index})=>(
                     <ProfileComponent 
                         key={index}
