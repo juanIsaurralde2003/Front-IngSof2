@@ -1,6 +1,5 @@
 {
   "expo": {
-
     "name": "IngenieriaDeSoftware2",
     "slug": "IngenieriaDeSoftware2",
     "version": "1.0.0",
@@ -12,8 +11,6 @@
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
-      
-
     },
     "assetBundlePatterns": [
       "**/*"
@@ -31,7 +28,8 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      "expo-secure-store"
     ]
   }
 }
