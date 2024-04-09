@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    fontFamily: 'NotoSansTC-Regular', 
+    //fontFamily: 'NotoSansTC-Regular', 
   },
   dontText: {
     color: '#000',

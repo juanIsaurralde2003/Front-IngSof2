@@ -108,7 +108,7 @@ const FeedScreen = () => {
           {feedData.map((item, index) => (
             <FeedComponentWithActionSheet 
               key={index}
-              imagenURL={'https://www.lavanguardia.com/files/content_image_mobile_filter/uploads/2022/06/13/62a75ae9bb6d9.jpeg'}
+              imagenURL={'https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/image_user_santi_prueba_4.jpg'}
               perfil={item.perfil}
               imagenPerfilURL={item.imagenPerfilURL}
             />
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 25,
     fontWeight: 'bold',
-    fontFamily: 'NotoSansTC-Regular', 
+    //fontFamily: 'NotoSansTC-Regular', 
   },
   dontText: {
     color: '#000',

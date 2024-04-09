@@ -11,8 +11,8 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const [loadingImage, setLoadingImage] = useState(true);
-  //const [loadingImage, setLoadingImage] = useState(false);
+  //const [loadingImage, setLoadingImage] = useState(true);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState(false);
   const [rating, setRating] = useState(0);
   const [initialRating, setInitialRating] = useState(3);
@@ -84,14 +84,17 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ width: width, height: 100}}>
+      <View style={{ width: width}}>
         <Image
           source={{uri: imagenURL}}
-          style={[styles.imageFeed]}
-          //onLoadStart={handleLoadStart}
-          //onLoadEnd={handleLoadEnd}
+          style={{width: width, aspectRatio: 1}}
+          onLoadStart={handleLoadStart}
+          onLoadEnd={handleLoadEnd}
+          //onLoadStart={() => console.log('Carga iniciada')}
+          //onLoadEnd={() => console.log('Cargada')}
           onError={handleLoadError}
-          resizeMode='cover'
+          //onError={() => console.log('Error')}
+          //resizeMode='contain'
         />
         {loadingImage && (
           <View style={styles.loadingContainer}>
@@ -132,8 +135,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 10,
     width: '100%',
-  },
-  imageFeed: {
   },
   profileImage: {
     width: 50,
