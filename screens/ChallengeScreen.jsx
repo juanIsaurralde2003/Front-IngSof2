@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { Camera } from 'expo-camera';
@@ -12,10 +12,10 @@ const ChallengeScreen = () => {
   const navigation = useNavigation();
 
   const [challengeData, setChallengeData] = useState(null);
-  const [isCameraOpen, setIsCameraOpen] = React.useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [image, setImage] = useState(null);
-  const [hasPermission, setHasPermission] = React.useState(null);
-  const cameraRef = React.useRef(null);
+  const [hasPermission, setHasPermission] = useState(null);
+  const cameraRef = useRef(null);
 
   
   useEffect(() => {
@@ -44,23 +44,21 @@ const ChallengeScreen = () => {
       // }
   };
 
-  const handleCaptureImage = () => {
+  const handleCaptureImage = async (capturedImage) => {
     console.log('Imagen capturada');
-    setIsCameraOpen(false);
-    console.log(image);
-    handleSavePost();
-
-    //navigation.navigate('feed');
+    setImage(capturedImage);
+    console.log(capturedImage);
+    handleSavePost(capturedImage);
   }
 
-  const handleSavePost = async () => {
+  const handleSavePost = async (image) => {
 
     const username = 'santi';
 
-    //const url = `${SERVER}/posts/${username}`;
+    const url = `${SERVER}/posts`;
 
     const data = new FormData();
-    data.append('imageURL', 'Hola');
+    data.append('username', username);
 
     console.log(data);
 
@@ -69,19 +67,15 @@ const ChallengeScreen = () => {
       const uriParts = image.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
-      const nombreArchivo = `image_user`;
+      const nombreArchivo = `image_user_${username}_prueba_4`;
 
-      data.append('image', {
+      data.append('file', {
         uri: image,
         name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
     }
     
-    // data = {
-    //   imageURL: '', //url de la imagen
-    // }
-
     try {
       const respuesta = await fetch(url, {
         method: 'POST', 
@@ -113,7 +107,7 @@ const ChallengeScreen = () => {
         //   type={Camera.Constants.Type.front} // Usar la cámara frontal
         //   ratio="16:9" // Ratio de aspecto
         // />
-        <CameraScreen onCapture={handleCaptureImage} setImage={setImage} setIsCameraOpen={setIsCameraOpen} />
+        <CameraScreen onCapture={(image) => handleCaptureImage(image)} setIsCameraOpen={setIsCameraOpen} />
       ) : (
         <View style={styles.content}>
           <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>

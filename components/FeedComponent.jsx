@@ -11,7 +11,8 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const [loadingImage, setLoadingImage] = useState(true);
+  //const [loadingImage, setLoadingImage] = useState(true);
+  const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState(false);
   const [rating, setRating] = useState(0);
   const [initialRating, setInitialRating] = useState(3);
@@ -85,12 +86,15 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
       </View>
       <View style={{ width: width}}>
         <Image
-          source={imagenURL}
-          style={[styles.imageFeed]}
+          source={{uri: imagenURL}}
+          style={{width: width, aspectRatio: 1}}
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
+          //onLoadStart={() => console.log('Carga iniciada')}
+          //onLoadEnd={() => console.log('Cargada')}
           onError={handleLoadError}
-          resizeMode='cover'
+          //onError={() => console.log('Error')}
+          //resizeMode='contain'
         />
         {loadingImage && (
           <View style={styles.loadingContainer}>
@@ -132,7 +136,6 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
   },
-  imageFeed: {},
   profileImage: {
     width: 50,
     height: 50,
