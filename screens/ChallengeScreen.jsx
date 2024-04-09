@@ -49,6 +49,7 @@ const ChallengeScreen = () => {
     setImage(capturedImage);
     console.log(capturedImage);
     handleSavePost(capturedImage);
+    navigation.navigate('feed')
   }
 
   const handleSavePost = async (image) => {
