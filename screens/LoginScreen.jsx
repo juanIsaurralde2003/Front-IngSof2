@@ -20,7 +20,7 @@ function LoginScreen({navigation}){
   }
   const handleLoginButton = async () => {
     setIsLoginLoading(true);
-    navigation.navigate('profile');
+    //navigation.navigate('profile');
     const url = `${SERVER}/auth/login`
     
     data = {
@@ -37,11 +37,11 @@ function LoginScreen({navigation}){
         body: JSON.stringify(data),
       });
   
-      if (respuesta.status === 201) { //Cambiar a 200 después
+      if (respuesta.status === 200) { //Cambiar a 200 después
         const JWT = await respuesta.json(); 
         console.log(JWT);
         //signIn(JWT);
-        navigation.navigate('feed');
+        navigation.navigate('challenge');
 
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);

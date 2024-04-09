@@ -88,7 +88,7 @@ const FeedScreen = () => {
               <Text style={styles.beRealText}> BE REAL</Text>
             </Text>
             <TouchableOpacity onPress={handleLupaPress}>
-              <MaterialIcons name='search' size={50} color={'black'} />
+              <MaterialIcons name='search' size={40} color={'black'} />
             </TouchableOpacity>
           </View>
           <View style={styles.retoContainer}>
@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   profileImage: {
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     borderRadius: 50,
   },
   headerText: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: 'bold',
     //fontFamily: 'NotoSansTC-Regular', 
   },
