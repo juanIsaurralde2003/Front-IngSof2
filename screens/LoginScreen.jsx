@@ -67,8 +67,7 @@ function LoginScreen({navigation}){
   const handleSignUpButton = () => {
     try{
       //setIsSignUpLoading(true);
-      //navigation.navigate('sign-up');
-      navigation.navigate('sign-up');
+      navigation.navigate('signup');
     }
     catch(error){
       console.error('Algo no funciona adecuadamente',error);
