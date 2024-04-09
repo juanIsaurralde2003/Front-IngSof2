@@ -19,9 +19,10 @@ function LoginScreen({navigation}){
 
   }
   const handleLoginButton = async () => {
+
     setIsLoginLoading(true);
-    //navigation.navigate('profile');
     const url = `${SERVER}/auth/login`
+
     
     data = {
       username: username,
@@ -66,8 +67,7 @@ function LoginScreen({navigation}){
   const handleSignUpButton = () => {
     try{
       //setIsSignUpLoading(true);
-      //navigation.navigate('sign-up');
-      navigation.navigate('feed');
+      navigation.navigate('signup');
     }
     catch(error){
       console.error('Algo no funciona adecuadamente',error);
