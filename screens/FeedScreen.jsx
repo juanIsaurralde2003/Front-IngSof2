@@ -9,7 +9,7 @@ const FeedScreen = () => {
    
   const navigation = useNavigation();
 
-  const [feedData, setFeedData] = useState();
+  const [feedData, setFeedData] = useState([]);
 
   useEffect(() => {
     const getPosts = async () => {
@@ -26,7 +26,7 @@ const FeedScreen = () => {
     
           const mergedData = data.map((item, index) => {
             const mergedItem = {
-              imagenURL: item.post.imageURL,
+              imageURL: item.post.imageURL,
               perfil: feedDataHardcode[index % feedDataHardcode.length].perfil,
               imagenPerfilURL: feedDataHardcode[index % feedDataHardcode.length].imagenPerfilURL,
             };
@@ -121,7 +121,7 @@ const FeedScreen = () => {
           {feedData.map((item, index) => (
             <FeedComponentWithActionSheet 
               key={index}
-              imagenURL={'https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/image_user_santi_prueba_4.jpg'}
+              imagenURL={item.imageURL}
               perfil={item.perfil}
               imagenPerfilURL={item.imagenPerfilURL}
             />
