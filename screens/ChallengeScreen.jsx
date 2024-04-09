@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     challengeDescription: {
       fontSize: 24,
-      fontFamily: 'Quicksand',
+      fontFamily: 'Quicksand-Regular',
       textAlign: 'center',
     },
     button: {
