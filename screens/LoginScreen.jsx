@@ -18,6 +18,7 @@ function LoginScreen({navigation}){
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
+  
   const handleLoginButton = async () => {
 
     setIsLoginLoading(true);
