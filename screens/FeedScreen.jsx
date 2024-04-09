@@ -9,19 +9,32 @@ const FeedScreen = () => {
    
   const navigation = useNavigation();
 
+  const [feedData, setFeedData] = useState([]);
+
   useEffect(() => {
     const getPosts = async () => {
 
       const url = `${SERVER}/posts`;
 
       try {
-        const response = await fetch(url,  {
-          method: 'GET'});
-        
+        const response = await fetch(url, { method: 'GET' });
+
         if (response.ok) {
           const data = await response.json();
-  
+    
           console.log(data);
+    
+          const mergedData = data.map((item, index) => {
+            const mergedItem = {
+              imageURL: item.post.imageURL,
+              perfil: feedDataHardcode[index % feedDataHardcode.length].perfil,
+              imagenPerfilURL: feedDataHardcode[index % feedDataHardcode.length].imagenPerfilURL,
+            };
+            return mergedItem;
+          });
+    
+          // Actualizar feedData con los datos fusionados
+          setFeedData(mergedData);
         } else {
           console.error('Error al obtener posts');
         }
@@ -87,7 +100,7 @@ const FeedScreen = () => {
       )
     }
 
-    const feedData = [
+    const feedDataHardcode = [
       { imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: '@usuario', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo.jpg') },
       { imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: '@usuario2', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo2.jpg') }
     ];
@@ -108,7 +121,7 @@ const FeedScreen = () => {
           {feedData.map((item, index) => (
             <FeedComponentWithActionSheet 
               key={index}
-              imagenURL={'https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/image_user_santi_prueba_4.jpg'}
+              imagenURL={item.imageURL}
               perfil={item.perfil}
               imagenPerfilURL={item.imagenPerfilURL}
             />

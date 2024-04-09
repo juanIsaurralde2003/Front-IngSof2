@@ -48,8 +48,8 @@ const ChallengeScreen = () => {
     console.log('Imagen capturada');
     setImage(capturedImage);
     console.log(capturedImage);
-    handleSavePost(capturedImage);
-    navigation.navigate('feed')
+    await handleSavePost(capturedImage);
+    navigation.navigate('feed');
   }
 
   const handleSavePost = async (image) => {
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     challengeDescription: {
       fontSize: 24,
-      fontFamily: 'Quicksand',
+      fontFamily: 'Quicksand-Regular',
       textAlign: 'center',
     },
     button: {
