@@ -1,6 +1,6 @@
 import { useFonts } from '@expo-google-fonts/quicksand';
 import React, { useState } from 'react';
-import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -45,9 +45,35 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
     setError(true);
   };
 
-  const reportImage = (reason) => {
+  const reportImage = async (reason) => {
     console.log("Imagen reportada por:", reason);
-    //Acción al reportar
+    
+    const url = `${SERVER}/posts/report`
+  
+    data = {
+      imageURL: imagenURL,
+      username: perfil,
+      report: reason === 'No cumple con la consigna' ? 'notPrompt' : 'inappropriate',
+    }
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    
+      if (respuesta.status === 200) {
+        Alert.alert('Éxito', 'Reporte realizado con éxito');
+      } else {
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+         
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
   };
 
   const options = ['No cumple con la consigna', 'Es ofensivo', 'Cancelar'];
