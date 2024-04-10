@@ -124,7 +124,7 @@ function SignupScreen({navigation}){
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
                   <Text style={styles.termsAndConditions} adjustsFontSizeToFit numberOfLines={1}>Acepto los </Text>
                   <TouchableOpacity onPress={() => /*navigation.navigate('TerminosCondiciones')*/ console.log('ver modal')}>
-                    <Text style={{ fontSize: 20, textDecorationLine: 'underline', color: 'blue', fontWeight: 'bold' }} adjustsFontSizeToFit numberOfLines={1}>términos y condiciones</Text>
+                    <Text style={[styles.termsAndConditions, {textDecorationLine: 'underline', color: 'blue', fontWeight: 'bold' }]} adjustsFontSizeToFit numberOfLines={1}>términos y condiciones</Text>
                   </TouchableOpacity>                
                 </View>
               </View>
