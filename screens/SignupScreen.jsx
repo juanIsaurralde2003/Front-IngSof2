@@ -9,7 +9,8 @@ function SignupScreen({navigation}){
     const [isLoginLoading,setIsLoginLoading] = useState(false);
     const [isSignUpLoading,setIsSignUpLoading] = useState(false);
     const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
-    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+    const [toggleCheckBox, setToggleCheckBox] = useState(false);
+    const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
     const [profileImage, setProfileImage] = useState(null);
 
     const handleCancelButton = async () => {
@@ -20,10 +21,45 @@ function SignupScreen({navigation}){
   
     }
 
-    const handleSignUpButton = () => {
-      setIsSignUpLoading(true);
-      navigation.navigate('feed');
-    }
+
+    const handleRegistrarButton = async () => {
+
+      const url = `${SERVER}/auth/signup`
+  
+      
+      data = {
+        username: username,
+        password: password,
+        email: email,
+        birthdate: birthdate,
+      }
+  
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+    
+        if (respuesta.status === 200) { //Cambiar a 200 después
+          const JWT = await respuesta.json(); 
+          console.log(JWT);
+          //signIn(JWT);
+          navigation.navigate('challenge');
+  
+        } else if (respuesta.status === 400){
+          setCredencialesIncorrectas(true);
+        } else {
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+          
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+      
+    };
 
     const handleProfileImagePicker = async () => {
       // Permite al usuario seleccionar una imagen de la galería
@@ -36,7 +72,7 @@ function SignupScreen({navigation}){
 
       const pickerResult = await ImagePicker.launchImageLibraryAsync();
       
-      if (pickerResult.cancelled === true) {
+      if (pickerResult.canceled === true) {
           return;
       }
 
@@ -56,7 +92,7 @@ function SignupScreen({navigation}){
                         <Image source={require("../assets/person.jpg")} style={styles.profileIcon} />
                     )}
               </TouchableOpacity>
-              <UserDataComponent/>
+              <UserDataComponent/> 
               {/* <CheckBox
                 disabled={false}
                 value={toggleCheckBox}
@@ -69,11 +105,35 @@ function SignupScreen({navigation}){
                   Aceptar Términos y Condiciones
                 </Text>  
               </TouchableOpacity>   
+
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', padding: 10, marginTop: 20, }}>
+                <TouchableOpacity 
+                  onPress={() => setTerminosCondicionesAceptados(!terminosCondicionesAceptados)}
+                  style={{
+                    borderWidth: 2,
+                    borderColor: '#390294',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: 25,
+                    height: 25,
+                    backgroundColor: terminosCondicionesAceptados ? '#390294' : 'transparent',
+                    borderRadius: 10,
+                    marginRight: 10
+                  }}
+                />
+                <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
+                  <Text style={styles.termsAndConditions} adjustsFontSizeToFit numberOfLines={1}>Acepto los </Text>
+                  <TouchableOpacity onPress={() => /*navigation.navigate('TerminosCondiciones')*/ console.log('ver modal')}>
+                    <Text style={[styles.termsAndConditions, {textDecorationLine: 'underline', color: 'blue', fontWeight: 'bold' }]} adjustsFontSizeToFit numberOfLines={1}>términos y condiciones</Text>
+                  </TouchableOpacity>                
+                </View>
+              </View>
+
               <TouchableOpacity 
                   disabled={isLoginLoading}
                   style={styles.loginButton}
                   activeOpacity={0.8}
-                  onPress={handleSignUpButton}
+                  onPress={handleRegistrarButton}
               >
                   {isLoginLoading ? 
                     <ActivityIndicator size="small" color="#FFFFFF" /> : 

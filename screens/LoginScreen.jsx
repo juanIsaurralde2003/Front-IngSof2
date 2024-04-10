@@ -18,6 +18,7 @@ function LoginScreen({navigation}){
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
+  
   const handleLoginButton = async () => {
 
     setIsLoginLoading(true);
@@ -72,8 +73,7 @@ function LoginScreen({navigation}){
   const handleSignUpButton = () => {
     try{
       //setIsSignUpLoading(true);
-      //navigation.navigate('sign-up');
-      navigation.navigate('sign-up');
+      navigation.navigate('signup');
     }
     catch(error){
       console.error('Algo no funciona adecuadamente',error);

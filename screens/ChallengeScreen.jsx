@@ -68,7 +68,11 @@ const ChallengeScreen = () => {
       const uriParts = image.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
-      const nombreArchivo = `image_user_${username}_prueba_4`;
+      const fecha = new Date().toISOString().split('T')[0];
+
+      console.log(fecha);
+
+      const nombreArchivo = `${username}_${fecha}`;
 
       data.append('file', {
         uri: image,
