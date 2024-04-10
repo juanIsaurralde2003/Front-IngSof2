@@ -92,7 +92,7 @@ function SignupScreen({navigation}){
                         <Image source={require("../assets/person.jpg")} style={styles.profileIcon} />
                     )}
               </TouchableOpacity>
-              <UserDataComponent/> {/* traer la data de aca y cambiar edad por fecha de nacimiento */}
+              <UserDataComponent/> 
               {/* <CheckBox
                 disabled={false}
                 value={toggleCheckBox}
@@ -114,15 +114,15 @@ function SignupScreen({navigation}){
                     borderColor: '#390294',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    width: 30,
-                    height: 30,
+                    width: 25,
+                    height: 25,
                     backgroundColor: terminosCondicionesAceptados ? '#390294' : 'transparent',
                     borderRadius: 10,
                     marginRight: 10
                   }}
                 />
                 <View style={{flexDirection: 'row', paddingHorizontal: 10}}>
-                  <Text style={{ fontSize: 20 }} adjustsFontSizeToFit numberOfLines={1}>Acepto los </Text>
+                  <Text style={styles.termsAndConditions} adjustsFontSizeToFit numberOfLines={1}>Acepto los </Text>
                   <TouchableOpacity onPress={() => /*navigation.navigate('TerminosCondiciones')*/ console.log('ver modal')}>
                     <Text style={{ fontSize: 20, textDecorationLine: 'underline', color: 'blue', fontWeight: 'bold' }} adjustsFontSizeToFit numberOfLines={1}>términos y condiciones</Text>
                   </TouchableOpacity>                
