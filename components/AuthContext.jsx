@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 const AuthContext = React.createContext();
 
 export const AuthProvider = ({children}) => {
-
+    const [user, setUser] = useState(null);
     const [token,setToken] = useState(null);
     const [loading,setLoading] = useState(true);
 
@@ -13,8 +13,10 @@ export const AuthProvider = ({children}) => {
         try {
             
             const credentials = await SecureStore.getItemAsync('userToken');
-            if (credentials) {
+            const username = await SecureStore.getItemAsync('user');
+            if (credentials && username) {
                 setToken(credentials);
+                setUser(username);
             }
         } 
         catch (error) {
@@ -29,10 +31,12 @@ export const AuthProvider = ({children}) => {
         loadToken();
     }, []);
         
-    const signIn = async (newToken) => {
+    const signIn = async (newToken,newUsername) => {
         try{
             await SecureStore.setItemAsync('userToken',newToken);
+            await SecureStore.setItemAsync('user',newUsername);
             setToken(newToken);
+            setUser(newUsername);
         }
         catch(error){
             console.error('Error en sign-in',error)
@@ -41,7 +45,9 @@ export const AuthProvider = ({children}) => {
     const signOut = async () => {
         try {
           await SecureStore.deleteItemAsync('userToken')
+          await SecureStore.deleteItemAsync('user')
           setToken(null);
+          setUser(null);
         }
         catch (error) {
             console.error('Error al borrar el token:', error);
@@ -49,7 +55,7 @@ export const AuthProvider = ({children}) => {
       };
     
       return (
-        <AuthContext.Provider value={{ token, loading, signIn, signOut }}>
+        <AuthContext.Provider value={{user, token, loading, signIn, signOut }}>
           {children}
         </AuthContext.Provider>
       );

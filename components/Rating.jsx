@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CustomRating = ({ maxRating, defaultRating, onRatingChange, readOnly}) => {
   const [rating, setRating] = useState(defaultRating);
 
+  useEffect(()=>{
+    setRating(defaultRating);
+  },[defaultRating])
   const handleRating = (rate) => {
     setRating(rate);
     onRatingChange(rate);

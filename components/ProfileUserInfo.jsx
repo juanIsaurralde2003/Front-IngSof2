@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState}from "react";
 import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS} from "react-native";
 import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
@@ -9,7 +9,24 @@ import ProfileStats from "./ProfileStats";
 import CustomRating from "./Rating";
 
 
-function ProfileUserInfo({navigation,usuario,imageURI,seguidores,seguidos,retos,rating}){
+function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating}){
+
+    const [loadingImage, setLoadingImage] = useState(true);
+    const [error, setError] = useState(false);
+
+    const handleLoadStart = () => {
+        setLoadingImage(true);
+        setError(false);
+        };
+    
+        const handleLoadEnd = () => {
+        setLoadingImage(false);
+        };
+    
+        const handleLoadError = () => {
+        setLoadingImage(false);
+        setError(true);
+        };
 
     const {token, loading, signIn, signOut} = useAuth();
     const showActionSheet = () => {
@@ -29,9 +46,8 @@ function ProfileUserInfo({navigation,usuario,imageURI,seguidores,seguidos,retos,
           }
         );
       };
-    
-
-    return(
+      
+      return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
                 <TouchableOpacity onPress={showActionSheet} style={styles.menuStyle}>
@@ -41,8 +57,12 @@ function ProfileUserInfo({navigation,usuario,imageURI,seguidores,seguidos,retos,
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>
-            <Image 
-                source = {profilePicture}     //CAMBIAR POR URL DE LA BD
+            <Image
+                source = {(imagenPerfilURL !=='' ? {uri:imagenPerfilURL} : profilePicture)}     //CAMBIAR POR URL DE LA BD
+                onLoadStart={handleLoadStart}
+                onLoadEnd={handleLoadEnd}
+                onError={handleLoadError}
+                resizeMode='cover' 
                 style = {styles.profilePicture}
             />
             <View style={styles.usernameTextContainer}>
@@ -85,12 +105,13 @@ const styles = StyleSheet.create({
         marginBottom:40,
     },  
     profilePicture: {
-        width: 200, // Ajusta el ancho como necesites
-        height: 200, // Ajusta la altura como necesites
+        width: 120, // Ajusta el ancho como necesites
+        height: 120, // Ajusta la altura como necesites
         borderRadius: 10000,
     },
     usernameTextContainer:{
-        marginTop:20,
+        paddingTop:20,
+        paddingBottom:7
     },
     raitingContainer:{ 
         flex: 1, 

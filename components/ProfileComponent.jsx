@@ -1,11 +1,9 @@
 import { useFonts } from '@expo-google-fonts/quicksand';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Rating } from 'react-native-ratings';
-import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
-import { MaterialIcons } from '@expo/vector-icons';
 import CustomRating from './Rating';
 import StyledText from './StyledText';
+import profilePicture from '../assets/profile_picture.png'
 
 const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, rating}) => {
 
@@ -31,6 +29,12 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
     setError(true);
     };
 
+    useEffect(
+        ()=>{
+            console.log("El url de la pub es: " + imagenURL);
+        }
+    ,[imagenURL])
+
 
     if (!fontsLoaded) {
     return null; // Esperando a que se carguen las fuentes
@@ -41,7 +45,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         <View style={styles.headerContainer}>
         <TouchableOpacity>
             <Image
-            source={imagenPerfilURL}
+            source = {(imagenPerfilURL !=='' ? {uri:imagenPerfilURL} : profilePicture)}
             style={styles.profileImage}
             />
         </TouchableOpacity>
@@ -53,7 +57,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         </View>
         <View style={{ width: width}}>
         <Image
-            source={imagenURL}
+            source={{uri:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg/1200px-Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg.png"}}
             style={[styles.imageFeed]}
             onLoadStart={handleLoadStart}
             onLoadEnd={handleLoadEnd}
@@ -73,7 +77,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         </View>
         <View style={styles.ratingContainer}>
             <CustomRating
-                defaultRating={3}
+                defaultRating={rating}
                 readOnly={true}
                 maxRating={5}
             />

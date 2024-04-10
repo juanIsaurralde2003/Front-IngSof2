@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 
 function LoginScreen({navigation}){
-  const {token, loading, signIn, signOut} = useAuth();
+  const {user,token, loading, signIn, signOut} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
@@ -23,7 +23,6 @@ function LoginScreen({navigation}){
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
 
-    
     data = {
       username: username,
       password: password
@@ -39,10 +38,12 @@ function LoginScreen({navigation}){
       });
   
       if (respuesta.status === 200) { //Cambiar a 200 después
-        const JWT = await respuesta.json(); 
-        console.log(JWT);
-        //signIn(JWT);
-        navigation.navigate('challenge');
+        const datos = await respuesta.json(); 
+        const JWT = datos.auth.token;
+        console.log("la respuesta es del servidor es: " + JSON.stringify(respuesta.json()),null,2);
+        signIn(JWT,data.username);
+        navigation.navigate('challenge')
+        setCredencialesIncorrectas(false)
 
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
@@ -60,9 +61,13 @@ function LoginScreen({navigation}){
 
   useEffect(() => {
     if (token) {
-      console.log(token); 
+      console.log("el token es: " + token); 
     }
   }, [token]); 
+
+  useEffect(()=>{
+    console.log("el usuario del context es: " + user)
+  },[user])
 
   const handleSignUpButton = () => {
     try{
