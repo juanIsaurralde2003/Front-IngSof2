@@ -6,6 +6,7 @@ import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import CameraScreen from './CameraScreen';
 import { SERVER } from '../utils/utils';
+import { useAuth } from '../components/AuthContext';
 
 const ChallengeScreen = () => {
 
@@ -54,12 +55,12 @@ const ChallengeScreen = () => {
 
   const handleSavePost = async (image) => {
 
-    const username = 'santi';
+    const {user} = useAuth();
 
     const url = `${SERVER}/posts`;
 
     const data = new FormData();
-    data.append('username', username);
+    data.append('username', user);
 
     console.log(data);
 
@@ -72,7 +73,7 @@ const ChallengeScreen = () => {
 
       console.log(fecha);
 
-      const nombreArchivo = `${username}_${fecha}`;
+      const nombreArchivo = `${user}_${fecha}`;
 
       data.append('file', {
         uri: image,
