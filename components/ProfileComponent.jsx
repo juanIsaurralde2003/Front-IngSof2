@@ -45,7 +45,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         <View style={styles.headerContainer}>
         <TouchableOpacity>
             <Image
-            source = {(imagenPerfilURL !=='' ? {uri:imagenPerfilURL} : profilePicture)}
+            source = {(imagenPerfilURL !=='' ? {uri:"https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/imagen1.png"} : profilePicture)}
             style={styles.profileImage}
             />
         </TouchableOpacity>
@@ -57,8 +57,8 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         </View>
         <View style={{ width: width}}>
         <Image
-            source={{uri:"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg/1200px-Escudo_del_Club_Atl%C3%A9tico_Pe%C3%B1arol.svg.png"}}
-            style={[styles.imageFeed]}
+            source={{uri:imagenURL}}
+            style={{width: width, aspectRatio: 1}}
             onLoadStart={handleLoadStart}
             onLoadEnd={handleLoadEnd}
             onError={handleLoadError}
@@ -112,7 +112,10 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
     },
-    imageFeed: {},
+    imageFeed: {
+        width: 50,
+        height: 50,
+    },
     profileImage: {
         width: 50,
         height: 50,
