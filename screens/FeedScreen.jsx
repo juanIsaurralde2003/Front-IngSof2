@@ -101,8 +101,8 @@ const FeedScreen = () => {
     }
 
     const feedDataHardcode = [
-      { imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: 'santi', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo.jpg') },
-      { imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: 'rena', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo2.jpg') }
+      { imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: 'juan', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo.jpg') },
+      { imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: 'renato', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo2.jpg') }
     ];
 
     return (
