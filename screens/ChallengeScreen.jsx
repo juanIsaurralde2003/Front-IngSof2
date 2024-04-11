@@ -18,6 +18,8 @@ const ChallengeScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const cameraRef = useRef(null);
 
+  const {user} = useAuth();
+
   
   useEffect(() => {
     // Simulación de la solicitud de datos del reto desde un endpoint
@@ -55,8 +57,6 @@ const ChallengeScreen = () => {
 
   const handleSavePost = async (image) => {
 
-    const {user} = useAuth();
-
     const url = `${SERVER}/posts`;
 
     const data = new FormData();
@@ -74,6 +74,8 @@ const ChallengeScreen = () => {
       console.log(fecha);
 
       const nombreArchivo = `${user}_${fecha}`;
+
+      console.log(nombreArchivo);
 
       data.append('file', {
         uri: image,
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
     },
     challengeDescription: {
       fontSize: 24,
-      fontFamily: 'Quicksand-Regular',
+      fontFamily: 'Quicksand',
       textAlign: 'center',
     },
     button: {

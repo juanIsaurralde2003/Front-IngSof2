@@ -46,10 +46,9 @@ const FeedScreen = () => {
     getPosts();
   }, []);
 
+  const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
 
-    const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
-
-    const scrollOffsetY = useRef(new Animated.Value(0)).current;
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
 
     const Header_Max_Height = 240;
     const Header_Min_Height = 70;
