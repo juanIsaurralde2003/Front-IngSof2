@@ -6,11 +6,14 @@ import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-s
 import { MaterialIcons } from '@expo/vector-icons';
 import CustomRating from './Rating';
 import { SERVER } from '../utils/utils';
+import { useAuth } from './AuthContext';
 
 const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
 
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const {user} = useAuth();
 
   //const [loadingImage, setLoadingImage] = useState(true);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -53,7 +56,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
   
     data = {
       imageURL: imagenURL,
-      username: perfil,
+      username: user,
       report: reason === 'No cumple con la consigna' ? 'notPrompt' : 'inappropriate',
     }
   

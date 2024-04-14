@@ -4,17 +4,20 @@ import FeedComponentWithActionSheet from '../components/FeedComponent';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
+import { useAuth } from '../components/AuthContext';
 
 const FeedScreen = () => {
    
   const navigation = useNavigation();
+
+  const {user} = useAuth();
 
   const [feedData, setFeedData] = useState([]);
 
   useEffect(() => {
     const getPosts = async () => {
 
-      const url = `${SERVER}/posts`;
+      const url = `${SERVER}/posts/feed/${user}`;
 
       try {
         const response = await fetch(url, { method: 'GET' });
@@ -24,10 +27,10 @@ const FeedScreen = () => {
     
           console.log(data);
     
-          const mergedData = data.map((item, index) => {
+          const mergedData = data.post.map((item, index) => {
             const mergedItem = {
               imageURL: item.post.imageURL,
-              perfil: feedDataHardcode[index % feedDataHardcode.length].perfil,
+              perfil: item.author,    //Revisar
               imagenPerfilURL: feedDataHardcode[index % feedDataHardcode.length].imagenPerfilURL,
             };
             return mergedItem;
@@ -43,7 +46,27 @@ const FeedScreen = () => {
       } 
     };
 
+    const getUsers = async () => {
+
+      const url = `${SERVER}/users`;
+
+      try {
+        const response = await fetch(url, { method: 'GET' });
+
+        if (response.ok) {
+          const data = await response.json();
+    
+          console.log(data);
+        } else {
+          console.error('Error al obtener usuarios');
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+      } 
+    };
+
     getPosts();
+    getUsers();
   }, []);
 
   const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
