@@ -5,6 +5,7 @@ import ChallengeScreen from '../screens/ChallengeScreen';
 import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import FeedScreen from '../screens/FeedScreen';
+import SignupScreen from '../screens/SignupScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,7 +19,7 @@ const StackNavigator = () => (
             name="login" component={LoginScreen} 
             // lo deje para probar la pantalla de la camara
         />
-    
+        <Stack.Screen options={{  headerShown: false }}  name="signup" component={SignupScreen} />
         <Stack.Screen options={{  headerShown: false }}  name="challenge" component={ChallengeScreen} />
         <Stack.Screen options={{  headerShown: false, animation:'slide_from_bottom' }}  name="profile" component={ProfileScreen}/>
         <Stack.Screen options={{  headerShown: false }}  name="camera" component={CameraScreen}  />

@@ -5,6 +5,7 @@ import { Rating } from 'react-native-ratings';
 import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
 import { MaterialIcons } from '@expo/vector-icons';
 import CustomRating from './Rating';
+import { SERVER } from '../utils/utils';
 
 const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
 
