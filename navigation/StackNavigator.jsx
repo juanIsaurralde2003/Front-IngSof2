@@ -6,6 +6,7 @@ import CameraScreen from '../screens/CameraScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import FeedScreen from '../screens/FeedScreen';
 import SignupScreen from '../screens/SignupScreen';
+import SearchScreen from '../screens/SearchScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +25,7 @@ const StackNavigator = () => (
         <Stack.Screen options={{  headerShown: false, animation:'slide_from_bottom' }}  name="profile" component={ProfileScreen}/>
         <Stack.Screen options={{  headerShown: false }}  name="camera" component={CameraScreen}  />
         <Stack.Screen options={{  headerShown: false }}  name="feed" component={FeedScreen}  />
+        <Stack.Screen options={{  headerShown: false }}  name="search" component={SearchScreen}  />
   </Stack.Navigator>
 );
 

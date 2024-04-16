@@ -86,6 +86,7 @@ const FeedScreen = () => {
     const handleLupaPress = () => {
       console.log('Lupa pressed');
       console.log('Navegar al buscador de perfiles');
+      navigation.navigate('search');
     }
 
     const DynamicHeader = ({value}) => {
