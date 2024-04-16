@@ -43,11 +43,18 @@ function LoginScreen({navigation}){
         const JWT = datos.auth.token;
         console.log("la respuesta es del servidor es: " + JSON.stringify(respuesta.json()),null,2);
         signIn(JWT,data.username);
-        navigation.navigate('challenge')
+        navigation.navigate('feed')
         setCredencialesIncorrectas(false)
 
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
+      } else if (respuesta.status === 403){
+        const datos = await respuesta.json(); 
+        const JWT = datos.auth.token;
+        console.log("la respuesta es del servidor es: " + JSON.stringify(respuesta.json()),null,2);
+        signIn(JWT,data.username);
+        navigation.navigate('challenge');
+        setCredencialesIncorrectas(false);
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
         
