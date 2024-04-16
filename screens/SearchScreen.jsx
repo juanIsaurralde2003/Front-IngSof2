@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
+import { Entypo } from '@expo/vector-icons';
 
 const SearchScreen = () => {
    
   const navigation = useNavigation();
+
+  const [inputValue, setInputValue] = useState(false);
 
   useEffect(() => {
     
@@ -31,18 +34,33 @@ const SearchScreen = () => {
     getUsers();
   }, []);
 
-  const handleLupaPress = () => {
+  const handleClosePress = () => {
     console.log('Lupa pressed');
-    console.log('Navegar al buscador de perfiles');
+    console.log('Navegar al feed');
+    navigation.navigate('feed');
   }
 
     return (
       <SafeAreaView style={{backgroundColor: '#e5e5e5'}}>
         
+        <View style={styles.searchHeading}>
+          <View style={styles.searchHeadingBar}>
+            <TextInput
+              value={inputValue}
+              style={styles.searchBar}
+            />
+          </View>
+          <View style={styles.searchHeadingCross}>
+            <TouchableOpacity onPress={handleClosePress} >
+              <Entypo name='cross' size={30} color={'black'}/>
+            </TouchableOpacity>
+          </View>
+        </View>
+        
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100}}
+          contentContainerStyle={{paddingBottom: 100, flex: 1}}
         >
           <Text>BUSCAR</Text>
           <Text>BUSCAR</Text>
@@ -55,7 +73,20 @@ const SearchScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  
+  searchHeading: {
+    flex: 1,
+    flexDirection: 'row',
+    width: '100%',
+    padding: 15,
+  },
+  searchHeadingBar: {
+    width: '85%',
+  },
+  searchHeadingCross: {
+    width: '15%',
+  }
+
+
 });
 
 export default SearchScreen;
