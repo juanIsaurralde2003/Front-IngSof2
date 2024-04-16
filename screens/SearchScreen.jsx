@@ -8,7 +8,7 @@ const SearchScreen = () => {
    
   const navigation = useNavigation();
 
-  const [inputValue, setInputValue] = useState(false);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     
@@ -41,33 +41,35 @@ const SearchScreen = () => {
   }
 
     return (
-      <SafeAreaView style={{backgroundColor: '#e5e5e5'}}>
+      <SafeAreaView style={{backgroundColor: '#e5e5e5', flex: 1}}>
+        <View style={{flex: 1}}>
         
-        <View style={styles.searchHeading}>
-          <View style={styles.searchHeadingBar}>
-            <TextInput
-              value={inputValue}
-              style={styles.searchBar}
-            />
+          <View style={styles.searchHeading}>
+            <View style={styles.searchHeadingBar}>
+              <TextInput
+                value={inputValue}
+                style={styles.searchBar}
+              />
+            </View>
+            <View style={styles.searchHeadingCross}>
+              <TouchableOpacity onPress={handleClosePress} >
+                <Entypo name='cross' size={30} color={'black'}/>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View style={styles.searchHeadingCross}>
-            <TouchableOpacity onPress={handleClosePress} >
-              <Entypo name='cross' size={30} color={'black'}/>
-            </TouchableOpacity>
-          </View>
+          
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={15}
+            contentContainerStyle={{paddingBottom: 100, flex: 1}}
+          >
+            <Text>BUSCAR</Text>
+            <Text>BUSCAR</Text>
+            <Text>BUSCAR</Text>
+            <Text>BUSCAR</Text>
+            <Text>BUSCAR</Text>
+          </ScrollView>
         </View>
-        
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100, flex: 1}}
-        >
-          <Text>BUSCAR</Text>
-          <Text>BUSCAR</Text>
-          <Text>BUSCAR</Text>
-          <Text>BUSCAR</Text>
-          <Text>BUSCAR</Text>
-        </ScrollView>
       </SafeAreaView>
   );
 };
@@ -76,15 +78,23 @@ const styles = StyleSheet.create({
   searchHeading: {
     flex: 1,
     flexDirection: 'row',
+    height: 70,
     width: '100%',
     padding: 15,
+    backgroundColor: 'red',
   },
   searchHeadingBar: {
     width: '85%',
+    backgroundColor: 'green',
   },
   searchHeadingCross: {
     width: '15%',
-  }
+    height: 30,
+  },
+  searchBar: {
+    borderWidth: 1,
+    borderColor: 'black'
+  },
 
 
 });
