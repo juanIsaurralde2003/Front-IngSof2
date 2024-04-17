@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, EvilIcons } from '@expo/vector-icons';
+import UserSearchComponent from '../components/UserSearchComponent';
 
 const SearchScreen = () => {
    
   const navigation = useNavigation();
 
   const [inputValue, setInputValue] = useState('');
+  const [usuarios, setUsuarios] = useState([]);
 
   useEffect(() => {
-    
     const getUsers = async () => {
 
       const url = `${SERVER}/users`;
@@ -21,6 +22,7 @@ const SearchScreen = () => {
 
         if (response.ok) {
           const data = await response.json();
+          setUsuarios(data.users);
     
           console.log(data);
         } else {
@@ -40,63 +42,85 @@ const SearchScreen = () => {
     navigation.navigate('feed');
   }
 
-    return (
-      <SafeAreaView style={{backgroundColor: '#e5e5e5', flex: 1}}>
-        <View style={{flex: 1}}>
-        
-          <View style={styles.searchHeading}>
-            <View style={styles.searchHeadingBar}>
-              <TextInput
-                value={inputValue}
-                style={styles.searchBar}
-              />
-            </View>
-            <View style={styles.searchHeadingCross}>
-              <TouchableOpacity onPress={handleClosePress} >
-                <Entypo name='cross' size={30} color={'black'}/>
-              </TouchableOpacity>
-            </View>
+  return (
+    <SafeAreaView style={{backgroundColor: '#e5e5e5', flexGrow: 1}}>
+      <View>
+        <View style={styles.searchHeading}>
+          <View style={styles.searchHeadingBar}>
+            <TextInput
+              value={inputValue}
+              style={styles.searchBar}
+              placeholder="Buscar usuarios ..."
+              placeholderTextColor={'darkgray'}
+              onChangeText={(text) => setInputValue(text)}
+            />
+            {inputValue === '' && (
+              <View style={styles.searchIcon}>
+                <Entypo name='magnifying-glass' size={24} color={'darkgray'} />
+              </View>
+            )}
           </View>
-          
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            scrollEventThrottle={15}
-            contentContainerStyle={{paddingBottom: 100, flex: 1}}
-          >
-            <Text>BUSCAR</Text>
-            <Text>BUSCAR</Text>
-            <Text>BUSCAR</Text>
-            <Text>BUSCAR</Text>
-            <Text>BUSCAR</Text>
-          </ScrollView>
+          <View style={styles.searchHeadingCross}>
+            <TouchableOpacity onPress={handleClosePress} >
+              <EvilIcons name='close' size={60} color={'black'}/>
+            </TouchableOpacity>
+          </View>
         </View>
-      </SafeAreaView>
+        
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          scrollEventThrottle={15}
+          contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5'}}
+        >
+          {usuarios.map((item, index) => (
+            <UserSearchComponent 
+              key={index}
+              perfil={item.username}
+              imagenPerfilURL={item.profilePicture}
+            />
+          ))}
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   searchHeading: {
-    flex: 1,
     flexDirection: 'row',
     height: 70,
     width: '100%',
     padding: 15,
-    backgroundColor: 'red',
+    alignItems: 'center',
   },
   searchHeadingBar: {
     width: '85%',
-    backgroundColor: 'green',
+    padding: 5,
+    flexDirection: 'row',
+    borderWidth: 1.5,
+    borderRadius: 30,
+    borderColor: 'black',
   },
   searchHeadingCross: {
     width: '15%',
-    height: 30,
+    flexDirection: 'column',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   searchBar: {
-    borderWidth: 1,
-    borderColor: 'black'
+    height: 40,
+    alignSelf: 'center',
+    paddingHorizontal: 10,
+    width: '85%',
   },
-
-
+  searchIcon: {
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '15%',
+    padding: 5,
+  },
 });
 
 export default SearchScreen;
