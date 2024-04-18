@@ -70,7 +70,7 @@ function ProfileScreen({navigation}){
           const data = await response.json();
           console.log(data);
           setProfileUserInfo({
-            rating: (data && data.user && data.user.rating) || 3,
+            rating: (data && data.user && data.user.score) || 3,
             usuario: '@' + data.user.username,
             imagenPerfilURL:'',
             seguidores: data && data.user && data.user.seguidores || 500, // pedir seguidores, seguidos, rating y cantidad de retos a back
@@ -89,6 +89,7 @@ function ProfileScreen({navigation}){
 
     useEffect(()=>{
       getProfileUserInfo();
+      console.log("el rating es" + profileUserInfo.rating)
       getPublicacionesUsuario();
     },[])
     

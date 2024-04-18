@@ -78,6 +78,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 seguidores={seguidores}
                 seguidos={seguidos}
                 retos={retos}
+                navigation={navigation}
             />
             </View>
         </View>

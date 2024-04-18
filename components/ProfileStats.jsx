@@ -1,38 +1,52 @@
 import React from "react";
-import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS} from "react-native";
-import profilePicture from '../assets/profile_picture.png'
+import { StyleSheet,View,Image,Text,TouchableOpacity} from "react-native";
 import StyledText from "./StyledText";
-import { MaterialIcons,Entypo } from '@expo/vector-icons';
-import { Rating } from 'react-native-ratings';
-import { useAuth } from "./AuthContext";
 
-const ProfileStats= ({seguidores,seguidos,retos})=>{
+const ProfileStats= ({seguidores,seguidos,retos,navigation})=>{
+
+    const handleSeguidosButton = async ()=>{
+        navigation.navigate('seguidos');
+    }
+
+    const handleSeguidoresButton = async ()=>{
+        navigation.navigate('seguidores');
+    }
+
+    const handleRetosButton = async ()=>{
+        navigation.navigate('retos');
+    }
+
     return(
         <View style={styles.fftContainer}>
                 {/* MÁS ADELANTE CAMBIAR FOLLOWERS Y FOLLOWING POR TOUCHABLEOPACITY */}
                     <View style={styles.statContainer}>
-                    <StyledText ffrText>
-                            <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {seguidos}</Text> 
-
-                        </StyledText>
-                        <StyledText ffrText>  Seguidos</StyledText>
+                        <TouchableOpacity onPress={handleSeguidosButton}>
+                            <StyledText ffrText>
+                                <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {seguidos}</Text> 
+                            </StyledText>
+                            <StyledText ffrText>  Seguidos</StyledText>
+                        </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row'}}>
                     <View style={styles.statColumn}></View>
                     <View style={styles.statContainer}>
-                        <StyledText ffrText>
-                            <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {seguidores}</Text>
-                        </StyledText>
-                        <StyledText ffrText>  Seguidores</StyledText>
+                        <TouchableOpacity onPress={handleSeguidoresButton}>
+                            <StyledText ffrText>
+                                <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {seguidores}</Text>
+                            </StyledText>
+                            <StyledText ffrText>  Seguidores</StyledText>
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <View style={{flexDirection:'row'}}>
                     <View style={styles.statColumn}></View>
                     <View style={styles.statContainer}>
-                        <StyledText ffrText>
-                            <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {retos}</Text>
-                        </StyledText>
-                        <StyledText ffrText>  Retos</StyledText>
+                        <TouchableOpacity onPress={handleRetosButton}>
+                            <StyledText ffrText>
+                                <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {retos}</Text>
+                            </StyledText>
+                            <StyledText ffrText>  Retos</StyledText>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
