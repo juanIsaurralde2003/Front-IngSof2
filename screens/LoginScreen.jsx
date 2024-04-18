@@ -23,6 +23,7 @@ function LoginScreen({navigation}){
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
+    const urlPost = `${SERVER}/posts/block/${username}`
 
     data = {
       username: username,
@@ -43,9 +44,20 @@ function LoginScreen({navigation}){
         const JWT = datos.auth.token;
         console.log("la respuesta es del servidor es: " + JSON.stringify(respuesta.json()),null,2);
         signIn(JWT,data.username);
-        navigation.navigate('challenge')
-        setCredencialesIncorrectas(false)
+        
+        const respuestaPost = await fetch(urlPost, {
+          method: 'POST',
+        });
 
+        if (respuestaPost.status === 200) {
+          setCredencialesIncorrectas(false)
+          navigation.navigate('feed')
+        } else if (respuestaPost.status === 403) {
+          setCredencialesIncorrectas(false);
+          navigation.navigate('challenge');
+        } else {
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        }
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
       } else {
