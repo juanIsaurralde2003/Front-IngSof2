@@ -9,7 +9,8 @@ function SignupScreen({ navigation }) {
 
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
-  const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
+  const [datosInvalidos, setDatosInvalidos] = useState(false);
+  const [errorGeneral, setErrorGeneral] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -18,7 +19,7 @@ function SignupScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [birthdate, setBirthdate] = useState(new Date());
+  const [birthday, setBirthday] = useState(new Date());
 
   const handleCancelButton = async () => {
     navigation.navigate('login');
@@ -31,14 +32,30 @@ function SignupScreen({ navigation }) {
 
   const handleRegistrarButton = async () => {
 
-    const url = `${SERVER}/auth/signUp`
+    const url = `${SERVER}/auth/signup`
 
+    const data = new FormData();
+    // data = {
+    //   username: username,
+    //   password: password,
+    //   email: email,
+    //   birthday: birthday,
+    //   file: profileImage
+    // }
+    data.append('username', username);
+    data.append('password', password);
+    data.append('email', email);
+    data.append('birthday', birthday);
 
-    data = {
-      username: username,
-      password: password,
-      email: email,
-      birthdate: birthdate,
+    if (profileImage) {
+      const uriParts = profileImage.split('.');
+      const fileType = uriParts[uriParts.length - 1];
+  
+      data.append('file', {
+        uri: profileImage,
+        name: `profile.${fileType}`,
+        type: `image/${fileType}`,
+      });
     }
 
     try {
@@ -46,23 +63,26 @@ function SignupScreen({ navigation }) {
       const respuesta = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
-        body: JSON.stringify(data),
+        body: data,
+        // body: JSON.stringify(data),
       });
 
-      if (respuesta.status === 200) { //Cambiar a 200 después
+      if (respuesta.ok) { 
         const JWT = await respuesta.json();
         console.log(JWT);
         //signIn(JWT);
-        navigation.navigate('challenge');
+        navigation.navigate('login');
 
       } else if (respuesta.status === 400) {
-        const errorMessage = await respuesta.text();
-        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
-        setCredencialesIncorrectas(true);
+        // const errorMessage = await respuesta.text();
+        // console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+        setDatosInvalidos(true);
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        // const errorMessage = await respuesta.text();
+        // console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+        setErrorGeneral(true);
 
       }
     } catch (error) {
@@ -103,7 +123,7 @@ function SignupScreen({ navigation }) {
           setUsername={setUsername}
           setPassword={setPassword}
           setEmail={setEmail}
-          setBirthdate={setBirthdate}
+          setBirthday={setBirthday}
         />
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', padding: 10, marginTop: 20, }}>
           <TouchableOpacity
@@ -127,8 +147,11 @@ function SignupScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-        {credencialesIncorrectas &&
-          <Text style={styles.credencialesError}>Datos ingresados incorrectos</Text>
+        {datosInvalidos &&
+          <Text style={styles.textError}>Datos invalidos</Text>
+        }
+        {errorGeneral &&
+          <Text style={styles.textError}>Hubo un problema al registrar el usuario</Text>
         }
         <TouchableOpacity
           disabled={isLoginLoading}
@@ -195,7 +218,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  credencialesError: {
+  textError: {
     color: '#D32F2F',
     textAlign: 'center',
   },
