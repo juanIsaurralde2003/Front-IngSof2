@@ -42,7 +42,6 @@ function LoginScreen({navigation}){
       if (respuesta.status === 200) { //Cambiar a 200 después
         const datos = await respuesta.json(); 
         const JWT = datos.auth.token;
-        console.log("la respuesta es del servidor es: " + JSON.stringify(respuesta.json()),null,2);
         signIn(JWT,data.username);
         
         const respuestaPost = await fetch(urlPost, {
