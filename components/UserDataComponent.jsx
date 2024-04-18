@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthdate }) => {
+const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
   const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para almacenar la fecha seleccionada
 
