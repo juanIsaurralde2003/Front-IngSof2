@@ -15,7 +15,7 @@ function LoginScreen({navigation}){
   const [password,setPassword] = useState('');
 
   const handleForgotPassword = () => {
-    navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
+    navigation.navigate('challenge'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
   
@@ -23,7 +23,8 @@ function LoginScreen({navigation}){
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
-    const urlPost = `${SERVER}/posts/block/${username}`
+    const urlPost = `${SERVER}/users/status/${username}`;
+    console.log(urlPost);
 
     data = {
       username: username,
@@ -45,8 +46,9 @@ function LoginScreen({navigation}){
         signIn(JWT,data.username);
         
         const respuestaPost = await fetch(urlPost, {
-          method: 'POST',
+          method: 'GET',
         });
+
 
         if (respuestaPost.status === 200) {
           setCredencialesIncorrectas(false)
@@ -55,13 +57,12 @@ function LoginScreen({navigation}){
           setCredencialesIncorrectas(false);
           navigation.navigate('challenge');
         } else {
-          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+          console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
         }
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
-        
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { format } from 'date-fns';
 
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
@@ -9,10 +10,10 @@ const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) 
   // Función para manejar el cambio de fecha seleccionada
 const handleDateChange = (event, selectedDate) => {
   const currentDate = selectedDate || date;
-  setShowDatePicker(false);
   setSelectedDate(currentDate);
-  // const isoDate = currentDate.toISOString(); 
-  // setBirthdate(isoDate); 
+  const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
+  setBirthday(formattedDate);
+  setShowDatePicker(false);
   // setBirthdate('2000/07/11');
 };
 
@@ -30,6 +31,7 @@ const handleDateChange = (event, selectedDate) => {
         <Text style={styles.label}>Email:</Text>
         <TextInput
           style={styles.input}
+          keyboardType='email-address'
           onChangeText={text => setEmail(text)}
         />
       </View>

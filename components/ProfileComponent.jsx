@@ -45,7 +45,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
         <View style={styles.headerContainer}>
         <TouchableOpacity>
             <Image
-            source = {(imagenPerfilURL !=='' ? {uri:"https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/imagen1.png"} : profilePicture)}
+            source={imagenPerfilURL === '' ? { uri: "https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/imagen1.png" } : { uri: imagenPerfilURL }}
             style={styles.profileImage}
             />
         </TouchableOpacity>

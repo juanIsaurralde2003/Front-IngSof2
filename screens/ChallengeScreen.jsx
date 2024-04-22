@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'; 
 import { Camera } from 'expo-camera';
 import Header from '../components/Header';
@@ -16,25 +16,55 @@ const ChallengeScreen = () => {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [image, setImage] = useState(null);
   const [hasPermission, setHasPermission] = useState(null);
+  const [savingImage, setSavingImage] = useState(false);
   const cameraRef = useRef(null);
 
   const {user} = useAuth();
 
   
-  useEffect(() => {
-    // Simulación de la solicitud de datos del reto desde un endpoint
-    const fetchChallengeData = async () => {
+  // useEffect(() => {
+  //   // Simulación de la solicitud de datos del reto desde un endpoint
+  //   const fetchChallengeData = async () => {
       
-      // Por ahora, simulamos la obtención de datos
-      const challengeData = {
-        name: 'foto artística',
-        description: 'Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.',
-      };
-      setChallengeData(challengeData);
+  //     // Por ahora, simulamos la obtención de datos
+  //     const challengeData = {
+  //       name: 'foto artística',
+  //       description: 'Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.',
+  //     };
+  //     setChallengeData(challengeData);
+  //   };
+
+  //   fetchChallengeData();
+
+  // }, []);
+
+  useEffect(() => {
+    const getChallenge = async () => {
+
+      const url = `${SERVER}/posts/prompt`;
+
+      try {
+        const response = await fetch(url, { method: 'GET' });
+
+        if (response.ok) {
+          const data = await response.json();
+    
+          console.log(data);
+    
+          const challengeData = {
+            name: 'foto artística',
+            description: data.prompt,
+          };
+          setChallengeData(challengeData);
+        } else {
+          console.error('Error al obtener challenge');
+        }
+      } catch (error) {
+        console.error('Error de red:', error);
+      } 
     };
 
-    fetchChallengeData();
-
+    getChallenge();
   }, []);
 
   const handlePressCamera = async () => {
@@ -51,8 +81,10 @@ const ChallengeScreen = () => {
     console.log('Imagen capturada');
     setImage(capturedImage);
     console.log(capturedImage);
+    setSavingImage(true);
     await handleSavePost(capturedImage);
     navigation.navigate('feed');
+    setSavingImage(false);
   }
 
   const handleSavePost = async (image) => {
@@ -118,14 +150,23 @@ const ChallengeScreen = () => {
         <CameraScreen onCapture={(image) => handleCaptureImage(image)} setIsCameraOpen={setIsCameraOpen} />
       ) : (
         <View style={styles.content}>
-          <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
-          <TouchableOpacity style={styles.challengeDescriptionContainer}>
-            <Text style={styles.challengeDescription}>{challengeData?.description}</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
-            <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
-            <Text style={styles.buttonText}>Adelante</Text>
-          </TouchableOpacity>
+          {savingImage ? (
+            <View>
+              <ActivityIndicator size="large" color="#390294" style={styles.loadingIndicator} />
+            </View>
+          ) : (
+            <>
+            <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
+            <TouchableOpacity style={styles.challengeDescriptionContainer}>
+              <Text style={styles.challengeDescription}>{challengeData?.description}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
+              <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
+              <Text style={styles.buttonText}>Adelante</Text>
+            </TouchableOpacity>
+            </>
+
+          )}
         </View>
       )}
     </View>

@@ -76,8 +76,8 @@ function SignupScreen({ navigation }) {
         navigation.navigate('login');
 
       } else if (respuesta.status === 400) {
-        // const errorMessage = await respuesta.text();
-        // console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+        const errorMessage = await respuesta.text();
+        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
         setDatosInvalidos(true);
       } else {
         // const errorMessage = await respuesta.text();
