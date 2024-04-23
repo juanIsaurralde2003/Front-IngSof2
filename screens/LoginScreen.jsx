@@ -15,7 +15,7 @@ function LoginScreen({navigation}){
   const [password,setPassword] = useState('');
 
   const handleForgotPassword = () => {
-    navigation.navigate('challenge'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
+    navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
   }
   
@@ -44,6 +44,8 @@ function LoginScreen({navigation}){
         const datos = await respuesta.json(); 
         const JWT = datos.auth.token;
         signIn(JWT,data.username);
+        setUsername('');
+        setPassword('');
         
         const respuestaPost = await fetch(urlPost, {
           method: 'GET',
