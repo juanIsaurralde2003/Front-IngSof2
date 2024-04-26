@@ -38,10 +38,10 @@ function ProfileScreen({navigation}){
             console.log("las publicaciones son: " + JSON.stringify(data, null, 2));
             const publicacionesCom = data.user.map( (item) => {
             const publicacion = {
-              fecha: item.date && convertDate(item.date),
-              consigna:'Sacar una foto que...', 
-              rating: item.score , 
-              imagenURL: item.imageURL, 
+              fecha: item.prompt.date && convertDate(item.prompt.date),
+              consigna: item.prompt && item.prompt.prompt, 
+              rating: item.post.score , 
+              imagenURL: item.post.imageURL, 
             }
             return publicacion
           });
@@ -72,7 +72,7 @@ function ProfileScreen({navigation}){
           setProfileUserInfo({
             rating: (data && data.user && data.user.score) || 3,
             usuario: '@' + data.user.username,
-            imagenPerfilURL:'',
+            imagenPerfilURL:data && data.user && data.user.profilePicture,
             seguidores: data && data.user && data.user.seguidores || 500, // pedir seguidores, seguidos, rating y cantidad de retos a back
             seguidos: data && data.user && data.user.seguidos || 208,
             retos: data && data.user && data.user.retos || 206
