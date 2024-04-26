@@ -46,9 +46,9 @@ const FeedScreen = () => {
       } 
     };
 
-    const getUsers = async () => {
+    const getChallenge = async () => {
 
-      const url = `${SERVER}/users`;
+      const url = `${SERVER}/posts/prompt`;
 
       try {
         const response = await fetch(url, { method: 'GET' });
@@ -57,16 +57,18 @@ const FeedScreen = () => {
           const data = await response.json();
     
           console.log(data);
+    
+          setReto(data.prompt);
         } else {
-          console.error('Error al obtener usuarios');
+          console.error('Error al obtener challenge');
         }
       } catch (error) {
         console.error('Error de red:', error);
       } 
     };
 
+    getChallenge();
     getPosts();
-    getUsers();
   }, []);
 
   const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
@@ -129,26 +131,35 @@ const FeedScreen = () => {
     ];
 
     return (
-      <SafeAreaView style={{backgroundColor: '#e5e5e5'}}>
+      <SafeAreaView style={{backgroundColor: '#e5e5e5', flex: 1}}>
         <DynamicHeader value={scrollOffsetY}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100}}
+          contentContainerStyle={{paddingBottom: 0, flexGrow: 1}}
+          bounces={false}
           onScroll={Animated.event([
             {nativeEvent: {contentOffset: {y: scrollOffsetY}}}
           ], {
             useNativeDriver: false,
           })}
         >
-          {feedData.map((item, index) => (
-            <FeedComponentWithActionSheet 
-              key={index}
-              imagenURL={item.imageURL}
-              perfil={item.perfil}
-              imagenPerfilURL={item.imagenPerfilURL}
-            />
-          ))}
+          {feedData.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
+                Las personas que sigues aún no han cumplido el reto.
+              </Text>
+            </View>
+          ) : (
+            feedData.map((item, index) => (
+              <FeedComponentWithActionSheet
+                key={index}
+                imagenURL={item.imageURL}
+                perfil={item.perfil}
+                imagenPerfilURL={item.imagenPerfilURL}
+              />
+            ))
+          )}
         </ScrollView>
       </SafeAreaView>
   );

@@ -23,38 +23,38 @@ function ProfileScreen({navigation}){
     }
     
     const getPublicacionesUsuario = async () => {
-        try {
-          const url = `${SERVER}/users/posts/${encodeURIComponent(user)}`;
-          console.log("el usuario es:" + user);
-          const response = await fetch(url, {method: 'GET',
+      try {
+        const url = `${SERVER}/users/posts/${encodeURIComponent(user)}`;
+        console.log("el usuario es:" + user);
+        const response = await fetch(url, {method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
-          });
-      
-          if (response.ok) {
-            const data = await response.json();
-            console.log("las publicaciones son: " + JSON.stringify(data, null, 2));
-            const publicacionesCom = data.user.map( (item) => {
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          console.log("las publicaciones son: " + JSON.stringify(data, null, 2));
+          const publicacionesCom = data.user.map( (item) => {
             const publicacion = {
               fecha: item.prompt.date && convertDate(item.prompt.date),
-              consigna: item.prompt && item.prompt.prompt, 
+              //consigna:'Sacar una foto que...', 
+              consigna: item.prompt.prompt,
               rating: item.post.score , 
               imagenURL: item.post.imageURL, 
             }
             return publicacion
           });
           setPublicaciones(publicacionesCom);
-          }
-          else{
-            console.error("Respuesta HTTP no exitosa",response.status);
-          }
-      
-        } catch (error) {
-          console.error('Hubo un problema con la solicitud fetch:', error);
+        } else {
+          console.error("Respuesta HTTP no exitosa",response.status);
         }
-      };
+    
+      } catch (error) {
+        console.error('Hubo un problema con la solicitud fetch:', error);
+      }
+    };
     
     const getProfileUserInfo = async () => {
       try {
