@@ -58,7 +58,7 @@ function ProfileScreen({navigation}){
     
     const getProfileUserInfo = async () => {
       try {
-        const url = `${SERVER}/users/${encodeURIComponent(user)}`
+        const url = `${SERVER}/users/followInfo/${encodeURIComponent(user)}`
         console.log("el usuario es:" + user);
         const response = await fetch(url,{method: 'GET',
           headers: {
@@ -71,10 +71,10 @@ function ProfileScreen({navigation}){
           console.log(data);
           setProfileUserInfo({
             rating: (data && data.user && data.user.score) || 3,
-            usuario: '@' + data.user.username,
-            imagenPerfilURL:data && data.user && data.user.profilePicture,
-            seguidores: data && data.user && data.user.seguidores || 500, // pedir seguidores, seguidos, rating y cantidad de retos a back
-            seguidos: data && data.user && data.user.seguidos || 208,
+            usuario: '@' + data.user.user.username,
+            imagenPerfilURL:data && data.user && data.user.user && data.user.user.profilePicture,
+            seguidores: data && data.user && data.user.followers, // pedir seguidores, seguidos, rating y cantidad de retos a back
+            seguidos: data && data.user && data.user.following,
             retos: data && data.user && data.user.retos || 206
           })
         }
