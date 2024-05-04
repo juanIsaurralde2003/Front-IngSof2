@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 
 function LoginScreen({navigation}){
-  const {user,token,profilePicture, loading, signIn, signOut} = useAuth();
+  const {user,token,profilePicture, loading, signIn, signOut,saveProfilePicture} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
@@ -43,7 +43,8 @@ function LoginScreen({navigation}){
       if (respuesta.status === 200) { //Cambiar a 200 después
         const datos = await respuesta.json(); 
         const JWT = datos.auth.token;
-        signIn(JWT,data.username,"https://miurl.com");
+        signIn(JWT,data.username);
+        saveProfilePicture("https://miur4l.com")
         setUsername('');
         setPassword('');
         
