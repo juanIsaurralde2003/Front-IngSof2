@@ -7,7 +7,7 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 
 function LoginScreen({navigation}){
-  const {user,token, loading, signIn, signOut} = useAuth();
+  const {user,token,profilePicture, loading, signIn, signOut} = useAuth();
   const [isLoginLoading,setIsLoginLoading] = useState(false);
   const [isSignUpLoading,setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
@@ -43,7 +43,7 @@ function LoginScreen({navigation}){
       if (respuesta.status === 200) { //Cambiar a 200 después
         const datos = await respuesta.json(); 
         const JWT = datos.auth.token;
-        signIn(JWT,data.username);
+        signIn(JWT,data.username,"https://miurl.com");
         setUsername('');
         setPassword('');
         
@@ -77,12 +77,10 @@ function LoginScreen({navigation}){
   useEffect(() => {
     if (token) {
       console.log("el token es: " + token); 
+      console.log("el usuario es: " + user);
+      console.log("la foto de perfil es: " + profilePicture)
     }
-  }, [token]); 
-
-  useEffect(()=>{
-    console.log("el usuario del context es: " + user)
-  },[user])
+  }, [token,user,profilePicture]); 
 
   const handleSignUpButton = () => {
     try{

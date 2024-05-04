@@ -8,19 +8,22 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [token,setToken] = useState(null);
     const [loading,setLoading] = useState(true);
+    const [profilePicture,setProfilePicture] = useState(null);
 
-    const loadToken = async ()=>{
+    const loadUserInfo = async ()=>{
         try {
             
             const credentials = await SecureStore.getItemAsync('userToken');
             const username = await SecureStore.getItemAsync('user');
-            if (credentials && username) {
+            const url = await SecureStore.getItemAsync('profilePicture')
+            if (credentials && username /*&&profilePicture*/) {  //contolar flujo acá
                 setToken(credentials);
                 setUser(username);
+                setProfilePicture(url);
             }
         } 
         catch (error) {
-            console.error('Error al cargar el token:', error);
+            console.error('Error al cargar la info del usuario:', error);
         }
         finally {
             setLoading(false);
@@ -28,15 +31,17 @@ export const AuthProvider = ({children}) => {
         };
     
     useEffect(() => {
-        loadToken();
+        loadUserInfo();
     }, []);
         
-    const signIn = async (newToken,newUsername) => {
+    const signIn = async (newToken,newUsername,newUrl) => {
         try{
             await SecureStore.setItemAsync('userToken',newToken);
             await SecureStore.setItemAsync('user',newUsername);
+            await SecureStore.setItemAsync('profilePicture',newUrl);
             setToken(newToken);
             setUser(newUsername);
+            setProfilePicture(newUrl);
         }
         catch(error){
             console.error('Error en sign-in',error)
@@ -46,8 +51,10 @@ export const AuthProvider = ({children}) => {
         try {
           await SecureStore.deleteItemAsync('userToken')
           await SecureStore.deleteItemAsync('user')
+          await SecureStore.deleteItemAsync('profilePicture')
           setToken(null);
           setUser(null);
+          setProfilePicture(null);
         }
         catch (error) {
             console.error('Error al borrar el token:', error);
@@ -55,7 +62,7 @@ export const AuthProvider = ({children}) => {
       };
     
       return (
-        <AuthContext.Provider value={{user, token, loading, signIn, signOut }}>
+        <AuthContext.Provider value={{user, token, profilePicture, loading, signIn, signOut }}>
           {children}
         </AuthContext.Provider>
       );
