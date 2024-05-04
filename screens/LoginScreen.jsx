@@ -42,6 +42,7 @@ function LoginScreen({navigation}){
   
       if (respuesta.status === 200) { //Cambiar a 200 después
         const datos = await respuesta.json(); 
+        console.log(datos);
         const JWT = datos.auth.token;
         signIn(JWT,data.username);
         saveProfilePicture("https://miur4l.com")
@@ -54,8 +55,8 @@ function LoginScreen({navigation}){
 
 
         if (respuestaPost.status === 200) {
-          setCredencialesIncorrectas(false)
-          navigation.navigate('feed')
+          setCredencialesIncorrectas(false);
+          navigation.navigate('feed');
         } else if (respuestaPost.status === 403) {
           setCredencialesIncorrectas(false);
           navigation.navigate('challenge');

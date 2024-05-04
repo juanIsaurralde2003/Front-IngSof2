@@ -7,6 +7,7 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [token,setToken] = useState(null);
+    const [profilePic, setProfilePic] = useState(null);
     const [loading,setLoading] = useState(true);
     const [profilePicture,setProfilePicture] = useState(null);
 

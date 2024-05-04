@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppNavigationContainer from './navigation/NavigationContainer';
 import { AuthProvider } from './components/AuthContext';
 import { useFonts } from 'expo-font';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
@@ -24,9 +25,11 @@ export default function App() {
     return null;
   }
   return (
+    <SafeAreaView style={{flex: 1}}>
     <AuthProvider>
       <AppNavigationContainer/>
-    </AuthProvider>  
+    </AuthProvider>
+    </SafeAreaView>  
   );
 }
 
