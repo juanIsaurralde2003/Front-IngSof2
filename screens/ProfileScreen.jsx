@@ -41,7 +41,7 @@ function ProfileScreen({navigation}){
               fecha: item.prompt.date && convertDate(item.prompt.date),
               //consigna:'Sacar una foto que...', 
               consigna: item.prompt.prompt,
-              rating: item.post.score , 
+              rating: item.post.score && item.post.score.low || 0, 
               imagenURL: item.post.imageURL, 
             }
             return publicacion
