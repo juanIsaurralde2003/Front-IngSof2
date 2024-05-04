@@ -43,6 +43,30 @@ function LoginScreen({navigation}){
       console.error('Hubo un error en la petición',error);
     }
   }
+
+  const getProfileUserInfo = async () => {
+    try {
+      const url = `${SERVER}/users/followInfo/${encodeURIComponent(username)}`
+      console.log("el usuario es:" + username);
+      const response = await fetch(url,{method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if(response.ok){
+        const data = await response.json();
+        console.log(data);
+        setProfilePic(data.user.user.profilePicture);
+      }
+      else{
+        console.error("Respuesta HTTP no existosa",response.status)
+      }
+    }
+    catch (error) {
+      console.error('Hubo un error en la petición',error);
+    }
+  }
   
   const handleLoginButton = async () => {
 
