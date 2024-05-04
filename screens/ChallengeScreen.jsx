@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons'; 
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; 
 import { Camera } from 'expo-camera';
 import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import CameraScreen from './CameraScreen';
 import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ChallengeScreen = () => {
 
@@ -136,9 +137,36 @@ const ChallengeScreen = () => {
       
   };
 
+  const handleProfilePress = () => {
+    console.log('Image pressed');
+    console.log('Navegar al perfil');
+    navigation.navigate('profile');
+  }
+
+  const handleLupaPress = () => {
+    console.log('Lupa pressed');
+    console.log('Navegar al buscador de perfiles');
+    navigation.navigate('search');
+  }
+
   return (
+    <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
     <View style={styles.container}>
-      <Header userProfilePic="https://cdn-icons-png.freepik.com/512/64/64572.png" />
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={handleProfilePress}>
+          <Image
+            source={require('../assets/imagenUsuarioEjemplo.jpg')}
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
+        <Text style={styles.headerText}>
+          <Text style={styles.dontText}>DON'T</Text>
+          <Text style={styles.beRealText}> BE REAL</Text>
+        </Text>
+        <TouchableOpacity onPress={handleLupaPress}>
+          <MaterialIcons name='search' size={40} color={'black'} />
+        </TouchableOpacity>
+      </View>
       
       {isCameraOpen ? (
         // <Camera
@@ -170,6 +198,7 @@ const ChallengeScreen = () => {
         </View>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -226,8 +255,32 @@ const styles = StyleSheet.create({
       marginRight: 10, 
     },
     camera: {
-        flex: 1,
-      },
+      flex: 1,
+    },
+    headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      paddingVertical: 15,
+      width: '100%',
+    },
+    profileImage: {
+      width: 60,
+      height: 60,
+      borderRadius: 50,
+    },
+    headerText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      //fontFamily: 'NotoSansTC-Regular', 
+    },
+    dontText: {
+      color: '#000',
+    },
+    beRealText: {
+      color: '#390294', 
+    },
   });
 
 export default ChallengeScreen;

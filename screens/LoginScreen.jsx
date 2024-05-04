@@ -7,12 +7,12 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 
 function LoginScreen({navigation}){
-  const {user,token, loading, signIn, signOut} = useAuth();
-  const [isLoginLoading,setIsLoginLoading] = useState(false);
-  const [isSignUpLoading,setIsSignUpLoading] = useState(false);
-  const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
-  const [username,setUsername] = useState('');
-  const [password,setPassword] = useState('');
+  const {user, token, loading, signIn, signOut} = useAuth();
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false);
+  const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
@@ -42,8 +42,9 @@ function LoginScreen({navigation}){
   
       if (respuesta.status === 200) { //Cambiar a 200 después
         const datos = await respuesta.json(); 
+        console.log(datos);
         const JWT = datos.auth.token;
-        signIn(JWT,data.username);
+        signIn(JWT, data.username);
         setUsername('');
         setPassword('');
         
@@ -53,8 +54,8 @@ function LoginScreen({navigation}){
 
 
         if (respuestaPost.status === 200) {
-          setCredencialesIncorrectas(false)
-          navigation.navigate('feed')
+          setCredencialesIncorrectas(false);
+          navigation.navigate('feed');
         } else if (respuestaPost.status === 403) {
           setCredencialesIncorrectas(false);
           navigation.navigate('challenge');
