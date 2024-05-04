@@ -20,7 +20,7 @@ function LoginScreen({navigation}){
 
   }
 
-  const getProfileUserInfo = async () => {
+  const getProfileUserInfo = async (JWT) => {
     try {
       const url = `${SERVER}/users/followInfo/${encodeURIComponent(username)}`
       console.log("el usuario es:" + username);
@@ -34,30 +34,8 @@ function LoginScreen({navigation}){
         const data = await response.json();
         console.log(data);
         setProfilePic(data.user.user.profilePicture);
-      }
-      else{
-        console.error("Respuesta HTTP no existosa",response.status)
-      }
-    }
-    catch (error) {
-      console.error('Hubo un error en la petición',error);
-    }
-  }
-
-  const getProfileUserInfo = async () => {
-    try {
-      const url = `${SERVER}/users/followInfo/${encodeURIComponent(username)}`
-      console.log("el usuario es:" + username);
-      const response = await fetch(url,{method: 'GET',
-        headers: {
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}`
-        }
-      });
-      if(response.ok){
-        const data = await response.json();
-        console.log(data);
-        setProfilePic(data.user.user.profilePicture);
+        signIn(JWT, username, data.user.user.profilePicture);
+        console.log('Obtuve foto del usuario');
       }
       else{
         console.error("Respuesta HTTP no existosa",response.status)
@@ -93,8 +71,9 @@ function LoginScreen({navigation}){
         const datos = await respuesta.json(); 
         console.log(datos);
         const JWT = datos.auth.token;
-        await getProfileUserInfo();
-        signIn(JWT, data.username, profilePic);
+        await getProfileUserInfo(JWT);
+        console.log('Voy a hacer login');
+        
         setUsername('');
         setPassword('');
         

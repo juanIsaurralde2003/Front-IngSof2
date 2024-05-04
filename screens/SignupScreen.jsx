@@ -154,7 +154,7 @@ function SignupScreen({ navigation }) {
           <Text style={styles.textError}>Hubo un problema al registrar el usuario</Text>
         }
         <TouchableOpacity
-          disabled={isLoginLoading}
+          disabled={isLoginLoading || !terminosCondicionesAceptados}
           style={styles.loginButton}
           activeOpacity={0.8}
           onPress={handleRegistrarButton}

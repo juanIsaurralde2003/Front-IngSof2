@@ -9,7 +9,7 @@ import ProfileStats from "./ProfileStats";
 import CustomRating from "./Rating";
 
 
-function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating}){
+function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating, fromScreen}){
 
     const [loadingImage, setLoadingImage] = useState(true);
     const [error, setError] = useState(false);
@@ -53,7 +53,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 <TouchableOpacity onPress={showActionSheet} style={styles.menuStyle}>
                     <Entypo name={'menu'} size={30} color={'black'}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate("feed")}} style={styles.closeStyle}>
+                <TouchableOpacity onPress={()=>{navigation.navigate(fromScreen)}} style={styles.closeStyle}>
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>

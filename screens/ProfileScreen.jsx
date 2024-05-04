@@ -5,12 +5,15 @@ import FeedComponentWithActionSheet from "../components/FeedComponent";
 import ProfileComponent from "../components/ProfileComponent";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from '../utils/utils';
+import { useRoute } from "@react-navigation/native";
 
 function ProfileScreen({navigation}){
     const {user,token} = useAuth()
     const [publicaciones, setPublicaciones] = useState([]);
     const [profileUserInfo,setProfileUserInfo] = useState({});
-    const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"]
+    const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
+    const route = useRoute();
+    const { fromScreen } = route.params;
 
     const convertDate = (date)=>{
       let profileDate = '';
@@ -117,6 +120,7 @@ function ProfileScreen({navigation}){
                                             seguidores={profileUserInfo.seguidores}
                                             seguidos={profileUserInfo.seguidos}
                                             retos={profileUserInfo.retos}
+                                            fromScreen={fromScreen}
                                     
                                           />}
                 data={publicaciones}

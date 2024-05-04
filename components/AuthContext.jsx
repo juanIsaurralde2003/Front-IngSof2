@@ -34,13 +34,14 @@ export const AuthProvider = ({children}) => {
         loadUserInfo();
     }, []);
         
-    const signIn = async (newToken,newUsername) => {
+    const signIn = async (newToken, newUsername, newUrl) => {
         try{
             await SecureStore.setItemAsync('userToken', newToken);
             await SecureStore.setItemAsync('user', newUsername);
             await SecureStore.setItemAsync('profilePicture', newUrl);
             setToken(newToken);
             setUser(newUsername);
+            setProfilePicture(newUrl);
         }
         catch(error){
             console.error('Error en sign-in',error)
@@ -60,18 +61,18 @@ export const AuthProvider = ({children}) => {
         }
       };
 
-      const saveProfilePicture = async(newUrl) => {
-        try{
-            await SecureStore.setItemAsync('profilePicture',newUrl)
-            setProfilePicture(newUrl)
-        }
-        catch{
-            console.error('Error al cargar la foto de perfil')
-        }
-      }
+    //   const saveProfilePicture = async(newUrl) => {
+    //     try{
+    //         await SecureStore.setItemAsync('profilePicture',newUrl)
+    //         setProfilePicture(newUrl)
+    //     }
+    //     catch{
+    //         console.error('Error al cargar la foto de perfil')
+    //     }
+    //   }
     
       return (
-        <AuthContext.Provider value={{user, token, profilePicture, loading, signIn, signOut,saveProfilePicture }}>
+        <AuthContext.Provider value={{user, token, profilePicture, loading, signIn, signOut/*, saveProfilePicture*/ }}>
           {children}
         </AuthContext.Provider>
       );

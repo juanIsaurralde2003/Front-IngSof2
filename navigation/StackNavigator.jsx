@@ -16,16 +16,17 @@ const StackNavigator = () => (
         <Stack.Screen
             options={{ 
                 headerShown: false,
+                gestureEnabled: false,
             }} 
             name="login" component={LoginScreen} 
             // lo deje para probar la pantalla de la camara
         />
-        <Stack.Screen options={{  headerShown: false }}  name="signup" component={SignupScreen} />
-        <Stack.Screen options={{  headerShown: false }}  name="challenge" component={ChallengeScreen} />
-        <Stack.Screen options={{  headerShown: false, animation:'slide_from_bottom' }}  name="profile" component={ProfileScreen}/>
-        <Stack.Screen options={{  headerShown: false }}  name="camera" component={CameraScreen}  />
-        <Stack.Screen options={{  headerShown: false }}  name="feed" component={FeedScreen}  />
-        <Stack.Screen options={{  headerShown: false }}  name="search" component={SearchScreen}  />
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="signup" component={SignupScreen} />
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="challenge" component={ChallengeScreen} />
+        <Stack.Screen options={{  headerShown: false, animation:'slide_from_bottom', gestureEnabled: false }}  name="profile" component={ProfileScreen}/>
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="camera" component={CameraScreen}  />
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="feed" component={FeedScreen}  />
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="search" component={SearchScreen}  />
   </Stack.Navigator>
 );
 
