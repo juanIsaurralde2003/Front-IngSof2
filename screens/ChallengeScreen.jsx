@@ -20,7 +20,7 @@ const ChallengeScreen = () => {
   const [savingImage, setSavingImage] = useState(false);
   const cameraRef = useRef(null);
 
-  const {user} = useAuth();
+  const {user, profilePicture} = useAuth();
 
   
   // useEffect(() => {
@@ -151,53 +151,53 @@ const ChallengeScreen = () => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-    <View style={styles.container}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={handleProfilePress}>
-          <Image
-            source={require('../assets/imagenUsuarioEjemplo.jpg')}
-            style={styles.profileImage}
-          />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>
-          <Text style={styles.dontText}>DON'T</Text>
-          <Text style={styles.beRealText}> BE REAL</Text>
-        </Text>
-        <TouchableOpacity onPress={handleLupaPress}>
-          <MaterialIcons name='search' size={40} color={'black'} />
-        </TouchableOpacity>
-      </View>
-      
-      {isCameraOpen ? (
-        // <Camera
-        //   ref={cameraRef}
-        //   style={styles.camera}
-        //   type={Camera.Constants.Type.front} // Usar la cámara frontal
-        //   ratio="16:9" // Ratio de aspecto
-        // />
-        <CameraScreen onCapture={(image) => handleCaptureImage(image)} setIsCameraOpen={setIsCameraOpen} />
-      ) : (
-        <View style={styles.content}>
-          {savingImage ? (
-            <View>
-              <ActivityIndicator size="large" color="#390294" style={styles.loadingIndicator} />
-            </View>
-          ) : (
-            <>
-            <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
-            <TouchableOpacity style={styles.challengeDescriptionContainer}>
-              <Text style={styles.challengeDescription}>{challengeData?.description}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
-              <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
-              <Text style={styles.buttonText}>Adelante</Text>
-            </TouchableOpacity>
-            </>
-
-          )}
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={handleProfilePress}>
+            <Image
+              source={{ uri: profilePicture}}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>
+            <Text style={styles.dontText}>DON'T</Text>
+            <Text style={styles.beRealText}> BE REAL</Text>
+          </Text>
+          <TouchableOpacity onPress={handleLupaPress}>
+            <MaterialIcons name='search' size={40} color={'black'} />
+          </TouchableOpacity>
         </View>
-      )}
-    </View>
+        
+        {isCameraOpen ? (
+          // <Camera
+          //   ref={cameraRef}
+          //   style={styles.camera}
+          //   type={Camera.Constants.Type.front} // Usar la cámara frontal
+          //   ratio="16:9" // Ratio de aspecto
+          // />
+          <CameraScreen onCapture={(image) => handleCaptureImage(image)} setIsCameraOpen={setIsCameraOpen} />
+        ) : (
+          <View style={styles.content}>
+            {savingImage ? (
+              <View>
+                <ActivityIndicator size="large" color="#390294" style={styles.loadingIndicator} />
+              </View>
+            ) : (
+              <>
+              <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
+              <TouchableOpacity style={styles.challengeDescriptionContainer}>
+                <Text style={styles.challengeDescription}>{challengeData?.description}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
+                <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
+                <Text style={styles.buttonText}>Adelante</Text>
+              </TouchableOpacity>
+              </>
+
+            )}
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 };

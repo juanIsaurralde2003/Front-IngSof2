@@ -7,16 +7,41 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 
 function LoginScreen({navigation}){
-  const {user,token,profilePicture, loading, signIn, signOut} = useAuth();
-  const [isLoginLoading,setIsLoginLoading] = useState(false);
-  const [isSignUpLoading,setIsSignUpLoading] = useState(false);
-  const [credencialesIncorrectas,setCredencialesIncorrectas] = useState(false);
-  const [username,setUsername] = useState('');
-  const [password,setPassword] = useState('');
+  const {user, token, profilePicture, loading, signIn, signOut} = useAuth();
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false);
+  const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [profilePic, setProfilePic] = useState(null);
 
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
 
+  }
+
+  const getProfileUserInfo = async () => {
+    try {
+      const url = `${SERVER}/users/followInfo/${encodeURIComponent(username)}`
+      console.log("el usuario es:" + username);
+      const response = await fetch(url,{method: 'GET',
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if(response.ok){
+        const data = await response.json();
+        console.log(data);
+        setProfilePic(data.user.user.profilePicture);
+      }
+      else{
+        console.error("Respuesta HTTP no existosa",response.status)
+      }
+    }
+    catch (error) {
+      console.error('Hubo un error en la petición',error);
+    }
   }
   
   const handleLoginButton = async () => {
@@ -44,7 +69,8 @@ function LoginScreen({navigation}){
         const datos = await respuesta.json(); 
         console.log(datos);
         const JWT = datos.auth.token;
-        signIn(JWT,data.username,"https://miurl.com");
+        await getProfileUserInfo();
+        signIn(JWT, data.username, profilePic);
         setUsername('');
         setPassword('');
         

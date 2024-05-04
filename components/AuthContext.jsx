@@ -7,9 +7,8 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [token,setToken] = useState(null);
-    const [profilePic, setProfilePic] = useState(null);
-    const [loading,setLoading] = useState(true);
     const [profilePicture,setProfilePicture] = useState(null);
+    const [loading,setLoading] = useState(true);
 
     const loadUserInfo = async ()=>{
         try {
@@ -37,9 +36,9 @@ export const AuthProvider = ({children}) => {
         
     const signIn = async (newToken,newUsername,newUrl) => {
         try{
-            await SecureStore.setItemAsync('userToken',newToken);
-            await SecureStore.setItemAsync('user',newUsername);
-            await SecureStore.setItemAsync('profilePicture',newUrl);
+            await SecureStore.setItemAsync('userToken', newToken);
+            await SecureStore.setItemAsync('user', newUsername);
+            await SecureStore.setItemAsync('profilePicture', newUrl);
             setToken(newToken);
             setUser(newUsername);
             setProfilePicture(newUrl);

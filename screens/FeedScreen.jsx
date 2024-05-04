@@ -10,7 +10,7 @@ const FeedScreen = () => {
    
   const navigation = useNavigation();
 
-  const {user} = useAuth();
+  const {user, profilePicture} = useAuth();
 
   const [feedData, setFeedData] = useState([]);
 
@@ -71,7 +71,7 @@ const FeedScreen = () => {
     getPosts();
   }, []);
 
-  const [reto, setReto] = useState('Sube una foto panorámica de la vista más linda que encuentres desde la ventana de tu hogar.');  
+  const [reto, setReto] = useState('Cargando ...');  
 
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
 
@@ -104,7 +104,7 @@ const FeedScreen = () => {
           <View style={styles.headerContainer}>
             <TouchableOpacity onPress={handleProfilePress}>
               <Image
-                source={require('../assets/imagenUsuarioEjemplo.jpg')}
+                source={{uri: profilePicture}}
                 style={styles.profileImage}
               />
             </TouchableOpacity>
@@ -131,7 +131,7 @@ const FeedScreen = () => {
     ];
 
     return (
-      <SafeAreaView style={{backgroundColor: '#e5e5e5', flex: 1}}>
+      <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
         <DynamicHeader value={scrollOffsetY}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -147,7 +147,7 @@ const FeedScreen = () => {
           {feedData.length === 0 ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
-                Las personas que sigues aún no han cumplido el reto.
+                Las personas que sigues aún no han cumplido el reto. Sigue a más personas o espera a que cumplan el desafío.
               </Text>
             </View>
           ) : (
@@ -161,7 +161,7 @@ const FeedScreen = () => {
             ))
           )}
         </ScrollView>
-      </SafeAreaView>
+      </View>
   );
 };
 
