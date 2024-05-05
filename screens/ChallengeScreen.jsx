@@ -146,7 +146,7 @@ const ChallengeScreen = () => {
   const handleLupaPress = () => {
     console.log('Lupa pressed');
     console.log('Navegar al buscador de perfiles');
-    navigation.navigate('search');
+    navigation.navigate('search', { fromScreen: 'challenge' });
   }
 
   return (

@@ -26,18 +26,8 @@ const FeedScreen = () => {
           const data = await response.json();
     
           console.log(data);
-    
-          const mergedData = data.post.map((item, index) => {
-            const mergedItem = {
-              imageURL: item.post.imageURL,
-              perfil: item.author,    //Revisar
-              imagenPerfilURL: feedDataHardcode[index % feedDataHardcode.length].imagenPerfilURL,
-            };
-            return mergedItem;
-          });
-    
-          // Actualizar feedData con los datos fusionados
-          setFeedData(mergedData);
+
+          setFeedData(data.post);
         } else {
           console.error('Error al obtener posts');
         }
@@ -88,7 +78,7 @@ const FeedScreen = () => {
     const handleLupaPress = () => {
       console.log('Lupa pressed');
       console.log('Navegar al buscador de perfiles');
-      navigation.navigate('search');
+      navigation.navigate('search', { fromScreen: 'feed' });
     }
 
     const DynamicHeader = ({value}) => {
@@ -125,11 +115,6 @@ const FeedScreen = () => {
       )
     }
 
-    const feedDataHardcode = [
-      { imagenURL: require('../assets/imagenFeedComponentEjemplo.png'), perfil: 'juan', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo.jpg') },
-      { imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: 'renato', imagenPerfilURL: require('../assets/imagenUsuarioEjemplo2.jpg') }
-    ];
-
     return (
       <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
         <DynamicHeader value={scrollOffsetY}/>
@@ -154,9 +139,9 @@ const FeedScreen = () => {
             feedData.map((item, index) => (
               <FeedComponentWithActionSheet
                 key={index}
-                imagenURL={item.imageURL}
-                perfil={item.perfil}
-                imagenPerfilURL={item.imagenPerfilURL}
+                imagenURL={item.post.imageURL}
+                perfil={item.author}
+                imagenPerfilURL={item.profilePicture}
               />
             ))
           )}

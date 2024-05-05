@@ -25,6 +25,7 @@ const handleDateChange = (event, selectedDate) => {
         <TextInput
           style={styles.input}
           onChangeText={text => setUsername(text)}
+          maxLength={25}
         />
       </View>
       <View style={styles.inputContainer}>

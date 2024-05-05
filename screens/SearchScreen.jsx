@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
 import { Entypo, EvilIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
@@ -8,6 +8,9 @@ import UserSearchComponent from '../components/UserSearchComponent';
 const SearchScreen = () => {
    
   const navigation = useNavigation();
+
+  const route = useRoute();
+  const { fromScreen } = route.params;
 
   const [inputValue, setInputValue] = useState('');
   const [usuarios, setUsuarios] = useState([]);
@@ -39,7 +42,7 @@ const SearchScreen = () => {
   const handleClosePress = () => {
     console.log('Lupa pressed');
     console.log('Navegar al feed');
-    navigation.navigate('feed');
+    navigation.navigate(fromScreen);
   }
 
   return (

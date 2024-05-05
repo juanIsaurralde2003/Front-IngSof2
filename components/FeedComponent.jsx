@@ -104,7 +104,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity>
           <Image
-            source={imagenPerfilURL}
+            source={{uri: imagenPerfilURL}}
             style={styles.profileImage}
           />
         </TouchableOpacity>
