@@ -72,7 +72,10 @@ const FeedScreen = () => {
     const handleProfilePress = () => {
       console.log('Image pressed');
       console.log('Navegar al perfil');
-      navigation.navigate('profile', { fromScreen: 'feed' });
+      navigation.navigate('profile', {
+        fromScreen: 'feed',
+        userData:user 
+      });
     }
 
     const handleLupaPress = () => {

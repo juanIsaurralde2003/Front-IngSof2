@@ -8,12 +8,12 @@ import { SERVER } from '../utils/utils';
 import { useRoute } from "@react-navigation/native";
 
 function ProfileScreen({navigation}){
-    const {user,token} = useAuth()
+    const {token} = useAuth()
     const [publicaciones, setPublicaciones] = useState([]);
     const [profileUserInfo,setProfileUserInfo] = useState({});
     const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
     const route = useRoute();
-    const { fromScreen } = route.params;
+    const { fromScreen, userData } = route.params;
 
     const convertDate = (date)=>{
       let profileDate = '';
@@ -27,8 +27,8 @@ function ProfileScreen({navigation}){
     
     const getPublicacionesUsuario = async () => {
       try {
-        const url = `${SERVER}/users/posts/${encodeURIComponent(user)}`;
-        console.log("el usuario es:" + user);
+        const url = `${SERVER}/users/posts/${encodeURIComponent(userData)}`;
+        console.log("el usuario es:" + userData);
         const response = await fetch(url, {method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -61,8 +61,8 @@ function ProfileScreen({navigation}){
     
     const getProfileUserInfo = async () => {
       try {
-        const url = `${SERVER}/users/followInfo/${encodeURIComponent(user)}`
-        console.log("el usuario es:" + user);
+        const url = `${SERVER}/users/followInfo/${encodeURIComponent(userData)}`
+        console.log("el usuario es aca:" + userData);
         const response = await fetch(url,{method: 'GET',
           headers: {
             'Content-Type': 'application/json', 

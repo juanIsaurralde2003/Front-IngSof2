@@ -7,9 +7,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import CustomRating from './Rating';
 import { SERVER } from '../utils/utils';
 import { useAuth } from './AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
 
+  const navigation = useNavigation();
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
 
@@ -99,10 +101,19 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
     );
   };
 
+  const handleProfilePress = () => {
+    console.log('Image pressed');
+    console.log('Navegar al perfil');
+    navigation.navigate('profile', {
+      fromScreen: 'feed',
+      userData:user 
+    });
+  }
+
   return (
     <View style={[styles.container, { width: width }]}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleProfilePress}>
           <Image
             source={{uri: imagenPerfilURL}}
             style={styles.profileImage}

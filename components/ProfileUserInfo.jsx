@@ -1,5 +1,5 @@
-import React,{useState}from "react";
-import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS} from "react-native";
+import React,{useEffect, useState}from "react";
+import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS,ActivityIndicator} from "react-native";
 import profilePicture from '../assets/profile_picture.png'
 import StyledText from "./StyledText";
 import { MaterialIcons,Entypo } from '@expo/vector-icons';
@@ -7,12 +7,30 @@ import { Rating } from 'react-native-ratings';
 import { useAuth } from "./AuthContext";
 import ProfileStats from "./ProfileStats";
 import CustomRating from "./Rating";
+import { tr } from "date-fns/locale";
+import FollowerOptions from "./FollowerOptions";
+
 
 
 function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating, fromScreen}){
 
+    const {token,signOut,user} = useAuth();
     const [loadingImage, setLoadingImage] = useState(true);
     const [error, setError] = useState(false);
+    const [sessionUser,setSessionUser] = useState(false);
+    const [isVisible,setIsVisible] = useState(false);
+    const [following,setFollowing] = useState(false);
+    const [isLoading,setIsLoading] = useState(false);
+
+    useEffect(()=>{
+        if("@"+user===usuario){
+            setSessionUser(true);
+        }
+    },[])
+
+    const toggleVisibility = () => {
+        setIsVisible(true);
+    }
 
     const handleLoadStart = () => {
         setLoadingImage(true);
@@ -27,8 +45,6 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         setLoadingImage(false);
         setError(true);
         };
-
-    const {token, loading, signIn, signOut} = useAuth();
     const showActionSheet = () => {
         ActionSheetIOS.showActionSheetWithOptions(
           {
@@ -46,14 +62,26 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
           }
         );
       };
+
+      const handleFollow = () => {
+        setIsLoading(true);
+        const seguidor = user;
+        const seguido = usuario;
+        setTimeout(()=>{
+            setIsLoading(false);
+            setFollowing(true)
+        },5000)
+      }
       
       return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
+                {sessionUser &&
                 <TouchableOpacity onPress={showActionSheet} style={styles.menuStyle}>
                     <Entypo name={'menu'} size={30} color={'black'}/>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=>{navigation.navigate(fromScreen)}} style={styles.closeStyle}>
+                }
+                <TouchableOpacity onPress={()=>{navigation.navigate(fromScreen)}} style={sessionUser ? styles.closeStyle : styles.closeStyleAlong}>
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
             </View>
@@ -81,6 +109,31 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 navigation={navigation}
             />
             </View>
+            {!sessionUser &&
+            <View>
+                {!following ?
+                <TouchableOpacity disabled={isLoading} onPress={handleFollow} style = {styles.followButton}>
+                    {isLoading?
+                     <ActivityIndicator size="small" color="#FFFFFF" />
+                     :
+                    <Text style={styles.followText}>Follow</Text>
+
+                    }
+                </TouchableOpacity>
+                :
+                <TouchableOpacity onPress={toggleVisibility} style = {styles.followingButton}>
+                    <Text style={styles.followingText}>Following</Text>
+                </TouchableOpacity>
+                }
+                {
+                isVisible && (
+                    <FollowerOptions
+                        setIsVisible={setIsVisible}
+                        usuarioDelPerfil={usuario}
+                    />
+                )}   
+            </View>
+            }
         </View>
 
     )
@@ -92,8 +145,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop:130,
-        paddingBottom:20
+        paddingBottom:19
         
+    },
+    closeStyleAlong:{
+        borderColor: "transparent",
+        borderWidth: 0,
+        borderRadius: 30,
+        marginTop:10,
+        right:-175
     },
     raiting:{
         marginTop:20
@@ -133,6 +193,35 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginTop:10,
         paddingHorizontal:160
+      },
+      followButton:{
+        paddingVertical:14,
+        backgroundColor: '#4402b2', // Color de fondo del botón
+        paddingHorizontal: 5,      // Espaciado horizontal dentro del botón
+        borderRadius: 14,           // Bordes redondeados
+        width:200,
+        alignItems:'center',
+        marginTop:30
+      },
+      followText:{
+        color:"#e5e5e5",
+        fontFamily:'Quicksand-bold'
+      },
+      followingButton:{
+        paddingVertical:14,
+        backgroundColor: "transparent", // Color de fondo del botón
+        paddingVertical: 14,        // Espaciado vertical dentro del botón
+        paddingHorizontal: 5,      // Espaciado horizontal dentro del botón
+        borderRadius: 14,           // Bordes redondeados
+        width:200,
+        alignItems:'center',
+        marginTop:30,
+        borderWidth:1.2,
+        borderColor:'#4402b2',
+      },
+      followingText:{
+        color:'#4402b2',
+        fontFamily:'Quicksand-bold'
       }
 
     });
