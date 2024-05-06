@@ -9,6 +9,7 @@ import ProfileStats from "./ProfileStats";
 import CustomRating from "./Rating";
 import { tr } from "date-fns/locale";
 import FollowerOptions from "./FollowerOptions";
+import { SERVER } from "../utils/utils";
 
 
 
@@ -21,6 +22,37 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     const [isVisible,setIsVisible] = useState(false);
     const [following,setFollowing] = useState(false);
     const [isLoading,setIsLoading] = useState(false);
+    const [seguimientoVerificado,setSeguimientoVerificado] = useState(false);
+
+    const isFollowing = async () => {
+        const seguidor = user;
+        const seguido = usuario.substring(1);
+        const url = `${SERVER}/users/isfollowing/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
+    
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) { 
+                const data = await response.json();
+                console.log(data);
+                setFollowing(data.user);
+                setSeguimientoVerificado(true);
+            } else {
+                console.error('No se pudo verificar el estado de seguimiento:', response.status);
+            }
+        } catch (error) {
+            console.error('Error al verificar si el usuario está siguiendo:', error.message);
+        }
+    }
+    
+    useEffect(()=>{
+        isFollowing();
+    },[following])
 
     useEffect(()=>{
         if("@"+user===usuario){
@@ -63,15 +95,33 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         );
       };
 
-      const handleFollow = () => {
+    const handleFollow = async () => {
         setIsLoading(true);
         const seguidor = user;
-        const seguido = usuario;
-        setTimeout(()=>{
+        const seguido = usuario.substring(1);
+        const url = `${SERVER}/users/follow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
+    
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.status === 200) {
+                console.log('User followed successfully');
+                setFollowing(true);
+            } else {
+                console.error('Hubo un problema con la solicitud HTTP:', response.status);
+            }
+        } catch (error) {
+            console.error('Error en la operación de follow:', error.message);
+        } finally {
             setIsLoading(false);
-            setFollowing(true)
-        },5000)
-      }
+        }
+    }
+    
       
       return(
         <View style={styles.container}>
@@ -109,7 +159,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 navigation={navigation}
             />
             </View>
-            {!sessionUser &&
+            {sessionUser && seguimientoVerificado &&
             <View>
                 {!following ?
                 <TouchableOpacity disabled={isLoading} onPress={handleFollow} style = {styles.followButton}>
