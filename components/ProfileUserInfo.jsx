@@ -26,7 +26,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
 
     const isFollowing = async () => {
         const seguidor = user;
-        const seguido = usuario.substring(1);
+        const seguido = usuario && usuario.slice(1);
         const url = `${SERVER}/users/isfollowing/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
     
         try {
@@ -98,7 +98,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     const handleFollow = async () => {
         setIsLoading(true);
         const seguidor = user;
-        const seguido = usuario.substring(1);
+        const seguido = usuario && usuario.slice(1);
         const url = `${SERVER}/users/follow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
     
         try {
