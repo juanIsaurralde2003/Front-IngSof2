@@ -4,8 +4,8 @@
     "slug": "IngenieriaDeSoftware2",
     "version": "1.0.0",
     "orientation": "portrait",
-    "permissions": ["INTERNET"],
     "icon": "./assets/icon.png",
+    "projectId": "a7e92cd2-f7c6-4810-9f88-891023c4b37b",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -16,13 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.juan2003.IngenieriaDeSoftware2"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.juan2003.IngenieriaDeSoftware2"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,6 +32,17 @@
     "plugins": [
       "expo-font",
       "expo-secure-store"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a7e92cd2-f7c6-4810-9f88-891023c4b37b"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a7e92cd2-f7c6-4810-9f88-891023c4b37b"
+    }
   }
 }

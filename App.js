@@ -7,12 +7,21 @@ import AppNavigationContainer from './navigation/NavigationContainer';
 import { AuthProvider } from './components/AuthContext';
 import { useFonts } from 'expo-font';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useEffect } from 'react';
+import { registerForPushNotificationsAsync, addNotificationReceivedListener } from './services/NotificationService';
 
 
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+    const subscription = addNotificationReceivedListener(notification => {
+      console.log(notification);
+    });
+    return () => subscription.remove();
+  }, []);
   const [fontsLoaded] = useFonts({
     'Quicksand': require('./assets/fonts/Quicksand-VariableFont_wght.ttf'),
     'Quicksand-Bold':require('./assets/fonts/Quicksand-Bold.ttf'),
