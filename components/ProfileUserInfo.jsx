@@ -159,7 +159,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 navigation={navigation}
             />
             </View>
-            {sessionUser && seguimientoVerificado &&
+            {!sessionUser && seguimientoVerificado &&
             <View>
                 {!following ?
                 <TouchableOpacity disabled={isLoading} onPress={handleFollow} style = {styles.followButton}>
