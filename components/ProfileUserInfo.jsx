@@ -52,6 +52,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     
     useEffect(()=>{
         isFollowing();
+        console.log(usuario + '   ' +imagenPerfilURL)
     },[following])
 
     useEffect(()=>{

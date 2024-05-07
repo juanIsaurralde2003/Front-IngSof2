@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FeedComponentWithActionSheet from '../components/FeedComponent';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -13,52 +13,64 @@ const FeedScreen = () => {
   const {user, profilePicture} = useAuth();
 
   const [feedData, setFeedData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    const getPosts = async () => {
+  const getPosts = async () => {
 
-      const url = `${SERVER}/posts/feed/${user}`;
+    const url = `${SERVER}/posts/feed/${user}`;
 
-      try {
-        const response = await fetch(url, { method: 'GET' });
+    try {
+      const response = await fetch(url, { method: 'GET' });
 
-        if (response.ok) {
-          const data = await response.json();
-    
-          console.log(data);
+      if (response.ok) {
+        const data = await response.json();
+  
+        console.log(data);
 
-          setFeedData(data.post);
-        } else {
-          console.error('Error al obtener posts');
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
+        setFeedData(data.post);
+      } else {
+        console.error('Error al obtener posts');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    } 
+  };
 
-    const getChallenge = async () => {
+  const getChallenge = async () => {
 
-      const url = `${SERVER}/posts/prompt`;
+    const url = `${SERVER}/posts/prompt`;
 
-      try {
-        const response = await fetch(url, { method: 'GET' });
+    try {
+      const response = await fetch(url, { method: 'GET' });
 
-        if (response.ok) {
-          const data = await response.json();
-    
-          console.log(data);
-    
-          setReto(data.prompt);
-        } else {
-          console.error('Error al obtener challenge');
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
+      if (response.ok) {
+        const data = await response.json();
+  
+        console.log(data);
+  
+        setReto(data.prompt);
+      } else {
+        console.error('Error al obtener challenge');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+    } 
+  };
 
+  const onFocus = () => {
+    setRefreshing(true);
     getChallenge();
     getPosts();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    // Agregar evento de enfoque al documento
+    const unsubscribe = navigation.addListener('focus', onFocus);
+
+    // Limpieza del efecto
+    return unsubscribe;
+
   }, []);
 
   const [reto, setReto] = useState('Cargando ...');  
@@ -119,6 +131,7 @@ const FeedScreen = () => {
     }
 
     return (
+      <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
       <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
         <DynamicHeader value={scrollOffsetY}/>
         <ScrollView
@@ -131,6 +144,14 @@ const FeedScreen = () => {
           ], {
             useNativeDriver: false,
           })}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onFocus}
+              colors={['#9Bd35A', '#689F38']}
+              progressBackgroundColor="#FFFFFF"
+            />
+          }
         >
           {feedData.length === 0 ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -150,6 +171,7 @@ const FeedScreen = () => {
           )}
         </ScrollView>
       </View>
+      </SafeAreaView>
   );
 };
 

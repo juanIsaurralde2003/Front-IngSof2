@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert } from "react-native";
 import UserDataComponent from "../components/UserDataComponent";
 import CheckBox from '@react-native-community/checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import { SERVER } from "../utils/utils";
+import { format } from "date-fns";
 
 function SignupScreen({ navigation }) {
 
@@ -19,7 +20,9 @@ function SignupScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState(new Date());
+  const newDate = new Date();
+  const [birthday, setBirthday] = useState(format(newDate, 'yyyy-MM-dd'));
+
 
   const handleCancelButton = async () => {
     navigation.navigate('login');
@@ -73,6 +76,7 @@ function SignupScreen({ navigation }) {
         const JWT = await respuesta.json();
         console.log(JWT);
         //signIn(JWT);
+        Alert.alert('Registro Exitoso', `Bienvenido a Don't be real`);
         navigation.navigate('login');
 
       } else if (respuesta.status === 400) {

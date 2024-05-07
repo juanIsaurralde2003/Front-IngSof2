@@ -7,11 +7,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import CustomRating from './Rating';
 import { SERVER } from '../utils/utils';
 import { useAuth } from './AuthContext';
+import { useNavigation } from '@react-navigation/native';
 
 const UserSearchComponent = ({ perfil, imagenPerfilURL }) => {
 
   const { width, height } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
+
+  const navigation = useNavigation();
 
   const {user} = useAuth();
 
@@ -28,10 +31,19 @@ const UserSearchComponent = ({ perfil, imagenPerfilURL }) => {
     return null; // Esperando a que se carguen las fuentes
   }
 
+  const handleUserSearch = () => {
+    console.log('Image pressed');
+    console.log('Navegar al perfil');
+    navigation.navigate('profile', {
+      fromScreen: 'feed',
+      userData:perfil 
+    });
+  }
+
   return (
     <View style={[styles.container, { height: height * 0.15 }]}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleUserSearch}>
           <View style={{flexDirection: 'row'}}>
             <Image
               source={{uri: imagenPerfilURL}}
