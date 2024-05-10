@@ -9,6 +9,7 @@ import { useFonts } from 'expo-font';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { registerForPushNotificationsAsync, addNotificationReceivedListener } from './services/NotificationService';
+import 'react-native-reanimated';
 
 
 
