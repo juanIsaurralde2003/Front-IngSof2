@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, Image, StyleSheet,Platform } from 'react-native';
 
 
-const FollowerOptions = ({isVisible,setIsVisible, usuarioDelPerfil, imageURL}) => {
+const FollowerOptions = ({isVisible,setIsVisible, usuarioDelPerfil, imageURL,handleUnfollow}) => {
     const [width, setWidth] = useState(0); // Estado inicial para el ancho
     return(
         <View style={styles.bottomView}>
@@ -30,7 +30,7 @@ const FollowerOptions = ({isVisible,setIsVisible, usuarioDelPerfil, imageURL}) =
                         <TouchableOpacity
                             style={styles.unfollowButton} 
                             title="Unfollow"
-                            onPress={() => setIsVisible(false)}
+                            onPress={() => handleUnfollow()}
                         >
                             <Text style={styles.unfollowText}>Unfollow</Text>
                         </TouchableOpacity>

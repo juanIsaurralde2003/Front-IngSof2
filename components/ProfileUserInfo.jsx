@@ -125,14 +125,15 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     }
 
     const handleUnfollow = async () => {
+        setIsVisible(false)
         setIsLoadingUnfollow(true);
         const seguidor = user;
         const seguido = usuario && usuario.slice(1);
-        const url = `${SERVER}/users/follow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
+        const url = `${SERVER}/users/unfollow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
     
         try {
             const response = await fetch(url, {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -147,7 +148,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         } catch (error) {
             console.error('Error en la operación de follow:', error.message);
         } finally {
-            setIsLoading(false);
+            setIsLoadingUnfollow(false);
         }
     }
     
@@ -199,11 +200,11 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                         }
                     </TouchableOpacity>
                     :
-                    <TouchableOpacity disabled={isLoadingUnfollow} onPress={handleUnfollow} style = {styles.followingButton}>
+                    <TouchableOpacity disabled={isLoadingUnfollow} onPress={()=>{setIsVisible(true)}} style = {styles.followingButton}>
                         {isLoadingUnfollow ?
                             <ActivityIndicator size="small" color="#FFFFFF" />
                         :
-                            <Text style={styles.followText}>Following</Text>
+                            <Text style={styles.followingText}>Following</Text>
                         }
                     </TouchableOpacity>
                 }
@@ -214,6 +215,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                         setIsVisible={setIsVisible}
                         usuarioDelPerfil={usuario}
                         imageURL={imagenPerfilURL}
+                        handleUnfollow={handleUnfollow}
                     />
                 )}   
             </View>
