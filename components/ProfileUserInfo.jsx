@@ -22,6 +22,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     const [isVisible,setIsVisible] = useState(false);
     const [following,setFollowing] = useState(false);
     const [isLoading,setIsLoading] = useState(false);
+    const [isLoadingUnfollow, setIsLoadingUnfollow] = useState(false);
     const [seguimientoVerificado,setSeguimientoVerificado] = useState(false);
 
     const isFollowing = async () => {
@@ -122,6 +123,33 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             setIsLoading(false);
         }
     }
+
+    const handleUnfollow = async () => {
+        setIsLoadingUnfollow(true);
+        const seguidor = user;
+        const seguido = usuario && usuario.slice(1);
+        const url = `${SERVER}/users/follow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
+    
+        try {
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.status === 200) {
+                console.log('User unfollowed successfully');
+                setFollowing(false);
+            } else {
+                console.error('Hubo un problema con la solicitud HTTP:', response.status);
+            }
+        } catch (error) {
+            console.error('Error en la operación de follow:', error.message);
+        } finally {
+            setIsLoading(false);
+        }
+    }
     
       
       return(
@@ -163,18 +191,21 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             {!sessionUser && seguimientoVerificado &&
             <View>
                 {!following ?
-                <TouchableOpacity disabled={isLoading} onPress={handleFollow} style = {styles.followButton}>
-                    {isLoading?
-                     <ActivityIndicator size="small" color="#FFFFFF" />
-                     :
-                    <Text style={styles.followText}>Follow</Text>
-
-                    }
-                </TouchableOpacity>
-                :
-                <TouchableOpacity onPress={toggleVisibility} style = {styles.followingButton}>
-                    <Text style={styles.followingText}>Following</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity disabled={isLoading} onPress={handleFollow} style = {styles.followButton}>
+                        {isLoading ?
+                            <ActivityIndicator size="small" color="#FFFFFF" />
+                        :
+                            <Text style={styles.followText}>Follow</Text>
+                        }
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity disabled={isLoadingUnfollow} onPress={handleUnfollow} style = {styles.followingButton}>
+                        {isLoadingUnfollow ?
+                            <ActivityIndicator size="small" color="#FFFFFF" />
+                        :
+                            <Text style={styles.followText}>Following</Text>
+                        }
+                    </TouchableOpacity>
                 }
                 {
                 isVisible && (

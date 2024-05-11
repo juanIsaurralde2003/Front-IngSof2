@@ -45,6 +45,10 @@ const SearchScreen = () => {
     navigation.navigate(fromScreen);
   }
 
+  const filteredUsuarios = usuarios.filter(usuario =>
+    usuario.username.toLowerCase().includes(inputValue.toLowerCase())
+  );
+
   return (
     <SafeAreaView style={{backgroundColor: '#e5e5e5', flexGrow: 1}}>
       <View>
@@ -75,7 +79,7 @@ const SearchScreen = () => {
           scrollEventThrottle={15}
           contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5'}}
         >
-          {usuarios.map((item, index) => (
+          {filteredUsuarios.map((item, index) => (
             <UserSearchComponent 
               key={index}
               perfil={item.username}
