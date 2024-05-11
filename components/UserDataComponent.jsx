@@ -6,15 +6,21 @@ import { format } from 'date-fns';
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
   const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para almacenar la fecha seleccionada
+  const [timeoutFecha, setTimeoutFecha] = useState(null);
 
   // Función para manejar el cambio de fecha seleccionada
 const handleDateChange = (event, selectedDate) => {
+  if (timeoutFecha) {
+    clearTimeout(timeoutFecha);
+  }
   const currentDate = selectedDate || date;
   setSelectedDate(currentDate);
   const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
   setBirthday(formattedDate);
-  setShowDatePicker(false);
-  // setBirthdate('2000/07/11');
+  const newTimeoutFecha = setTimeout(() => {
+    setShowDatePicker(false);
+  }, 2000); // 2000 milisegundos = 2 segundos
+  setTimeoutFecha(newTimeoutFecha);
 };
 
 

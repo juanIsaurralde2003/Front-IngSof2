@@ -53,7 +53,7 @@ const ChallengeScreen = () => {
           console.log(data);
     
           const challengeData = {
-            name: 'foto artística',
+            name: data.title,
             description: data.prompt,
           };
           setChallengeData(challengeData);

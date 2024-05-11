@@ -53,10 +53,12 @@ function SignupScreen({ navigation }) {
     if (profileImage) {
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
+
+      const nombreArchivo = `profile_${username}`;
   
       data.append('file', {
         uri: profileImage,
-        name: `profile.${fileType}`,
+        name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
     }
