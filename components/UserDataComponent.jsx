@@ -20,7 +20,7 @@ const handleDateChange = (event, selectedDate) => {
   const newTimeoutFecha = setTimeout(() => {
     setShowDatePicker(false);
   }, 2000); // 2000 milisegundos = 2 segundos
-  setTimeoutId(newTimeoutFecha);
+  setTimeoutFecha(newTimeoutFecha);
 };
 
 
