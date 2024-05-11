@@ -179,8 +179,10 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 {
                 isVisible && (
                     <FollowerOptions
+                        isVisible={isVisible}
                         setIsVisible={setIsVisible}
                         usuarioDelPerfil={usuario}
+                        imageURL={imagenPerfilURL}
                     />
                 )}   
             </View>
