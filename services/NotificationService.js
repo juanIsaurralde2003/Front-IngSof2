@@ -1,11 +1,13 @@
 import * as Notifications from 'expo-notifications';
 import { SERVER } from '../utils/utils';
+import * as NotificationHandlers from './NotificationReceivedHandler.js'
+import * as NotificationHandlerResponse from './NotificationReceivedHandlerResponse.js'
 
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
-        shouldPlaySound: false,
+        shouldPlaySound: true,
         shouldSetBadge: false,
     }), 
 });
@@ -24,12 +26,9 @@ export async function registerForPushNotificationsAsync() {
         const expoToken = (await Notifications.getExpoPushTokenAsync({
             projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
         })).data;
-        const pushToken = expoToken.substring(
-            expoToken.indexOf('[') + 1, 
-            expoToken.indexOf(']')
-        );
         const data = JSON.stringify({
-            token: pushToken
+            token: expoToken,
+            username:"TestUser"
         });
         console.log(data);
         const url = `${SERVER}/notifications/register-token`;
@@ -48,17 +47,38 @@ export async function registerForPushNotificationsAsync() {
         }
         
     } catch (error) {
-        console.error("Se produjo un error durante el registro de notificaciones push: ", error);
+        console.error("Se produjo un error durante el registro de notificaciones push:  ", error);
     }
 }
 
-export function addNotificationReceivedListener(handleNotification){
-    return Notifications.addNotificationReceivedListener(handleNotification);
-}
+export const registerNotificationHandlers = (navigation) => {
+    Notifications.addNotificationReceivedListener((notification) => {
+        const type = notification.request.content.data.type
+        switch (type) {
+            case 'daily-prompt':
+                NotificationHandlers.handleDailyPromptNotification(notification);
+                break;
+            case 'new-follower':
+                NotificationHandlers.handleNewFollowerNotification(notification);
+                break;
+            default:
+                console.log("Unhandled notification type:", type);
+        }
+    });
 
-export function addNotificationResponseReceivedListener(handleNotificationResponse){
-    return Notifications.addNotificationResponseReceivedListener(handleNotificationResponse);
-}
-
-
+    Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log(JSON.stringify(response));
+        const type = response.notification.request.content.data.type;
+        switch (type) {
+            case 'daily-prompt':
+                NotificationHandlerResponse.handleDailyPromptNotificationResponse(response,navigation);
+            break;
+            case 'new-follower':
+                NotificationHandlerResponse.handleNewFollowerNotificationResponse(response,navigation);
+            break;
+            default:
+                console.log("Unhandled notification response type:", type);
+        }
+    });
+};
 

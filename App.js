@@ -8,9 +8,9 @@ import { AuthProvider } from './components/AuthContext';
 import { useFonts } from 'expo-font';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
-import { registerForPushNotificationsAsync, addNotificationReceivedListener } from './services/NotificationService';
+import { registerForPushNotificationsAsync, registerNotificationHandlers } from './services/NotificationService';
 import 'react-native-reanimated';
-
+import NotificationHandler from './components/NotificationHandler';
 
 
 const Stack = createNativeStackNavigator();
@@ -18,10 +18,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
     registerForPushNotificationsAsync();
-    const subscription = addNotificationReceivedListener(notification => {
-      console.log(notification);
-    });
-    return () => subscription.remove();
+    registerNotificationHandlers();
   }, []);
   const [fontsLoaded] = useFonts({
     'Quicksand': require('./assets/fonts/Quicksand-VariableFont_wght.ttf'),
