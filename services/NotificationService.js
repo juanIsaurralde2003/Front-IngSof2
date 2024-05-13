@@ -51,34 +51,42 @@ export async function registerForPushNotificationsAsync() {
     }
 }
 
-export const registerNotificationHandlers = (navigation) => {
-    Notifications.addNotificationReceivedListener((notification) => {
-        const type = notification.request.content.data.type
-        switch (type) {
-            case 'daily-prompt':
-                NotificationHandlers.handleDailyPromptNotification(notification);
-                break;
-            case 'new-follower':
-                NotificationHandlers.handleNewFollowerNotification(notification);
-                break;
-            default:
-                console.log("Unhandled notification type:", type);
-        }
-    });
+export const registerNotificationHandlers = (navigation,dailyPost) => {
+    if(navigation && dailyPost){
+        console.log("aaaa " + navigation)
+        const receivedSubscription = Notifications.addNotificationReceivedListener((notification) => {
+            const type = notification.request.content.data.type;
+            switch (type) {
+                case 'daily-prompt':
+                    NotificationHandlers.handleDailyPromptNotification(notification);
+                    break;
+                case 'new-follower':
+                    NotificationHandlers.handleNewFollowerNotification(notification);
+                    break;
+                default:
+                    console.log("Unhandled notification type:", type);
+            }
+        });
 
-    Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log(JSON.stringify(response));
-        const type = response.notification.request.content.data.type;
-        switch (type) {
-            case 'daily-prompt':
-                NotificationHandlerResponse.handleDailyPromptNotificationResponse(response,navigation);
-            break;
-            case 'new-follower':
-                NotificationHandlerResponse.handleNewFollowerNotificationResponse(response,navigation);
-            break;
-            default:
-                console.log("Unhandled notification response type:", type);
-        }
-    });
+        const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
+            console.log(JSON.stringify(response));
+            const type = response.notification.request.content.data.type;
+            switch (type) {
+                case 'daily-prompt':
+                    NotificationHandlerResponse.handleDailyPromptNotificationResponse(response, navigation);
+                    break;
+                case 'new-follower':
+                    NotificationHandlerResponse.handleNewFollowerNotificationResponse(response, navigation, dailyPost);
+                    break;
+                default:
+                    console.log("Unhandled notification response type:", type);
+            }
+        });
+    }
+    return () => {
+        receivedSubscription.remove();
+        responseSubscription.remove();
+    };
 };
+
 

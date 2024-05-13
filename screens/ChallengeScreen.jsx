@@ -20,7 +20,7 @@ const ChallengeScreen = () => {
   const [savingImage, setSavingImage] = useState(false);
   const cameraRef = useRef(null);
 
-  const {user, profilePicture} = useAuth();
+  const {user, profilePicture,setDailyPostDone,dailyPost} = useAuth();
 
   
   // useEffect(() => {
@@ -84,6 +84,8 @@ const ChallengeScreen = () => {
     console.log(capturedImage);
     setSavingImage(true);
     await handleSavePost(capturedImage);
+    setDailyPostDone(true);
+    console.log("daily post es true en challenge?:" + dailyPost)
     navigation.navigate('feed');
     setSavingImage(false);
   }

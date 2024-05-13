@@ -2,10 +2,11 @@
   "expo": {
     "name": "IngenieriaDeSoftware2",
     "slug": "IngenieriaDeSoftware2",
+    "owner":"frontingsof2",
     "version": "1.0.0",
+    "projectId":"a7e92cd2-f7c6-4810-9f88-891023c4b37b",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "projectId": "a7e92cd2-f7c6-4810-9f88-891023c4b37b",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",

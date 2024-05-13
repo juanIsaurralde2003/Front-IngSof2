@@ -5,9 +5,11 @@ import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
+import NotificationHandler from "../components/NotificationHandler";
+import { registerForPushNotificationsAsync, registerNotificationHandlers } from "../services/NotificationService";
 
 function LoginScreen({navigation}){
-  const {user, token, profilePicture, loading, signIn, signOut} = useAuth();
+  const {user, token, profilePicture, loading, signIn, signOut, setDailyPostDone,dailyPost} = useAuth();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
@@ -84,6 +86,7 @@ function LoginScreen({navigation}){
 
         if (respuestaPost.status === 200) {
           setCredencialesIncorrectas(false);
+          setDailyPostDone(true)
           navigation.navigate('feed');
         } else if (respuestaPost.status === 403) {
           setCredencialesIncorrectas(false);
@@ -109,6 +112,7 @@ function LoginScreen({navigation}){
       console.log("el token es: " + token); 
       console.log("el usuario es: " + user);
       console.log("la foto de perfil es: " + profilePicture)
+      console.log("hay daily post: " + dailyPost)
     }
   }, [token,user,profilePicture]); 
 
