@@ -106,7 +106,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
     console.log('Navegar al perfil');
     navigation.navigate('profile', {
       fromScreen: 'feed',
-      userData:user 
+      userData: perfil
     });
   }
 
@@ -119,7 +119,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
             style={styles.profileImage}
           />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleProfilePress}>
           <Text style={styles.userNameFeed}>
             {perfil}
           </Text>
