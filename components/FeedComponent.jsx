@@ -139,7 +139,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
         />
         {loadingImage && (
           <View style={styles.loadingContainer}>
-            <ActivityIndicator size="large" color="black" />
+            <ActivityIndicator size="large" color="#390294" />
           </View>
         )}
         {error && (
