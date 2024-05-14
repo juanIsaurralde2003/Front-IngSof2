@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FeedScreen = () => {
    
@@ -14,6 +15,8 @@ const FeedScreen = () => {
 
   const [feedData, setFeedData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [reportedImages, setReportedImages] = useState([]);
 
   const getPosts = async () => {
 
@@ -65,6 +68,37 @@ const FeedScreen = () => {
   };
 
   useEffect(() => {
+    const retrieveReportedImages = async () => {
+      try {
+        const storedImages = await AsyncStorage.getItem('reportedImages');
+        if (storedImages !== null) {
+          setReportedImages(JSON.parse(storedImages));
+        }
+      } catch (error) {
+        console.error('Error al recuperar las imágenes reportadas:', error);
+      }
+    };
+
+    retrieveReportedImages();
+  }, []);
+
+  useEffect(() => {
+    const storeReportedImages = async () => {
+      try {
+        await AsyncStorage.setItem('reportedImages', JSON.stringify(reportedImages));
+      } catch (error) {
+        console.error('Error al guardar las imágenes reportadas:', error);
+      }
+    };
+  
+    // Guardar las imágenes al salir de la pantalla
+    const unsubscribe = navigation.addListener('blur', storeReportedImages);
+  
+    // Limpieza del efecto
+    return unsubscribe;
+  }, [reportedImages, navigation]);
+
+  useEffect(() => {
     // Agregar evento de enfoque al documento
     const unsubscribe = navigation.addListener('focus', onFocus);
 
@@ -77,61 +111,61 @@ const FeedScreen = () => {
 
   const scrollOffsetY = useRef(new Animated.Value(0)).current;
 
-    const Header_Max_Height = 240;
-    const Header_Min_Height = 70;
-    const Scroll_Distance = Math.min(Header_Max_Height - Header_Min_Height, 500);
+  const Header_Max_Height = 240;
+  const Header_Min_Height = 70;
+  const Scroll_Distance = Math.min(Header_Max_Height - Header_Min_Height, 500);
 
-    const handleProfilePress = () => {
-      console.log('Image pressed');
-      console.log('Navegar al perfil');
-      navigation.navigate('profile', {
-        fromScreen: 'feed',
-        userData:user 
-      });
-    }
+  const handleProfilePress = () => {
+    console.log('Image pressed');
+    console.log('Navegar al perfil');
+    navigation.navigate('profile', {
+      fromScreen: 'feed',
+      userData:user 
+    });
+  }
 
-    const handleLupaPress = () => {
-      console.log('Lupa pressed');
-      console.log('Navegar al buscador de perfiles');
-      navigation.navigate('search', { fromScreen: 'feed' });
-    }
+  const handleLupaPress = () => {
+    console.log('Lupa pressed');
+    console.log('Navegar al buscador de perfiles');
+    navigation.navigate('search', { fromScreen: 'feed' });
+  }
 
-    const DynamicHeader = ({value}) => {
+  const DynamicHeader = ({value}) => {
 
-      const animatedHeaderHeight = value.interpolate({
-        inputRange: [0, Scroll_Distance],
-        outputRange: [Header_Max_Height, Header_Min_Height],
-        extrapolate: 'clamp',
-      });
-
-      return (
-        <Animated.View style={[styles.dynamicHeader, { height: animatedHeaderHeight }]}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={handleProfilePress}>
-              <Image
-                source={{uri: profilePicture}}
-                style={styles.profileImage}
-              />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>
-              <Text style={styles.dontText}>DON'T</Text>
-              <Text style={styles.beRealText}> BE REAL</Text>
-            </Text>
-            <TouchableOpacity onPress={handleLupaPress}>
-              <MaterialIcons name='search' size={40} color={'black'} />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.retoContainer}>
-            <Text style={styles.challengeDescription} numberOfLines={3} adjustsFontSizeToFit>
-              {reto}
-            </Text>
-          </View>
-        </Animated.View>
-      )
-    }
+    const animatedHeaderHeight = value.interpolate({
+      inputRange: [0, Scroll_Distance],
+      outputRange: [Header_Max_Height, Header_Min_Height],
+      extrapolate: 'clamp',
+    });
 
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
+      <Animated.View style={[styles.dynamicHeader, { height: animatedHeaderHeight }]}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={handleProfilePress}>
+            <Image
+              source={{uri: profilePicture}}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>
+            <Text style={styles.dontText}>DON'T</Text>
+            <Text style={styles.beRealText}> BE REAL</Text>
+          </Text>
+          <TouchableOpacity onPress={handleLupaPress}>
+            <MaterialIcons name='search' size={40} color={'black'} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.retoContainer}>
+          <Text style={styles.challengeDescription} numberOfLines={3} adjustsFontSizeToFit>
+            {reto}
+          </Text>
+        </View>
+      </Animated.View>
+    )
+  }
+
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
       <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
         <DynamicHeader value={scrollOffsetY}/>
         <ScrollView
@@ -160,18 +194,25 @@ const FeedScreen = () => {
               </Text>
             </View>
           ) : (
-            feedData.map((item, index) => (
-              <FeedComponentWithActionSheet
-                key={index}
-                imagenURL={item.post.imageURL}
-                perfil={item.author}
-                imagenPerfilURL={item.profilePicture}
-              />
+            feedData
+              .filter(item => {
+                // Verificar si la lista de imágenes reportadas contiene la URL de la imagen y el usuario actual
+                return !reportedImages.some(reportedImage => reportedImage.imageURL === item.post.imageURL && reportedImage.username === user);
+              })
+              .map((item, index) => (
+                <FeedComponentWithActionSheet
+                  key={index}
+                  imagenURL={item.post.imageURL}
+                  perfil={item.author}
+                  imagenPerfilURL={item.profilePicture}
+                  isSelfPost={item.author === user}
+                  setReportedImages={setReportedImages}
+                />
             ))
           )}
         </ScrollView>
       </View>
-      </SafeAreaView>
+    </SafeAreaView>
   );
 };
 

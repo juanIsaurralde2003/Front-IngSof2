@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions } from "react-native";
 import UserDataComponent from "../components/UserDataComponent";
 import CheckBox from '@react-native-community/checkbox';
 import * as ImagePicker from 'expo-image-picker';
-import { SERVER } from "../utils/utils";
+import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { format } from "date-fns";
+import * as FileSystem from 'expo-file-system';
+import { Asset } from 'expo-asset';
 
 function SignupScreen({ navigation }) {
 
@@ -16,6 +18,9 @@ function SignupScreen({ navigation }) {
   const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loadingRegistrar, setLoadingRegistrar] = useState(false);
+
+  const { height, width } = Dimensions.get('window');
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -28,6 +33,13 @@ function SignupScreen({ navigation }) {
     navigation.navigate('login');
   };
 
+  const handleDefaultImage = async () => {
+    const asset = Asset.fromModule(require("../assets/person.jpg"));
+    await asset.downloadAsync();
+  
+    return asset.localUri;
+  };
+
   const handleTermsAndConditions = () => {
 
   }
@@ -35,6 +47,7 @@ function SignupScreen({ navigation }) {
 
   const handleRegistrarButton = async () => {
 
+    setIsLoginLoading(true);
     const url = `${SERVER}/auth/signup`
 
     const data = new FormData();
@@ -61,6 +74,14 @@ function SignupScreen({ navigation }) {
         name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
+    } else {
+      const defaultImageUri = await handleDefaultImage();
+    
+      data.append('file', {
+        uri: defaultImageUri,
+        name: `profile_${username}.jpg`,
+        type: `image/jpeg`,
+      });
     }
 
     try {
@@ -86,13 +107,15 @@ function SignupScreen({ navigation }) {
         console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
         setDatosInvalidos(true);
       } else {
-        // const errorMessage = await respuesta.text();
-        // console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+         const errorMessage = await respuesta.text();
+         console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
         setErrorGeneral(true);
 
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoginLoading(false);
     }
 
   };
@@ -116,7 +139,7 @@ function SignupScreen({ navigation }) {
   };
 
   return (
-    <ScrollView style={styles.container} keyboardDismissMode="on-drag">
+    <ScrollView style={styles.container} keyboardDismissMode="on-drag" bounces={false}>
       <View style={styles.secondContainer}>
         <TouchableOpacity onPress={handleProfileImagePicker}>
           {profileImage ? (
@@ -189,12 +212,12 @@ function SignupScreen({ navigation }) {
         onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalText}>Aquí van los términos y condiciones</Text>
+          <ScrollView style={[styles.modalContent, {maxHeight: height * 0.75}]}>
+            <Text style={styles.modalText}>{TERMINOSCONDICIONES}</Text>
             <TouchableOpacity onPress={() => setShowModal(false)}>
               <Text style={styles.closeModalButton}>Cerrar</Text>
             </TouchableOpacity>
-          </View>
+          </ScrollView>
         </View>
       </Modal>
     </ScrollView>
@@ -284,7 +307,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: '#fff',
-    padding: 20,
+    paddingHorizontal: 20,
     borderRadius: 10,
     width: '80%',
   },

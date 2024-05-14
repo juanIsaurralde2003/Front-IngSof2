@@ -142,7 +142,10 @@ const ChallengeScreen = () => {
   const handleProfilePress = () => {
     console.log('Image pressed');
     console.log('Navegar al perfil');
-    navigation.navigate('profile', { fromScreen: 'challenge' });
+    navigation.navigate('profile', {
+      fromScreen: 'challenge',
+      userData: user, 
+    });
   }
 
   const handleLupaPress = () => {

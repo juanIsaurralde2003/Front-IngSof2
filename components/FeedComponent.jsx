@@ -9,7 +9,7 @@ import { SERVER } from '../utils/utils';
 import { useAuth } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
-const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
+const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setReportedImages }) => {
 
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
@@ -56,7 +56,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
     
     const url = `${SERVER}/posts/report`
   
-    data = {
+    const data = {
       imageURL: imagenURL,
       username: user,
       report: reason === 'No cumple con la consigna' ? 'notPrompt' : 'inappropriate',
@@ -73,6 +73,8 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
     
       if (respuesta.status === 200) {
         Alert.alert('Éxito', 'Reporte realizado con éxito');
+        const reportedImage = { imageURL: imagenURL, username: user };
+        setReportedImages(prevReportedImages => [...prevReportedImages, reportedImage]);
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
          
@@ -149,14 +151,17 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL }) => {
         )}
       </View>
       <View style={styles.ratingContainer}>
-          <CustomRating
-            maxRating={5}
-            defaultRating={initialRating}
-            onRatingChange={ratingCompleted}
-          />
-        <TouchableOpacity onPress={showActionSheet}>
-         <MaterialIcons name={'report-problem'} size={30} color={'black'} />
-        </TouchableOpacity>
+        <CustomRating
+          maxRating={5}
+          defaultRating={initialRating}
+          onRatingChange={ratingCompleted}
+        />
+
+        {!isSelfPost && (
+          <TouchableOpacity onPress={showActionSheet}>
+          <MaterialIcons name={'report-problem'} size={30} color={'black'} />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );

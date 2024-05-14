@@ -42,10 +42,16 @@ const handleDateChange = (event, selectedDate) => {
           onChangeText={text => setEmail(text)}
         />
       </View>
-      <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-        <View style={styles.inputContainer}>
+      <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+        <View style={[styles.inputContainer, {marginBottom: 0}]}>
           <Text style={styles.label}>Fecha de nacimiento:</Text>
-          <Text style={styles.inputFecha}>{selectedDate.toLocaleDateString()}</Text>
+          <TextInput
+            style={[styles.input, {textAlign: 'center'}]}
+            editable={false}
+            onPress={() => setShowDatePicker(true)}
+            value={selectedDate.toLocaleDateString()}
+          />
+          {/* <Text style={styles.inputFecha}>{selectedDate.toLocaleDateString()}</Text> */}
         </View>
       </TouchableOpacity>
       {showDatePicker && (
@@ -54,6 +60,7 @@ const handleDateChange = (event, selectedDate) => {
           mode="date"
           display="spinner"
           onChange={handleDateChange}
+          maximumDate={new Date()}
         />
       )}
       <View style={styles.inputContainer}>
@@ -80,8 +87,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  labelContainer: {
+    width: '25%',
+  },
   label: {
-    width: 120,
+    //width: 120,
     marginRight: 10,
     fontFamily: 'Quicksand-Bold'
   },
@@ -96,12 +106,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9f9f9',
   },
   inputFecha: {
-    // flex: 1,
-    width: 220,
+    flex: 1,
+    //width: 220,
     height: 30,
     borderWidth: 1,
     borderColor: '#505050',
-    // borderRadius: 25,
+    //borderRadius: 25,
     fontFamily: 'Quicksand',
     backgroundColor: '#f9f9f9',
     paddingHorizontal: 10,
