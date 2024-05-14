@@ -9,7 +9,7 @@ import { SERVER } from '../utils/utils';
 import { useAuth } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
-const UserSearchComponent = ({ perfil, imagenPerfilURL }) => {
+const UserSearchComponent = ({ perfil, imagenPerfilURL, fromScreen }) => {
 
   const { width, height } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -35,7 +35,7 @@ const UserSearchComponent = ({ perfil, imagenPerfilURL }) => {
     console.log('Image pressed');
     console.log('Navegar al perfil');
     navigation.navigate('profile', {
-      fromScreen: 'feed',
+      fromScreen: fromScreen,
       userData:perfil 
     });
   }

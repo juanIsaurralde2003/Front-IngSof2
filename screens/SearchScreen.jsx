@@ -84,6 +84,7 @@ const SearchScreen = () => {
               key={index}
               perfil={item.username}
               imagenPerfilURL={item.profilePicture}
+              fromScreen={fromScreen}
             />
           ))}
         </ScrollView>
