@@ -1,7 +1,6 @@
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 export const handleDailyPromptNotificationResponse = (notification) => {
-    console.log("Handling message notification:", notification);
     navigation.navigate("challenge");
 };
 

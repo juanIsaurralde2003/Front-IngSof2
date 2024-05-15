@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useNavigation} from '@react-navigation/native';
 import { useAuth } from './AuthContext';
 import { registerForPushNotificationsAsync, registerNotificationHandlers, unregisterNotificationHandlers } from '../services/NotificationService';
+import { SERVER } from '../utils/utils';
 
 const NotificationHandler = () => {
     const navigation = useNavigation();
