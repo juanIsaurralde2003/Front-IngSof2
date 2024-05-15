@@ -13,6 +13,8 @@ function SignupScreen({ navigation }) {
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
   const [datosInvalidos, setDatosInvalidos] = useState(false);
+  const [emailInvalido, setEmailInvalido] = useState(false);
+  const [contrasenaInvalida, setContrasenaInvalida] = useState(false);
   const [errorGeneral, setErrorGeneral] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
@@ -44,8 +46,28 @@ function SignupScreen({ navigation }) {
 
   }
 
+  const validarEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
 
   const handleRegistrarButton = async () => {
+
+    setDatosInvalidos(false);
+    setEmailInvalido(false);
+    
+    if (!username || !email || !password) {
+      setDatosInvalidos(true);
+      return;
+    }
+
+    const isValidEmail = validarEmail();
+    if (!isValidEmail) {
+      setEmailInvalido(true);
+      return;
+
+    }
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/signup`
@@ -179,6 +201,12 @@ function SignupScreen({ navigation }) {
         {datosInvalidos &&
           <Text style={styles.textError}>Datos invalidos</Text>
         }
+        {emailInvalido &&
+          <Text style={styles.textError}>Email inválido</Text>
+        }
+        {contrasenaInvalida &&
+          <Text style={styles.textError}>Contraseña inválida</Text>
+        }
         {errorGeneral &&
           <Text style={styles.textError}>Hubo un problema al registrar el usuario</Text>
         }
@@ -230,22 +258,38 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   profileIcon: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 125,
+    height: 125,
+    borderRadius: 70,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#505050',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3, // equivalente a boxShadow en Android para efecto de elevación
+    backgroundColor: '#f2f2f2',
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 125,
+    height: 125,
+    borderRadius: 70,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#505050',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3, // equivalente a boxShadow en Android para efecto de elevación
+    backgroundColor: '#f2f2f2',
   },
   secondContainer: {
     flex: 1,
-    marginTop: 60,
+    marginTop: 80,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textError: {
     color: '#D32F2F',

@@ -69,7 +69,7 @@ const SearchScreen = () => {
           </View>
           <View style={styles.searchHeadingCross}>
             <TouchableOpacity onPress={handleClosePress} >
-              <EvilIcons name='close' size={60} color={'black'}/>
+              <EvilIcons name='close' size={60} çcolor={'black'}/>
             </TouchableOpacity>
           </View>
         </View>

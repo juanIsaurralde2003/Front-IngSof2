@@ -27,7 +27,9 @@ const handleDateChange = (event, selectedDate) => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Usuario:</Text>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Usuario:</Text>
+        </View>      
         <TextInput
           style={styles.input}
           onChangeText={text => setUsername(text)}
@@ -35,7 +37,9 @@ const handleDateChange = (event, selectedDate) => {
         />
       </View>
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Email:</Text>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Email:</Text>
+        </View>
         <TextInput
           style={styles.input}
           keyboardType='email-address'
@@ -44,7 +48,9 @@ const handleDateChange = (event, selectedDate) => {
       </View>
       <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
         <View style={[styles.inputContainer, {marginBottom: 0}]}>
-          <Text style={styles.label}>Fecha de nacimiento:</Text>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Fecha de nacimiento:</Text>
+          </View>
           <TextInput
             style={[styles.input, {textAlign: 'center'}]}
             editable={false}
@@ -64,12 +70,19 @@ const handleDateChange = (event, selectedDate) => {
         />
       )}
       <View style={styles.inputContainer}>
-        <Text style={styles.label}>Contraseña:</Text>
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>Contraseña:</Text>
+        </View>
         <TextInput
           style={styles.input}
           secureTextEntry={true}
           onChangeText={text => setPassword(text)}
         />
+      </View>
+      <View>
+        <Text style={styles.warningcontrasena}>
+          La contraseña debe tener un mínimo de 8 caracteres e incluir al menos una mayúscula, una minúscula, un número y un caracter especial.
+        </Text>
       </View>
     </View>
   );
@@ -81,11 +94,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
+    marginTop: 15,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   labelContainer: {
     width: '25%',
@@ -93,17 +107,24 @@ const styles = StyleSheet.create({
   label: {
     //width: 120,
     marginRight: 10,
-    fontFamily: 'Quicksand-Bold'
+    fontFamily: 'Quicksand-Bold',
+    fontSize: 14,
   },
   input: {
     flex: 1,
-    height: 30,
+    paddingVertical:13,
     borderWidth: 1,
     borderColor: '#505050',
     borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3, // equivalente a boxShadow en Android para efecto de elevación
+    backgroundColor: '#f2f2f2',
     paddingHorizontal: 10,
+    fontSize: 14,
     fontFamily: 'Quicksand',
-    backgroundColor: '#f9f9f9',
   },
   inputFecha: {
     flex: 1,
@@ -119,6 +140,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
+  warningcontrasena: {
+    fontSize: 10,
+    paddingVertical: 5,
+    color: '#4f4f4f'
+  }
 });
 
 export default UserDataComponent;
