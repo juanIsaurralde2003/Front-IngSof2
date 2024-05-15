@@ -9,11 +9,11 @@ const NotificationHandler = () => {
 
     useEffect(() => {
         let unsubscribeNotifications;
-        console.log("hay post diario?: " + dailyPost)
+        console.log("hay post diario? Notification Handler: " + dailyPost)
         console.log("navigation?: " + navigation)
         console.log("user?: " + user)
-        if (user && navigation && dailyPost) {
-            console.log("hay post diario? 2: " + dailyPost)
+        if (user && navigation) {
+            console.log("hay post diario 2? Notification Handler: " + dailyPost)
             registerForPushNotificationsAsync(user);
             unsubscribeNotifications = registerNotificationHandlers(navigation,dailyPost);
         }

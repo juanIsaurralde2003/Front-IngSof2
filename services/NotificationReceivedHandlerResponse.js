@@ -15,7 +15,7 @@ function getSubstringBeforeSpace(str) {
 }
 
 export const handleNewFollowerNotificationResponse = (notification,navigation,dailyPost) => {
-    console.log("y aqui el navigation es: " + navigation);
+    console.log("y aqui el navigation es: NoticationReceivedHandlerResponse" + navigation);
     const bodyText = notification.notification.request.content.body
     const user = getSubstringBeforeSpace(bodyText);
     navigation.navigate('profile', {

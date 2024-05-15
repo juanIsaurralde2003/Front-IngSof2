@@ -90,6 +90,7 @@ function LoginScreen({navigation}){
           navigation.navigate('feed');
         } else if (respuestaPost.status === 403) {
           setCredencialesIncorrectas(false);
+          setDailyPostDone(false)
           navigation.navigate('challenge');
         } else {
           console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
@@ -112,7 +113,7 @@ function LoginScreen({navigation}){
       console.log("el token es: " + token); 
       console.log("el usuario es: " + user);
       console.log("la foto de perfil es: " + profilePicture)
-      console.log("hay daily post: " + dailyPost)
+      console.log("hay daily post en Login Screen: " + dailyPost)
     }
   }, [token,user,profilePicture]); 
 

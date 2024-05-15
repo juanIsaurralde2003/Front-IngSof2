@@ -54,7 +54,7 @@ export async function registerForPushNotificationsAsync(user) {
 }
 
 export const registerNotificationHandlers = (navigation,dailyPost) => {
-    if(navigation && dailyPost){
+    if(navigation){
         console.log("aaaa " + navigation)
         const receivedSubscription = Notifications.addNotificationReceivedListener((notification) => {
             const type = notification.request.content.data.type;
