@@ -14,7 +14,7 @@ const NotificationHandler = () => {
         console.log("user?: " + user)
         if (user && navigation && dailyPost) {
             console.log("hay post diario? 2: " + dailyPost)
-            registerForPushNotificationsAsync();
+            registerForPushNotificationsAsync(user);
             unsubscribeNotifications = registerNotificationHandlers(navigation,dailyPost);
         }
         else if(!user && unsubscribeNotifications){

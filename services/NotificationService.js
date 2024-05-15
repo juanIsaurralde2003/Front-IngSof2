@@ -12,38 +12,40 @@ Notifications.setNotificationHandler({
     }), 
 });
 
-export async function registerForPushNotificationsAsync() {
+export async function registerForPushNotificationsAsync(user) {
     try {
-        let token;
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Error para obtener push token para push notifications');
-                return;
+        if(user){
+            let token;
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Error para obtener push token para push notifications');
+                    return;
+                }
             }
-        }
-        const expoToken = (await Notifications.getExpoPushTokenAsync({
-            projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
-        })).data;
-        const data = JSON.stringify({
-            token: expoToken,
-            username:"TestUser"
-        });
-        console.log(data);
-        const url = `${SERVER}/notifications/register-token`;
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: data
-        });
-        if(response.status === 200){
-            console.log("token registrado correctamente");
-        }
-        else{
-            console.error("Hubo un error con la solicitud: ",response.status);
+            const expoToken = (await Notifications.getExpoPushTokenAsync({
+                projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
+            })).data;
+            const data = JSON.stringify({
+                token: expoToken,
+                username:user
+            });
+            console.log(data);
+            const url = `${SERVER}/notifications/register-token`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data
+            });
+            if(response.status === 200){
+                console.log("token registrado correctamente");
+            }
+            else{
+                console.error("Hubo un error con la solicitud: ",response.status);
+            }
         }
         
     } catch (error) {
