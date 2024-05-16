@@ -41,7 +41,7 @@ const UserSearchComponent = ({ perfil, imagenPerfilURL, fromScreen }) => {
   }
 
   return (
-    <View style={[styles.container, { height: height * 0.15 }]}>
+    <View style={[styles.container, { height: height * 0.10, width: width }]}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleUserSearch}>
           <View style={{flexDirection: 'row'}}>
@@ -50,7 +50,7 @@ const UserSearchComponent = ({ perfil, imagenPerfilURL, fromScreen }) => {
               style={styles.profileImage}
             />
             <Text style={styles.userNameFeed}>
-              {perfil}
+              @{perfil}
             </Text>
           </View>
         </TouchableOpacity>
@@ -75,15 +75,15 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   profileImage: {
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     borderRadius: 50,
     backgroundColor: 'white',
   },
   userNameFeed: {
     fontFamily: 'Quicksand-Regular',
-    paddingHorizontal: 30,
-    fontSize: 20,
+    paddingHorizontal: 20,
+    fontSize: 16,
     alignSelf: 'center',
   },
 });

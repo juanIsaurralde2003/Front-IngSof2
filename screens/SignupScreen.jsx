@@ -15,12 +15,12 @@ function SignupScreen({ navigation }) {
   const [datosInvalidos, setDatosInvalidos] = useState(false);
   const [emailInvalido, setEmailInvalido] = useState(false);
   const [contrasenaInvalida, setContrasenaInvalida] = useState(false);
+  const [usuarioExistente, setUsuarioExistente] = useState(false);
   const [errorGeneral, setErrorGeneral] = useState(false);
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [loadingRegistrar, setLoadingRegistrar] = useState(false);
 
   const { height, width } = Dimensions.get('window');
 
@@ -56,11 +56,9 @@ function SignupScreen({ navigation }) {
 
     setDatosInvalidos(false);
     setEmailInvalido(false);
-    
-    if (!username || !email || !password) {
-      setDatosInvalidos(true);
-      return;
-    }
+    setErrorGeneral(false);
+    setContrasenaInvalida(false);
+    setUsuarioExistente(false);
 
     const isValidEmail = validarEmail();
     if (!isValidEmail) {
@@ -124,15 +122,24 @@ function SignupScreen({ navigation }) {
         Alert.alert('Registro Exitoso', `Bienvenido a Don't be real`);
         navigation.navigate('login');
 
-      } else if (respuesta.status === 400) {
-        const errorMessage = await respuesta.text();
-        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
-        setDatosInvalidos(true);
       } else {
-         const errorMessage = await respuesta.text();
-         console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
-        setErrorGeneral(true);
-
+        const errorMessage = await respuesta.text();
+        console.log('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+        if (respuesta.status === 400) {
+            const errorJSON = JSON.parse(errorMessage);
+            if (errorJSON.message.includes('password is not strong enough')) {
+                // Realizar acciones específicas para cuando la contraseña no es lo suficientemente fuerte
+                setContrasenaInvalida(true);
+            } else if (errorJSON.message === 'User already exists') {
+                // Realizar acciones específicas para cuando el usuario ya existe
+                setUsuarioExistente(true);
+            }
+        } else if (respuesta.status === 500 && errorMessage.includes(' already exists with label `User` and property `email` =')) {
+          setUsuarioExistente(true);
+        } else {
+          // Manejar otros errores generales
+          setErrorGeneral(true);
+        }
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
@@ -207,12 +214,15 @@ function SignupScreen({ navigation }) {
         {contrasenaInvalida &&
           <Text style={styles.textError}>Contraseña inválida</Text>
         }
+        {usuarioExistente &&
+          <Text style={styles.textError}>El nombre de usuario o el correo electrónico ingresados ya están en uso</Text>
+        }
         {errorGeneral &&
           <Text style={styles.textError}>Hubo un problema al registrar el usuario</Text>
         }
         <TouchableOpacity
-          disabled={isLoginLoading || !terminosCondicionesAceptados}
-          style={styles.loginButton}
+          disabled={isLoginLoading || (!terminosCondicionesAceptados || !username || !email || !password)}
+          style={[styles.loginButton, {backgroundColor: (terminosCondicionesAceptados && username && email && password) ? '#390294' : '#6e3aa7'}]}
           activeOpacity={0.8}
           onPress={handleRegistrarButton}
         >
@@ -294,9 +304,10 @@ const styles = StyleSheet.create({
   textError: {
     color: '#D32F2F',
     textAlign: 'center',
+    padding: 5,
   },
   loginButton: {
-    backgroundColor: '#390294', // Color de fondo del botón
+    //backgroundColor: '#390294', // Color de fondo del botón
     paddingVertical: 14,        // Espaciado vertical dentro del botón
     paddingHorizontal: 10,      // Espaciado horizontal dentro del botón
     borderRadius: 20,           // Bordes redondeados
@@ -322,6 +333,7 @@ const styles = StyleSheet.create({
     elevation: 8,
     width: 200,
     alignItems: 'center',
+    marginBottom: 40,
 
   },
   loginText: {
@@ -364,7 +376,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#390294',
     alignSelf: 'flex-end',
-    fontFamily: 'Quicksand-Bold'
+    fontFamily: 'Quicksand-Bold',
+    marginBottom: 15,
   },
 
 })

@@ -189,9 +189,9 @@ const ChallengeScreen = () => {
               </View>
             ) : (
               <>
-              <Text style={styles.challengeHeaderText}>Reto diario: {challengeData?.name}</Text>
+              <Text style={styles.challengeHeaderText}>{challengeData?.name}</Text>
               <TouchableOpacity style={styles.challengeDescriptionContainer}>
-                <Text style={styles.challengeDescription}>{challengeData?.description}</Text>
+                <Text style={styles.challengeDescription} adjustsFontSizeToFit>{challengeData?.description}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
                 <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
       fontSize: 24,
       marginBottom: 20,
       fontFamily: 'Quicksand-Bold',
+      textAlign: 'center',
     },
     challengeDescriptionContainer: {
       backgroundColor: '#c7c7f1',

@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from "react";
-import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView} from "react-native";
+import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView, Keyboard, KeyboardAvoidingView} from "react-native";
 import StyledText from "../components/StyledText";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
@@ -7,6 +7,7 @@ import { useFonts } from 'expo-font';
 import { SERVER } from "../utils/utils";
 import NotificationHandler from "../components/NotificationHandler";
 import { registerForPushNotificationsAsync, registerNotificationHandlers } from "../services/NotificationService";
+
 
 function LoginScreen({navigation}){
   const {user, token, profilePicture, loading, signIn, signOut, setDailyPostDone,dailyPost} = useAuth();
@@ -49,6 +50,7 @@ function LoginScreen({navigation}){
   }
   
   const handleLoginButton = async () => {
+    setCredencialesIncorrectas(false);
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
@@ -127,7 +129,7 @@ function LoginScreen({navigation}){
     }
   }
   return(
-    <ScrollView style={styles.container} keyboardDismissMode="on-drag">
+    <ScrollView style={styles.container} keyboardDismissMode="on-drag" bounces={false} keyboardShouldPersistTaps='handled'>
         <TituloLogin/>
         <View style = {styles.secondContainer}>
             {credencialesIncorrectas &&
@@ -156,10 +158,10 @@ function LoginScreen({navigation}){
               <Text style={styles.forgotPswText}>
                 ¿Olvidaste tu contraseña?
               </Text>
-            </TouchableOpacity>  
+            </TouchableOpacity>
             <TouchableOpacity 
-                disabled={isLoginLoading}
-                style={styles.loginButton}
+                disabled={isLoginLoading || (!username || !password)}
+                style={[styles.loginButton, {backgroundColor: (username && password) ? '#390294' : '#6e3aa7'}]}
                 activeOpacity={0.8}
                 onPress={handleLoginButton}
             >
