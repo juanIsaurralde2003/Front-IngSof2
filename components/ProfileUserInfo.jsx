@@ -1,6 +1,6 @@
 import React,{useEffect, useState}from "react";
 import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS,ActivityIndicator} from "react-native";
-import profilePicture from '../assets/profile_picture.png'
+import profilePicture from '../assets/person.jpg'
 import StyledText from "./StyledText";
 import { MaterialIcons,Entypo } from '@expo/vector-icons';
 import { Rating } from 'react-native-ratings';
@@ -185,7 +185,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 </TouchableOpacity>
             </View>
             <Image
-                source = {(imagenPerfilURL !=='' ? {uri:imagenPerfilURL} : profilePicture)}     //CAMBIAR POR URL DE LA BD
+                source = {(typeof imagenPerfilURL !=='undefined' ? {uri:imagenPerfilURL} : profilePicture)}     //CAMBIAR POR URL DE LA BD
                 onLoadStart={handleLoadStart}
                 onLoadEnd={handleLoadEnd}
                 onError={handleLoadError}

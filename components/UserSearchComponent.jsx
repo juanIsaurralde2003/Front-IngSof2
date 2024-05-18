@@ -45,10 +45,17 @@ const UserSearchComponent = ({ perfil, imagenPerfilURL, fromScreen }) => {
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleUserSearch}>
           <View style={{flexDirection: 'row'}}>
-            <Image
-              source={{uri: imagenPerfilURL}}
-              style={styles.profileImage}
-            />
+            {typeof imagenPerfilURL === "undefined" ? 
+              <Image
+                source={require("../assets/person.jpg")}
+                style={styles.profileImage}
+              />
+            :
+                <Image
+                source={{uri: imagenPerfilURL}}
+                style={styles.profileImage}
+              />
+            }
             <Text style={styles.userNameFeed}>
               @{perfil}
             </Text>

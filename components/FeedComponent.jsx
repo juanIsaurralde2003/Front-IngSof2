@@ -9,7 +9,7 @@ import { SERVER } from '../utils/utils';
 import { useAuth } from './AuthContext';
 import { useNavigation } from '@react-navigation/native';
 
-const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setReportedImages }) => {
+const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setReportedImages, score, userScore }) => {
 
   const navigation = useNavigation();
   const { width } = useWindowDimensions();
@@ -116,10 +116,17 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
     <View style={[styles.container, { width: width }]}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleProfilePress}>
-          <Image
-            source={{uri: imagenPerfilURL}}
-            style={styles.profileImage}
-          />
+          {typeof imagenPerfilURL === "undefined" ? 
+            <Image
+              source={require("../assets/person.jpg")}
+              style={styles.profileImage}
+            />
+          :
+              <Image
+              source={{uri: imagenPerfilURL}}
+              style={styles.profileImage}
+            />
+          }
         </TouchableOpacity>
         <TouchableOpacity onPress={handleProfilePress}>
           <Text style={styles.userNameFeed}>
@@ -151,15 +158,19 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
         )}
       </View>
       <View style={styles.ratingContainer}>
-        <CustomRating
-          maxRating={5}
-          defaultRating={initialRating}
-          onRatingChange={ratingCompleted}
-        />
-
+        <View style={styles.scoreContainer}>
+          <CustomRating
+            maxRating={5}
+            defaultRating={userScore ? userScore : 0}
+            onRatingChange={ratingCompleted}
+            imageUrl={imagenURL}
+            username={user}
+          />
+          <Text style={styles.score}>{score}</Text>
+        </View>
         {!isSelfPost && (
           <TouchableOpacity onPress={showActionSheet}>
-          <MaterialIcons name={'report-problem'} size={30} color={'black'} />
+            <MaterialIcons name={'report-problem'} size={30} color={'black'} />
           </TouchableOpacity>
         )}
       </View>
@@ -217,6 +228,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
   },
+  scoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  score: {
+    fontSize: 20,
+    color: '#DAA520',
+    marginLeft: 10,
+  }
 });
 
 const FeedComponentWithActionSheet = (props) => (

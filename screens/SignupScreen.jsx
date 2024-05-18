@@ -68,7 +68,9 @@ function SignupScreen({ navigation }) {
     }
 
     setIsLoginLoading(true);
-    const url = `${SERVER}/auth/signup`
+
+    let url = `${SERVER}/auth/signup`
+
 
     const data = new FormData();
     // data = {
@@ -95,17 +97,20 @@ function SignupScreen({ navigation }) {
         type: `image/${fileType}`,
       });
     } else {
-      const defaultImageUri = await handleDefaultImage();
+      // const defaultImageUri = await handleDefaultImage();
     
-      data.append('file', {
-        uri: defaultImageUri,
-        name: `profile_${username}.jpg`,
-        type: `image/jpeg`,
-      });
+      // data.append('file', {
+      //   uri: defaultImageUri,
+      //   name: `profile_${username}.jpg`,
+      //   type: `image/jpeg`,
+      // });
+      console.log('Cambio url')
+      url = `${SERVER}/auth/signup/nopic`
     }
 
     try {
       console.log(data)
+      console.log(url);
       const respuesta = await fetch(url, {
         method: 'POST',
         headers: {

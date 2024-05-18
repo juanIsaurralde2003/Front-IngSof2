@@ -29,6 +29,7 @@ const FeedScreen = () => {
         const data = await response.json();
   
         console.log(data);
+        console.log(data.post);
 
         setFeedData(data.post);
       } else {
@@ -206,6 +207,8 @@ const FeedScreen = () => {
                   perfil={item.author}
                   imagenPerfilURL={item.profilePicture}
                   isSelfPost={item.author === user}
+                  score={item.post.score}
+                  userScore={item.post.userScore}
                   setReportedImages={setReportedImages}
                 />
             ))
