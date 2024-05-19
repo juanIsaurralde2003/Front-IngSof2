@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, TouchableOpacity } from 'react-native';
 import CustomRating from './Rating';
 import StyledText from './StyledText';
-import profilePicture from '../assets/profile_picture.png'
 
 const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, rating}) => {
 
