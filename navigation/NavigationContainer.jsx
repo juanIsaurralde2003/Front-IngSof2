@@ -9,6 +9,7 @@ import { SessionExpired } from '../components/SessionExpired';
 const AppNavigationContainer = () => (
   <NavigationContainer>
     <NotificationHandler/>
+    <SessionExpired/>
     <StackNavigator/>
   </NavigationContainer>
 );

@@ -58,14 +58,17 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignSelf:'center',
         top:300,
-        padding:20,
+        padding:10,
+        paddingHorizontal:20,
         width:300,
         borderColor:'#4402b2',
+        borderRadius:10,
         borderWidth:2
 
     },
     topContainer:{
         flexDirection:'row',
+        marginTop:5
     },
     iconContainer:{
         marginRight:5,
@@ -78,7 +81,6 @@ const styles = StyleSheet.create({
     },
     tittleContainer:{
         alignSelf:'center',
-        marginLeft:0
     },
     tittleText:{
         color:'black',
@@ -87,14 +89,16 @@ const styles = StyleSheet.create({
     },
     textContainer:{
         marginTop:15,
-        marginBottom:15
+        marginBottom:15,
+        left:15
     },
     text:{ 
-        color:'black',
-        fontSize:14
+        color:'#514A5D',
+        fontSize:12
     },
     buttonContainer:{
-        alignItems:'flex-end'
+        alignItems:'flex-end',
+        marginRight:-10
     },
     loginButton:{
         borderColor:'#4402b2',

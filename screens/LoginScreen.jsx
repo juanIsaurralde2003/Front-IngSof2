@@ -1,6 +1,5 @@
 import React, {useState, useEffect } from "react";
-import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView} from "react-native";
-import StyledText from "../components/StyledText";
+import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView, Keyboard, KeyboardAvoidingView} from "react-native";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from "../utils/utils";
@@ -129,7 +128,6 @@ function LoginScreen({navigation}){
   return(
     <ScrollView style={styles.container} keyboardDismissMode="on-drag" bounces={false} keyboardShouldPersistTaps='handled'>
         <TituloLogin/>
-        {/*<SessionExpired/>*/}
         <View style = {styles.secondContainer}>
             {credencialesIncorrectas &&
             <Text style={styles.credencialesError}>Usuario o contraseña incorrectos</Text>
