@@ -4,23 +4,18 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
+  const today = new Date();
+  const maximumDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Estado para almacenar la fecha seleccionada
-  const [timeoutFecha, setTimeoutFecha] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(maximumDate); // Estado para almacenar la fecha seleccionada
 
   // Función para manejar el cambio de fecha seleccionada
 const handleDateChange = (event, selectedDate) => {
-  if (timeoutFecha) {
-    clearTimeout(timeoutFecha);
-  }
   const currentDate = selectedDate || date;
   setSelectedDate(currentDate);
   const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
   setBirthday(formattedDate);
-  const newTimeoutFecha = setTimeout(() => {
-    setShowDatePicker(false);
-  }, 2000); // 2000 milisegundos = 2 segundos
-  setTimeoutFecha(newTimeoutFecha);
 };
 
 
@@ -44,9 +39,10 @@ const handleDateChange = (event, selectedDate) => {
           style={styles.input}
           keyboardType='email-address'
           onChangeText={text => setEmail(text)}
+          maxLength={100}
         />
       </View>
-      <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(true)}>
+      <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(!showDatePicker)}>
         <View style={[styles.inputContainer, {marginBottom: 0}]}>
           <View style={styles.labelContainer}>
             <Text style={styles.label}>Fecha de nacimiento:</Text>
@@ -54,20 +50,26 @@ const handleDateChange = (event, selectedDate) => {
           <TextInput
             style={[styles.input, {textAlign: 'center'}]}
             editable={false}
-            onPress={() => setShowDatePicker(true)}
+            onPress={() => setShowDatePicker(!showDatePicker)}
             value={selectedDate.toLocaleDateString()}
           />
           {/* <Text style={styles.inputFecha}>{selectedDate.toLocaleDateString()}</Text> */}
         </View>
       </TouchableOpacity>
       {showDatePicker && (
-        <DateTimePicker
-          value={selectedDate}
-          mode="date"
-          display="spinner"
-          onChange={handleDateChange}
-          maximumDate={new Date()}
-        />
+        <View>
+          <DateTimePicker
+            value={selectedDate}
+            mode="date"
+            display="spinner"
+            onChange={handleDateChange}
+            maximumDate={maximumDate}
+            minimumDate={new Date(1900, 0, 2)}
+          />
+          <TouchableOpacity onPress={() => setShowDatePicker(false)}>
+            <Text style={styles.closeDatePickerButton}>Cerrar</Text>
+          </TouchableOpacity>
+        </View>
       )}
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>
@@ -77,6 +79,7 @@ const handleDateChange = (event, selectedDate) => {
           style={styles.input}
           secureTextEntry={true}
           onChangeText={text => setPassword(text)}
+          maxLength={100}
         />
       </View>
       <View>
@@ -144,7 +147,14 @@ const styles = StyleSheet.create({
     fontSize: 10,
     paddingVertical: 5,
     color: '#4f4f4f'
-  }
+  },
+  closeDatePickerButton: {
+    fontSize: 16,
+    color: '#390294',
+    alignSelf: 'flex-end',
+    fontFamily: 'Quicksand-Bold',
+    marginBottom: 20,
+  },
 });
 
 export default UserDataComponent;

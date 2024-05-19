@@ -1,9 +1,11 @@
 import React, {useState, useEffect } from "react";
 import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView} from "react-native";
+import StyledText from "../components/StyledText";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from "../utils/utils";
 import { SessionExpired } from "../components/SessionExpired";
+
 
 function LoginScreen({navigation}){
   const {user, token, profilePicture, loading, signIn, signOut, setDailyPostDone,dailyPost} = useAuth();
@@ -46,6 +48,7 @@ function LoginScreen({navigation}){
   }
   
   const handleLoginButton = async () => {
+    setCredencialesIncorrectas(false);
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
@@ -124,7 +127,7 @@ function LoginScreen({navigation}){
     }
   }
   return(
-    <ScrollView style={styles.container} keyboardDismissMode="on-drag">
+    <ScrollView style={styles.container} keyboardDismissMode="on-drag" bounces={false} keyboardShouldPersistTaps='handled'>
         <TituloLogin/>
         {/*<SessionExpired/>*/}
         <View style = {styles.secondContainer}>
@@ -154,10 +157,10 @@ function LoginScreen({navigation}){
               <Text style={styles.forgotPswText}>
                 ¿Olvidaste tu contraseña?
               </Text>
-            </TouchableOpacity>  
+            </TouchableOpacity>
             <TouchableOpacity 
-                disabled={isLoginLoading}
-                style={styles.loginButton}
+                disabled={isLoginLoading || (!username || !password)}
+                style={[styles.loginButton, {backgroundColor: (username && password) ? '#390294' : '#6e3aa7'}]}
                 activeOpacity={0.8}
                 onPress={handleLoginButton}
             >

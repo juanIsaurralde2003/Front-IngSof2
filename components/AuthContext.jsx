@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Image } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
 const AuthContext = React.createContext();
@@ -62,10 +63,27 @@ export const AuthProvider = ({ children }) => {
         try {
             await SecureStore.setItemAsync('userToken', newToken);
             await SecureStore.setItemAsync('user', newUsername);
-            await SecureStore.setItemAsync('profilePicture', newUrl);
+
+            console.log('Imprimo newUrl')
+            console.log(newUrl);
+
+            if (typeof newUrl !== "undefined") {
+                console.log('Entro a not null');
+                // Si la URL de la imagen no es null, la guardamos en SecureStore
+                await SecureStore.setItemAsync('profilePicture', newUrl);
+                setProfilePicture(newUrl);
+            } else {
+                console.log('Entro a null')
+                // Si la URL de la imagen es null, guardamos la imagen predeterminada en SecureStore
+                const defaultProfilePicture = require("../assets/person.jpg");
+                console.log(defaultProfilePicture);
+                const defaultUrl = Image.resolveAssetSource(require("../assets/person.jpg")).uri; // Obtenemos la URI de la imagen predeterminada
+                console.log(defaultUrl)
+                await SecureStore.setItemAsync('profilePicture', defaultUrl);
+                setProfilePicture(defaultUrl);
+            }
             setToken(newToken);
             setUser(newUsername);
-            setProfilePicture(newUrl);
         } catch (error) {
             console.error('Error en sign-in', error);
         }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
-import { Entypo, EvilIcons } from '@expo/vector-icons';
+import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
 
 const SearchScreen = () => {
@@ -69,7 +69,7 @@ const SearchScreen = () => {
           </View>
           <View style={styles.searchHeadingCross}>
             <TouchableOpacity onPress={handleClosePress} >
-              <EvilIcons name='close' size={60} çcolor={'black'}/>
+              <MaterialIcons name={'close'} size={30} color={'black'} />
             </TouchableOpacity>
           </View>
         </View>
@@ -77,7 +77,9 @@ const SearchScreen = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5'}}
+          contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5', width: '100%'}}
+          onTouchStart={Keyboard.dismiss}
+          keyboardShouldPersistTaps='handled'
         >
           {filteredUsuarios.map((item, index) => (
             <UserSearchComponent 
