@@ -1,51 +1,71 @@
 import React, { useEffect, useState } from "react";
-import { View,StyleSheet,Modal,Text,TouchableOpacity,Image } from "react-native";
+import { View, StyleSheet, Modal, Text, TouchableOpacity, Image } from "react-native";
+import { jwtDecode } from "jwt-decode";
 import { useAuth } from "./AuthContext";
 import { useNavigation } from "@react-navigation/native";
 
 
 export const SessionExpired = () => {
-    const [isVisible,setIsVisible] = useState(true);
-    const {validToken} = useAuth()
+    const [isVisible,setIsVisible] = useState(false);
+    const {token} = useAuth()
     const navigator = useNavigation();
     
     useEffect(()=>{
-        setIsVisible(validToken);
-    },[validToken]);
+        const checkTokenExpiration = () => {
+            if(token){
+                const decodedToken = jwtDecode(token);
+                const currentTime = Math.floor(Date.now/1000);
+                console.log("SessionExpired: la fecha en la que el token expira es: " + decodedToken.exp);
+                if(decodedToken.exp < currentTime){
+                    setIsVisible(true);
+                }
+                else{
+                    setIsVisible(false);
+                }
+            }
+        };
+
+        checkTokenExpiration();
+
+        const intervalId = setInterval(checkTokenExpiration, 60*1000);
+
+        return () => clearInterval(intervalId);
+    },[token]);
 
     const handleLoginPress = ()=>{
         navigator.navigate('login');
         setIsVisible(false);
     }
-
-    return(
-        <View style={styles.container}>
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={isVisible}
-            >
-                <View style={styles.modalContainer}>
-                    <View style={styles.topContainer}>
-                        <View style={styles.iconContainer}>
-                            <Image source={require('../assets/alert.png')} style={styles.icon}/>
+    if(isVisible !== null){
+        return(
+            <View style={styles.container}>
+                <Modal
+                    animationType="fade"
+                    transparent={true}
+                    visible={isVisible}
+                >
+                    <View style={styles.modalContainer}>
+                        <View style={styles.topContainer}>
+                            <View style={styles.iconContainer}>
+                                <Image source={require('../assets/alert.png')} style={styles.icon}/>
+                            </View>
+                            <View style={styles.tittleContainer}>
+                                <Text style={styles.tittleText}> Tu sesión ha expirado</Text>
+                            </View>
                         </View>
-                        <View style={styles.tittleContainer}>
-                            <Text style={styles.tittleText}> Tu sesión ha expirado</Text>
+                        <View style={styles.textContainer}>
+                            <Text style={styles.text}> Por favor, vuelve a iniciar sesión para continuar usando la app.</Text>   
                         </View>
-                    </View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.text}> Por favor, vuelve a iniciar sesión para continuar usando la app.</Text>   
-                    </View>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity onPress={handleLoginPress}style={styles.loginButton}>
-                            <Text style={styles.loginText}>Login</Text>
-                        </TouchableOpacity>
-                    </View>   
-                </View>  
-            </Modal>
-        </View>
-    )
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity onPress={handleLoginPress}style={styles.loginButton}>
+                                <Text style={styles.loginText}>Login</Text>
+                            </TouchableOpacity>
+                        </View>   
+                    </View>  
+                </Modal>
+            </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
