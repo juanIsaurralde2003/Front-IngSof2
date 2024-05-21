@@ -59,35 +59,37 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const signIn = async (newToken, newUsername, newUrl) => {
+    const signIn = async (newToken, newUsername) => {
         try {
             await SecureStore.setItemAsync('userToken', newToken);
             await SecureStore.setItemAsync('user', newUsername);
-
-            console.log('Imprimo newUrl')
-            console.log(newUrl);
-
-            if (typeof newUrl !== "undefined") {
-                console.log('Entro a not null');
-                // Si la URL de la imagen no es null, la guardamos en SecureStore
-                await SecureStore.setItemAsync('profilePicture', newUrl);
-                setProfilePicture(newUrl);
-            } else {
-                console.log('Entro a null')
-                // Si la URL de la imagen es null, guardamos la imagen predeterminada en SecureStore
-                const defaultProfilePicture = require("../assets/person.jpg");
-                console.log(defaultProfilePicture);
-                const defaultUrl = Image.resolveAssetSource(require("../assets/person.jpg")).uri; // Obtenemos la URI de la imagen predeterminada
-                console.log(defaultUrl)
-                await SecureStore.setItemAsync('profilePicture', defaultUrl);
-                setProfilePicture(defaultUrl);
-            }
             setToken(newToken);
             setUser(newUsername);
         } catch (error) {
             console.error('Error en sign-in', error);
         }
     };
+
+
+    const setProfilePic = async (newUrl)=>{
+
+        if (typeof newUrl !== "undefined") {
+            console.log('Entro a not null');
+            // Si la URL de la imagen no es null, la guardamos en SecureStore
+            await SecureStore.setItemAsync('profilePicture', newUrl);
+            setProfilePicture(newUrl);
+        } else {
+            console.log('Entro a null')
+            // Si la URL de la imagen es null, guardamos la imagen predeterminada en SecureStore
+            const defaultProfilePicture = require("../assets/person.jpg");
+            console.log(defaultProfilePicture);
+            const defaultUrl = Image.resolveAssetSource(require("../assets/person.jpg")).uri; // Obtenemos la URI de la imagen predeterminada
+            console.log(defaultUrl)
+            await SecureStore.setItemAsync('profilePicture', defaultUrl);
+            setProfilePicture(defaultUrl);
+        }
+        
+    }
 
     const signOut = async () => {
         try {
@@ -103,7 +105,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone }}>
+        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone,setProfilePic }}>
             {children}
         </AuthContext.Provider>
     );

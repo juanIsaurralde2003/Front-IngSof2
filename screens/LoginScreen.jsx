@@ -34,7 +34,6 @@ function LoginScreen({navigation}){
         const data = await response.json();
         console.log(data);
         setProfilePic(data.user.user.profilePicture);
-        signIn(JWT, username, data.user.user.profilePicture);
         console.log('Obtuve foto del usuario');
       }
       else{
@@ -51,6 +50,7 @@ function LoginScreen({navigation}){
 
     setIsLoginLoading(true);
     const url = `${SERVER}/auth/login`
+    console.log(url);
     const urlPost = `${SERVER}/users/status/${username}`;
     console.log(urlPost);
 
@@ -67,11 +67,12 @@ function LoginScreen({navigation}){
         },
         body: JSON.stringify(data),
       });
-  
+
       if (respuesta.status === 200) { //Cambiar a 200 después
-        const datos = await respuesta.json(); 
-        console.log(datos);
+        const datos = await respuesta.json();
+        console.log("Login: los datos son: " + JSON.stringify(datos))
         const JWT = datos.auth.token;
+        signIn(JWT, username);
         await getProfileUserInfo(JWT);
         console.log('Voy a hacer login');
         
@@ -80,9 +81,11 @@ function LoginScreen({navigation}){
         
         const respuestaPost = await fetch(urlPost, {
           method: 'GET',
+          headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
         });
-
-
         if (respuestaPost.status === 200) {
           setCredencialesIncorrectas(false);
           setDailyPostDone(true)
@@ -93,6 +96,7 @@ function LoginScreen({navigation}){
           navigation.navigate('challenge');
         } else {
           console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
+          console.log("hola")
         }
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
