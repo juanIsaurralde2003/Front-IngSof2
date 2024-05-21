@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
             const credentials = await SecureStore.getItemAsync('userToken');
             const username = await SecureStore.getItemAsync('user');
             const url = await SecureStore.getItemAsync('profilePicture');
-            if (credentials && username && url) {
+            if (credentials && username) {
                 setToken(credentials);
                 setUser(username);
                 setProfilePicture(url);
@@ -32,6 +32,23 @@ export const AuthProvider = ({ children }) => {
         loadUserInfo();
     }, []);
 
+    useEffect (()=>{
+        loadProfilePicture();
+    },[])
+
+    const loadProfilePicture = async () => {
+        try {
+            const url = await SecureStore.getItemAsync('profilePicture');
+            if (url) {
+                setProfilePicture(url);
+            }
+        } catch (error) {
+            console.error('Error al cargar la foto de perfil:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     const loadDailyPost = async () => {
         try {
             const post = await SecureStore.getItemAsync('dailyPost');
@@ -65,13 +82,14 @@ export const AuthProvider = ({ children }) => {
             await SecureStore.setItemAsync('user', newUsername);
             setToken(newToken);
             setUser(newUsername);
+            console.log("AuthContext: el token nuevo es: " + newToken);
         } catch (error) {
             console.error('Error en sign-in', error);
         }
     };
 
 
-    const setProfilePic = async (newUrl)=>{
+    const setProfilePic = async (newUrl) => {
 
         if (typeof newUrl !== "undefined") {
             console.log('Entro a not null');

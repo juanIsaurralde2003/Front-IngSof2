@@ -33,7 +33,7 @@ function LoginScreen({navigation}){
       if(response.ok){
         const data = await response.json();
         console.log(data);
-        await setProfilePic(data.user.user.profilePicture);
+        setProfilePic(data.user.user.profilePicture);
         console.log('Obtuve foto del usuario');
       }
       else{
@@ -71,12 +71,12 @@ function LoginScreen({navigation}){
         console.log("Login: los datos son: " + JSON.stringify(datos))
         const JWT = datos.auth.token;
         await signIn(JWT, username);
-        await getProfileUserInfo(JWT);
         console.log('Voy a hacer login');
         
         setUsername('');
         setPassword('');
-        
+        await getProfileUserInfo(JWT);
+        console.log("aaa: "+ token);
         const respuestaPost = await fetch(urlPost, {
           method: 'GET',
           headers:{
