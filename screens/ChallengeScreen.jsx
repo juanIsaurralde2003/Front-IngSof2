@@ -19,6 +19,7 @@ const ChallengeScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [savingImage, setSavingImage] = useState(false);
   const cameraRef = useRef(null);
+  const {token} = useAuth();
 
   const {user, profilePicture,setDailyPostDone,dailyPost} = useAuth();
 
@@ -45,7 +46,14 @@ const ChallengeScreen = () => {
       const url = `${SERVER}/posts/prompt`;
 
       try {
-        const response = await fetch(url, { method: 'GET' });
+        const response = await fetch(url, { 
+          method: 'GET',
+          headers:{
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+            
+          }
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -190,9 +198,9 @@ const ChallengeScreen = () => {
             ) : (
               <>
               <Text style={styles.challengeHeaderText}>{challengeData?.name}</Text>
-              <TouchableOpacity style={styles.challengeDescriptionContainer}>
+              <View style={styles.challengeDescriptionContainer}>
                 <Text style={styles.challengeDescription} adjustsFontSizeToFit>{challengeData?.description}</Text>
-              </TouchableOpacity>
+              </View>
               <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
                 <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
                 <Text style={styles.buttonText}>Adelante</Text>
