@@ -69,23 +69,28 @@ function SignupScreen({ navigation }) {
 
     setIsLoginLoading(true);
 
-    let url = `${SERVER}/auth/signup`
+    let url = `${SERVER}/auth/signup`;
+    let headers = {
+      'Content-Type': 'multipart/form-data',
+    }
+    let body;
 
-
-    const data = new FormData();
-    // data = {
-    //   username: username,
-    //   password: password,
-    //   email: email,
-    //   birthday: birthday,
-    //   file: profileImage
-    // }
-    data.append('username', username);
-    data.append('password', password);
-    data.append('email', email);
-    data.append('birthday', birthday);
+    const dataSimple = {
+      username: username,
+      password: password,
+      email: email,
+      birthday: birthday,
+    }
 
     if (profileImage) {
+
+      const data = new FormData();
+
+      data.append('username', username);
+      data.append('password', password);
+      data.append('email', email);
+      data.append('birthday', birthday);  
+
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
@@ -96,6 +101,8 @@ function SignupScreen({ navigation }) {
         name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
+
+      body = data;
     } else {
       // const defaultImageUri = await handleDefaultImage();
     
@@ -105,18 +112,20 @@ function SignupScreen({ navigation }) {
       //   type: `image/jpeg`,
       // });
       console.log('Cambio url')
-      url = `${SERVER}/auth/signup/nopic`
+      url = `${SERVER}/auth/signup/nopic`,
+      headers = {'Content-Type': 'application/json'}
+      body = JSON.stringify(dataSimple);
     }
 
     try {
-      console.log(data)
+      console.log('Datos: ')
       console.log(url);
+      console.log(headers);
+      console.log(body);
       const respuesta = await fetch(url, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        body: data,
+        headers: headers,
+        body: body,
         // body: JSON.stringify(data),
       });
 

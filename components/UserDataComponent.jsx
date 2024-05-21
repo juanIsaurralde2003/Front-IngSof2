@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
   const today = new Date();
-  const maximumDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+  const maximumDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate() - 1);
 
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
   const [selectedDate, setSelectedDate] = useState(maximumDate); // Estado para almacenar la fecha seleccionada
