@@ -11,6 +11,7 @@ function ProfileScreen({navigation}){
     const {token} = useAuth()
     const [publicaciones, setPublicaciones] = useState([]);
     const [profileUserInfo,setProfileUserInfo] = useState({});
+    const [retosUser, setRetosUser] = useState(0);
     const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
     const route = useRoute();
     const { fromScreen, userData } = route.params;
@@ -23,6 +24,31 @@ function ProfileScreen({navigation}){
       profileDate = months[month] + " " + day + ", " + year
       return profileDate;
       
+    }
+
+    const getCantidadPosts = async () => {
+      try {
+        const url = `${SERVER}/users/completedprompts/${encodeURIComponent(userData)}`;
+        console.log("el usuario es:" + userData);
+        const response = await fetch(url, {method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+    
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Imprimo cantidad de posts');
+          setRetosUser(data.totalPrompts);
+          console.log(data);
+        } else {
+          console.error("Respuesta HTTP no exitosa",response.status);
+        }
+    
+      } catch (error) {
+        console.error('Hubo un problema con la solicitud cantidad fetch:', error);
+      }
     }
     
     const getPublicacionesUsuario = async () => {
@@ -94,6 +120,7 @@ function ProfileScreen({navigation}){
       getProfileUserInfo();
       console.log("el rating es" + profileUserInfo.rating)
       getPublicacionesUsuario();
+      getCantidadPosts();
     },[])
     
     const profileUserInfoHC = {
@@ -119,7 +146,7 @@ function ProfileScreen({navigation}){
                                             imagenPerfilURL={profileUserInfo.imagenPerfilURL}
                                             seguidores={profileUserInfo.seguidores}
                                             seguidos={profileUserInfo.seguidos}
-                                            retos={profileUserInfo.retos}
+                                            retos={retosUser}
                                             fromScreen={fromScreen}
                                     
                                           />}
