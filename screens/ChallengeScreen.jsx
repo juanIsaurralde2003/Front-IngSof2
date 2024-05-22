@@ -132,6 +132,7 @@ const ChallengeScreen = () => {
         method: 'POST', 
         headers: {
           'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         },
         body: data,
       });
@@ -139,7 +140,7 @@ const ChallengeScreen = () => {
       if (respuesta.ok) {
         console.log('Hecho');
       } else {
-        console.error('Algo salió mal');
+        console.error('Algo salió mal al guardar la foto');
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);

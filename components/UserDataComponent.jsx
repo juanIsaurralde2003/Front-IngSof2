@@ -40,6 +40,7 @@ const handleDateChange = (event, selectedDate) => {
           keyboardType='email-address'
           onChangeText={text => setEmail(text)}
           maxLength={100}
+          autoCapitalize='none'
         />
       </View>
       <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(!showDatePicker)}>

@@ -1,7 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import LoginScreen from './screens/LoginScreen'
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppNavigationContainer from './navigation/NavigationContainer';
 import { AuthProvider } from './components/AuthContext';
@@ -10,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { registerForPushNotificationsAsync, registerNotificationHandlers } from './services/NotificationService';
 import 'react-native-reanimated';
-import NotificationHandler from './components/NotificationHandler';
 
 
 const Stack = createNativeStackNavigator();

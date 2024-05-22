@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet,View,Text,Image} from "react-native";
-import StyledText from "../components/StyledText";
+import { StyleSheet,View,Text} from "react-native";
 import { CameraIcon } from "./CameraIcon";
 
 

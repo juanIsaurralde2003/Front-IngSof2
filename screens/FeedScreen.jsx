@@ -37,6 +37,8 @@ const FeedScreen = () => {
 
         setFeedData(data.post);
       } else {
+        console.log(response.status);
+        console.log(response)
         console.error('Error al obtener posts');
       }
     } catch (error) {
@@ -118,11 +120,7 @@ const FeedScreen = () => {
 
   const [reto, setReto] = useState('Cargando ...');  
 
-  const scrollOffsetY = useRef(new Animated.Value(0)).current;
-
-  const Header_Max_Height = 240;
-  const Header_Min_Height = 70;
-  const Scroll_Distance = Math.min(Header_Max_Height - Header_Min_Height, 500);
+  const [scrollOffsetY] = useState(new Animated.Value(0));
 
   const handleProfilePress = () => {
     console.log('Image pressed');
@@ -139,16 +137,17 @@ const FeedScreen = () => {
     navigation.navigate('search', { fromScreen: 'feed' });
   }
 
-  const DynamicHeader = ({value}) => {
-
-    const animatedHeaderHeight = value.interpolate({
-      inputRange: [0, Scroll_Distance],
-      outputRange: [Header_Max_Height, Header_Min_Height],
+  const dynamicHeaderStyle = {
+    opacity: scrollOffsetY.interpolate({
+      inputRange: [0, 100], // Cambia estos valores según tus necesidades
+      outputRange: [1, 0], // Cambia estos valores según tus necesidades
       extrapolate: 'clamp',
-    });
+    }),
+  };
 
-    return (
-      <Animated.View style={[styles.dynamicHeader, { height: animatedHeaderHeight }]}>
+  return (
+    <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
+      <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={handleProfilePress}>
             <Image
@@ -164,19 +163,13 @@ const FeedScreen = () => {
             <MaterialIcons name='search' size={40} color={'black'} />
           </TouchableOpacity>
         </View>
-        <View style={styles.retoContainer}>
-          <Text style={styles.challengeDescription} numberOfLines={3} adjustsFontSizeToFit>
-            {reto}
-          </Text>
+        <View style={[styles.dynamicHeader]}>
+          <View style={styles.retoContainer}>
+            <Text style={styles.challengeDescription} numberOfLines={5} adjustsFontSizeToFit>
+              {reto}
+            </Text>
+          </View>
         </View>
-      </Animated.View>
-    )
-  }
-
-  return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
-      <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
-        <DynamicHeader value={scrollOffsetY}/>
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
@@ -231,7 +224,7 @@ const styles = StyleSheet.create({
   dynamicHeader: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 25,
+    paddingTop: 0,
     width: '100%',
     borderBottomWidth: 1,
     borderBottomColor: '#909090',

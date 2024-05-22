@@ -7,13 +7,13 @@ import { SessionExpired } from "../components/SessionExpired";
 
 
 function LoginScreen({navigation}){
-  const {user, token, profilePicture, loading, signIn, signOut, setDailyPostDone,dailyPost} = useAuth();
+  const {user, token, profilePicture, loading, signIn, signOut, setDailyPostDone,dailyPost, setProfilePic} = useAuth();
   const [isLoginLoading, setIsLoginLoading] = useState(false);
   const [isSignUpLoading, setIsSignUpLoading] = useState(false);
   const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [profilePic, setProfilePic] = useState(null);
+  //const [profilePic, setProfilePic] = useState(null);
 
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
@@ -73,8 +73,6 @@ function LoginScreen({navigation}){
         await signIn(JWT, username);
         console.log('Voy a hacer login');
         
-        setUsername('');
-        setPassword('');
         await getProfileUserInfo(JWT);
         const respuestaPost = await fetch(urlPost, {
           method: 'GET',
@@ -83,13 +81,18 @@ function LoginScreen({navigation}){
             'Authorization': `Bearer ${JWT}`
           }
         });
+        console.log(respuestaPost.status)
         if (respuestaPost.status === 200) {
           setCredencialesIncorrectas(false);
-          setDailyPostDone(true)
+          setDailyPostDone(true);
+          setUsername('');
+          setPassword('');
           navigation.navigate('feed');
         } else if (respuestaPost.status === 403) {
           setCredencialesIncorrectas(false);
           setDailyPostDone(false)
+          setUsername('');
+          setPassword('');
           navigation.navigate('challenge');
         } else {
           console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
