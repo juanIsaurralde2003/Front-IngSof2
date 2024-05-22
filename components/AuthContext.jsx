@@ -15,11 +15,9 @@ export const AuthProvider = ({ children }) => {
         try {
             const credentials = await SecureStore.getItemAsync('userToken');
             const username = await SecureStore.getItemAsync('user');
-            const url = await SecureStore.getItemAsync('profilePicture');
             if (credentials && username) {
                 setToken(credentials);
                 setUser(username);
-                setProfilePicture(url);
             }
         } catch (error) {
             console.error('Error al cargar la info del usuario:', error);

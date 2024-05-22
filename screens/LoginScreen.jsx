@@ -27,7 +27,7 @@ function LoginScreen({navigation}){
       const response = await fetch(url,{method: 'GET',
         headers: {
           'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${JWT}`
         }
       });
       if(response.ok){
@@ -37,7 +37,7 @@ function LoginScreen({navigation}){
         console.log('Obtuve foto del usuario');
       }
       else{
-        console.error("Respuesta HTTP no existosa",response.status)
+        console.error("Respuesta HTTP no existosa en getProfileUserInfo",response.status)
       }
     }
     catch (error) {
@@ -81,7 +81,7 @@ function LoginScreen({navigation}){
           method: 'GET',
           headers:{
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${JWT}`
           }
         });
         if (respuestaPost.status === 200) {
