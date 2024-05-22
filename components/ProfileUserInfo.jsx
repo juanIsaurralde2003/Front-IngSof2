@@ -35,6 +35,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
             });
     
@@ -56,6 +57,9 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             const url = `${SERVER}/pushToken/${encodeURIComponent(username)}`
             const response = await fetch(url,{
                 method:'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                  }
             })
             if(response.status === 200){
                 console.log("ProfileUserInfo: push token borrado correctamente")

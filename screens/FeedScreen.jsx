@@ -11,7 +11,7 @@ const FeedScreen = () => {
    
   const navigation = useNavigation();
 
-  const {user, profilePicture} = useAuth();
+  const {user, token, profilePicture} = useAuth();
 
   const [feedData, setFeedData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -23,7 +23,11 @@ const FeedScreen = () => {
     const url = `${SERVER}/posts/feed/${user}`;
 
     try {
-      const response = await fetch(url, { method: 'GET' });
+      const response = await fetch(url, { method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -45,7 +49,11 @@ const FeedScreen = () => {
     const url = `${SERVER}/posts/prompt`;
 
     try {
-      const response = await fetch(url, { method: 'GET' });
+      const response = await fetch(url, { method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (response.ok) {
         const data = await response.json();

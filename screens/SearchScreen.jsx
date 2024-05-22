@@ -4,6 +4,7 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
 import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
+import { useAuth } from '../components/AuthContext';
 
 const SearchScreen = () => {
    
@@ -11,6 +12,7 @@ const SearchScreen = () => {
 
   const route = useRoute();
   const { fromScreen } = route.params;
+  const {token} = useAuth();
 
   const [inputValue, setInputValue] = useState('');
   const [usuarios, setUsuarios] = useState([]);
@@ -21,7 +23,11 @@ const SearchScreen = () => {
       const url = `${SERVER}/users`;
 
       try {
-        const response = await fetch(url, { method: 'GET' });
+        const response = await fetch(url, { method: 'GET',         
+          headers: { 
+            'Authorization': `Bearer ${token}`
+          }
+        });
 
         if (response.ok) {
           const data = await response.json();
@@ -63,7 +69,7 @@ const SearchScreen = () => {
             />
             {inputValue === '' && (
               <View style={styles.searchIcon}>
-                <Entypo name='magnifying-glass' size={24} color={'darkgray'} />
+                <Entypo name='magnifying-glass' size={18} color={'darkgray'} />
               </View>
             )}
           </View>
@@ -119,9 +125,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   searchBar: {
-    height: 40,
     alignSelf: 'center',
     paddingHorizontal: 10,
+    paddingVertical:13,
+    fontSize: 14,
     width: '85%',
   },
   searchIcon: {
