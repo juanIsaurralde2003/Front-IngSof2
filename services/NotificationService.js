@@ -50,9 +50,9 @@ export async function registerForPushNotificationsAsync(user,sessionToken) {
     }
 }
 
-export const registerNotificationHandlers = (navigation,dailyPost) => {
-    if(navigation){
-        console.log("aaaa " + navigation)
+export const registerNotificationHandlers = async (navigation,dailyPost) => {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    if(navigation && existingStatus === 'granted'){
         const receivedSubscription = Notifications.addNotificationReceivedListener((notification) => {
             const type = notification.request.content.data.type;
             switch (type) {
