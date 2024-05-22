@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Image } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { deletePushToken } from "../services/NotificationService";
 
 const AuthContext = React.createContext();
 
@@ -109,6 +110,9 @@ export const AuthProvider = ({ children }) => {
 
     const signOut = async () => {
         try {
+            if(user && token){
+                await deletePushToken(user,token);
+            }
             await SecureStore.deleteItemAsync('userToken');
             await SecureStore.deleteItemAsync('user');
             await SecureStore.deleteItemAsync('profilePicture');

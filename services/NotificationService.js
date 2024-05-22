@@ -83,9 +83,32 @@ export const registerNotificationHandlers = async (navigation,dailyPost) => {
         });
     }
     return () => {
-        receivedSubscription.remove();
-        responseSubscription.remove();
+        if (receivedSubscription) {
+            receivedSubscription.remove();
+        }
+        if (responseSubscription) {
+            responseSubscription.remove();
+        }
     };
 };
+
+export const deletePushToken = async (username, token) => {
+    try {
+        const url = `${SERVER}/pushToken/${encodeURIComponent(username)}`;
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        if (response.status === 200) {
+            console.log("ProfileUserInfo: push token borrado correctamente");
+        } else {
+            console.error("NotificationService: Hubo un error con la solicitud HTTP",response.status);
+        }
+    } catch (e) {
+        console.error("ProfileUserInfo: Error borrando el push token", e);
+    }
+}
 
 
