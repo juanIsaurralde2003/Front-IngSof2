@@ -12,17 +12,13 @@ Notifications.setNotificationHandler({
     }), 
 });
 
-export async function registerForPushNotificationsAsync(user) {
+export async function registerForPushNotificationsAsync(user,sessionToken) {
     try {
-        if(user){
-            let token;
+        if(user && sessionToken){
+            console.log("NotificationService: el token que llega es: "+sessionToken)
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             if (existingStatus !== 'granted') {
                 const { status } = await Notifications.requestPermissionsAsync();
-                if (status !== 'granted') {
-                    alert('Error para obtener push token para push notifications');
-                    return;
-                }
             }
             const expoToken = (await Notifications.getExpoPushTokenAsync({
                 projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
@@ -37,6 +33,7 @@ export async function registerForPushNotificationsAsync(user) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization':`Bearer ${sessionToken}`
                 },
                 body: data
             });
@@ -44,7 +41,7 @@ export async function registerForPushNotificationsAsync(user) {
                 console.log("token registrado correctamente");
             }
             else{
-                console.error("Hubo un error con la solicitud: ",response.status);
+                console.error("NotificationService: Hubo un error con la solicitud: ",response.status);
             }
         }
         

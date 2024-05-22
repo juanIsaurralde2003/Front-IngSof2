@@ -76,7 +76,6 @@ function LoginScreen({navigation}){
         setUsername('');
         setPassword('');
         await getProfileUserInfo(JWT);
-        console.log("aaa: "+ token);
         const respuestaPost = await fetch(urlPost, {
           method: 'GET',
           headers:{
