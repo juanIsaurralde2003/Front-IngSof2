@@ -136,10 +136,16 @@ const ChallengeScreen = () => {
         },
         body: data,
       });
+
+      const res = await respuesta.json()
+      console.log(res.message)
   
       if (respuesta.ok) {
         console.log('Hecho');
       } else {
+        console.log(respuesta.status)
+        console.log(respuesta);
+        console.log(respuesta.message)
         console.error('Algo salió mal al guardar la foto');
       }
     } catch (error) {

@@ -1,5 +1,5 @@
 import { useFonts } from '@expo-google-fonts/quicksand';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, useWindowDimensions, StyleSheet, Image, ActivityIndicator, TouchableOpacity, Alert } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import { ActionSheetProvider, useActionSheet } from '@expo/react-native-action-sheet';
@@ -116,7 +116,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
     <View style={[styles.container, { width: width }]}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleProfilePress}>
-          {typeof imagenPerfilURL === "undefined" ? 
+          {imagenPerfilURL === null ? 
             <Image
               source={require("../assets/person.jpg")}
               style={styles.profileImage}

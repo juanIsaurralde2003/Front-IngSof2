@@ -118,7 +118,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             }
           }
         );
-      };
+    };
 
     const handleFollow = async () => {
         setIsLoading(true);
@@ -131,6 +131,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
             });
     
