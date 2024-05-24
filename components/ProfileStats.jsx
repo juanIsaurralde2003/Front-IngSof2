@@ -1,15 +1,24 @@
 import React from "react";
 import { StyleSheet,View,Image,Text,TouchableOpacity} from "react-native";
 import StyledText from "./StyledText";
+import { AuthProvider, useAuth } from "./AuthContext";
 
-const ProfileStats= ({seguidores,seguidos,retos,navigation})=>{
+const ProfileStats= ({seguidores,seguidos,retos,navigation, fromScreen})=>{
+
+    const {user} = useAuth();
 
     const handleSeguidosButton = async ()=>{
-        navigation.navigate('seguidos');
+        navigation.navigate('followers', {
+            fromScreen: fromScreen,
+            fromAction: 'Following', 
+        });
     }
 
     const handleSeguidoresButton = async ()=>{
-        navigation.navigate('seguidores');
+        navigation.navigate('followers', {
+            fromScreen: fromScreen,
+            fromAction: 'Followers', 
+        });
     }
 
     const handleRetosButton = async ()=>{

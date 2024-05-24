@@ -160,6 +160,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
             });
     
@@ -211,6 +212,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 seguidos={seguidos}
                 retos={retos}
                 navigation={navigation}
+                fromScreen={fromScreen}
             />
             </View>
             {!sessionUser && seguimientoVerificado &&

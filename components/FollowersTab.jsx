@@ -5,22 +5,21 @@ import { SERVER } from '../utils/utils';
 import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
 import { useAuth } from '../components/AuthContext';
+import FollowerComponent from './FollowerComponent';
 
-const SearchScreen = () => {
+const FollowersTab = ({fromScreen}) => {
    
   const navigation = useNavigation();
 
-  const route = useRoute();
-  const { fromScreen } = route.params;
-  const {token} = useAuth();
+  const {token, user} = useAuth();
 
   const [inputValue, setInputValue] = useState('');
-  const [usuarios, setUsuarios] = useState([]);
+  const [followers, setFollowers] = useState([]);
 
   useEffect(() => {
-    const getUsers = async () => {
+    const getFollowers = async () => {
 
-      const url = `${SERVER}/users`;
+      const url = `${SERVER}/users/followerslist/${user}`;
 
       try {
         const response = await fetch(url, { method: 'GET',         
@@ -31,27 +30,21 @@ const SearchScreen = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setUsuarios(data.users);
+          setFollowers(data);
     
           console.log(data);
         } else {
-          console.error('Error al obtener usuarios');
+          console.error('Error al obtener followers');
         }
       } catch (error) {
         console.error('Error de red:', error);
       } 
     };
 
-    getUsers();
+    getFollowers();
   }, []);
 
-  const handleClosePress = () => {
-    console.log('Lupa pressed');
-    console.log('Navegar al feed');
-    navigation.navigate(fromScreen);
-  }
-
-  const filteredUsuarios = usuarios.filter(usuario =>
+  const filteredUsuarios = followers.filter(usuario =>
     usuario.username.toLowerCase().includes(inputValue.toLowerCase())
   );
 
@@ -67,16 +60,6 @@ const SearchScreen = () => {
               placeholderTextColor={'darkgray'}
               onChangeText={(text) => setInputValue(text)}
             />
-            {inputValue === '' && (
-              <View style={styles.searchIcon}>
-                <Entypo name='magnifying-glass' size={18} color={'darkgray'} />
-              </View>
-            )}
-          </View>
-          <View style={styles.searchHeadingCross}>
-            <TouchableOpacity onPress={handleClosePress} >
-              <MaterialIcons name={'close'} size={30} color={'black'} />
-            </TouchableOpacity>
           </View>
         </View>
         
@@ -88,11 +71,12 @@ const SearchScreen = () => {
           keyboardShouldPersistTaps='handled'
         >
           {filteredUsuarios.map((item, index) => (
-            <UserSearchComponent 
+            <FollowerComponent 
               key={index}
               perfil={item.username}
               imagenPerfilURL={item.profilePicture}
               fromScreen={fromScreen}
+              follows={false}
             />
           ))}
         </ScrollView>
@@ -110,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchHeadingBar: {
-    width: '85%',
+    width: '100%',
     padding: 5,
     flexDirection: 'row',
     borderWidth: 1.5,
@@ -127,10 +111,9 @@ const styles = StyleSheet.create({
   searchBar: {
     alignSelf: 'center',
     paddingHorizontal: 10,
-    paddingVertical:13,
+    paddingVertical:5,
     fontSize: 14,
-    height: 40,
-    width: '85%',
+    width: '100%',
   },
   searchIcon: {
     justifyContent: 'flex-end',
@@ -141,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchScreen;
+export default FollowersTab;
