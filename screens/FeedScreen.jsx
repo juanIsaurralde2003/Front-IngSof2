@@ -165,7 +165,7 @@ const FeedScreen = () => {
         </View>
         <View style={[styles.dynamicHeader]}>
           <View style={styles.retoContainer}>
-            <Text style={styles.challengeDescription} numberOfLines={5} adjustsFontSizeToFit>
+            <Text style={styles.challengeDescription} numberOfLines={6} adjustsFontSizeToFit>
               {reto}
             </Text>
           </View>

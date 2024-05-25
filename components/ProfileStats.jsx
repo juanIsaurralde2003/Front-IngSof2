@@ -3,21 +3,21 @@ import { StyleSheet,View,Image,Text,TouchableOpacity} from "react-native";
 import StyledText from "./StyledText";
 import { AuthProvider, useAuth } from "./AuthContext";
 
-const ProfileStats= ({seguidores,seguidos,retos,navigation, fromScreen})=>{
-
-    const {user} = useAuth();
+const ProfileStats= ({usuario, seguidores,seguidos,retos,navigation, fromScreen})=>{
 
     const handleSeguidosButton = async ()=>{
         navigation.navigate('followers', {
             fromScreen: fromScreen,
-            fromAction: 'Following', 
+            fromAction: 'Following',
+            usuario: usuario,  
         });
     }
 
     const handleSeguidoresButton = async ()=>{
         navigation.navigate('followers', {
             fromScreen: fromScreen,
-            fromAction: 'Followers', 
+            fromAction: 'Followers',
+            usuario: usuario, 
         });
     }
 
@@ -50,7 +50,7 @@ const ProfileStats= ({seguidores,seguidos,retos,navigation, fromScreen})=>{
                 <View style={{flexDirection:'row'}}>
                     <View style={styles.statColumn}></View>
                     <View style={styles.statContainer}>
-                        <TouchableOpacity onPress={handleRetosButton}>
+                        <TouchableOpacity /*onPress={handleRetosButton}*/>
                             <StyledText ffrText>
                                 <Text style={{fontSize:20,fontFamily:'Quicksand-bold'}}> {retos}</Text>
                             </StyledText>

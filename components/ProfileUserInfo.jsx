@@ -13,7 +13,7 @@ import { SERVER } from "../utils/utils";
 
 
 
-function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating, fromScreen}){
+function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating, fromScreen, userdata}){
 
     const {token,signOut,user} = useAuth();
     const [loadingImage, setLoadingImage] = useState(true);
@@ -208,6 +208,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                     maxRating={5}
                 />
             <ProfileStats
+                usuario={userdata}
                 seguidores={seguidores}
                 seguidos={seguidos}
                 retos={retos}

@@ -31,6 +31,7 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
     useEffect(
         ()=>{
             console.log("El url de la pub es: " + imagenURL);
+            console.log("La imagen de perfil es: " + imagenPerfilURL)
         }
     ,[imagenURL])
 
@@ -43,10 +44,21 @@ const ProfileComponent= ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha, 
     <View style={[styles.container, { width: width }]}>
         <View style={styles.headerContainer}>
         <TouchableOpacity>
-            <Image
+            {/* <Image
             source={imagenPerfilURL === '' ? { uri: "https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/imagen1.png" } : { uri: imagenPerfilURL }}
             style={styles.profileImage}
-            />
+            /> */}
+            {typeof imagenPerfilURL === "undefined" ? 
+                <Image
+                source={require("../assets/person.jpg")}
+                style={styles.profileImage}
+                />
+            :
+              <Image
+                source={{uri: imagenPerfilURL}}
+                style={styles.profileImage}
+                />
+            }
         </TouchableOpacity>
         <TouchableOpacity>
             <Text style={styles.userNameFeed}>
@@ -119,6 +131,7 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 50,
+        marginLeft: 5,
     },
     userNameFeed: {
         fontFamily: 'Quicksand-Regular',

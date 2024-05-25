@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, StyleSheet,View,Image,Text , SafeAreaView } from "react-native";
+import { FlatList, StyleSheet,View,Image,Text , SafeAreaView, ActivityIndicator } from "react-native";
 import ProfileUserInfo from "../components/ProfileUserInfo";
 import FeedComponentWithActionSheet from "../components/FeedComponent";
 import ProfileComponent from "../components/ProfileComponent";
@@ -12,6 +12,7 @@ function ProfileScreen({navigation}){
     const [publicaciones, setPublicaciones] = useState([]);
     const [profileUserInfo,setProfileUserInfo] = useState({});
     const [retosUser, setRetosUser] = useState(0);
+    const [loading, setLoading] = useState(true);
     const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
     const route = useRoute();
     const { fromScreen, userData } = route.params;
@@ -116,12 +117,23 @@ function ProfileScreen({navigation}){
       }
     }
 
-    useEffect(()=>{
-      getProfileUserInfo();
-      console.log("el rating es" + profileUserInfo.rating)
-      getPublicacionesUsuario();
-      getCantidadPosts();
-    },[])
+    useEffect(() => {
+      const fetchData = async () => {
+        setLoading(true);
+        try {
+          await getProfileUserInfo();
+          console.log("el rating es" + profileUserInfo.rating);
+          await getPublicacionesUsuario();
+          await getCantidadPosts();
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
+      fetchData();
+    }, [userData]);
     
     const profileUserInfoHC = {
       rating: 3,
@@ -136,6 +148,14 @@ function ProfileScreen({navigation}){
       { fecha: "December 7, 2019", consigna: "Sacar una foto que tenga al menos 5 plantas diferentes y una medialuna con café", rating: 1, imagenURL: require('../assets/imagenFeedComponentEjemplo2.png'), perfil: '@usuario2', imagenPerfilURL: require('../assets/profile_picture.png') }
     ]
 
+    if (loading) {
+      return (
+          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#e5e5e5'}}>
+              <ActivityIndicator size="large" color="#390294" />
+          </View>
+      );
+  }
+
     return(
             <FlatList 
                 style={styles.lista}
@@ -143,6 +163,7 @@ function ProfileScreen({navigation}){
                                             navigation={navigation}
                                             rating={profileUserInfo.rating}
                                             usuario={profileUserInfo.usuario}
+                                            userdata={userData}
                                             imagenPerfilURL={profileUserInfo.imagenPerfilURL}
                                             seguidores={profileUserInfo.seguidores}
                                             seguidos={profileUserInfo.seguidos}

@@ -16,7 +16,7 @@ const FollowersScreen = () => {
   const navigation = useNavigation();
 
   const route = useRoute();
-  const { fromScreen, fromAction } = route.params;
+  const { fromScreen, fromAction, usuario } = route.params;
   const {token, user} = useAuth();
 
   const [inputValue, setInputValue] = useState('');
@@ -25,7 +25,7 @@ const FollowersScreen = () => {
   const handleClosePress = () => {
     navigation.navigate('profile', {
       fromScreen: fromScreen,
-      userData: user, 
+      userData: usuario, 
     });
   }
 
@@ -46,10 +46,10 @@ const FollowersScreen = () => {
           initialRouteName={fromAction === 'Followers' ? 'Seguidores' : 'Seguidos'}
         >
           <Tab.Screen name="Seguidores">
-            {() => <FollowersTab user={user} fromScreen={fromScreen}/>}
+            {() => <FollowersTab usuario={usuario} fromScreen={fromScreen}/>}
           </Tab.Screen>
           <Tab.Screen name="Seguidos">
-            {() => <FollowingTab user={user} fromScreen={fromScreen} />}
+            {() => <FollowingTab usuario={usuario} fromScreen={fromScreen} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>

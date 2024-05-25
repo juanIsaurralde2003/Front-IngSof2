@@ -7,7 +7,7 @@ import UserSearchComponent from '../components/UserSearchComponent';
 import { useAuth } from '../components/AuthContext';
 import FollowerComponent from './FollowerComponent';
 
-const FollowersTab = ({fromScreen}) => {
+const FollowersTab = ({fromScreen, usuario}) => {
    
   const navigation = useNavigation();
 
@@ -19,7 +19,7 @@ const FollowersTab = ({fromScreen}) => {
   useEffect(() => {
     const getFollowers = async () => {
 
-      const url = `${SERVER}/users/followerslist/${user}`;
+      const url = `${SERVER}/users/followerslist/${usuario}`;
 
       try {
         const response = await fetch(url, { method: 'GET',         
