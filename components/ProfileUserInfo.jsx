@@ -1,5 +1,5 @@
 import React,{useEffect, useState}from "react";
-import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS,ActivityIndicator} from "react-native";
+import { StyleSheet,View,Image,Text,TouchableOpacity, ActionSheetIOS,ActivityIndicator, Platform} from "react-native";
 import profilePicture from '../assets/person.jpg'
 import StyledText from "./StyledText";
 import { MaterialIcons,Entypo } from '@expo/vector-icons';
@@ -10,6 +10,8 @@ import CustomRating from "./Rating";
 import { tr } from "date-fns/locale";
 import FollowerOptions from "./FollowerOptions";
 import { SERVER } from "../utils/utils";
+import { useActionSheet } from '@expo/react-native-action-sheet';
+
 
 
 
@@ -24,12 +26,13 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     const [isLoading,setIsLoading] = useState(false);
     const [isLoadingUnfollow, setIsLoadingUnfollow] = useState(false);
     const [seguimientoVerificado,setSeguimientoVerificado] = useState(false);
+    const { showActionSheetWithOptions } = useActionSheet();
 
     const isFollowing = async () => {
         const seguidor = user;
         const seguido = usuario && usuario.slice(1);
         const url = `${SERVER}/users/isfollowing/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
-    
+
         try {
             const response = await fetch(url, {
                 method: 'GET',
@@ -38,8 +41,8 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                     'Authorization': `Bearer ${token}`
                 },
             });
-    
-            if (response.ok) { 
+
+            if (response.ok) {
                 const data = await response.json();
                 console.log(data);
                 setFollowing(data.user);
@@ -72,7 +75,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             console.error("ProfileUserIngo: Error borrando el push token",e)
         }
     }
-    
+
     useEffect(()=>{
         isFollowing();
         console.log(usuario + '   ' +imagenPerfilURL)
@@ -91,33 +94,54 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
     const handleLoadStart = () => {
         setLoadingImage(true);
         setError(false);
-        };
-    
-        const handleLoadEnd = () => {
+    };
+
+    const handleLoadEnd = () => {
         setLoadingImage(false);
-        };
-    
-        const handleLoadError = () => {
+    };
+
+    const handleLoadError = () => {
         setLoadingImage(false);
         setError(true);
-        };
+    };
+
     const showActionSheet = () => {
-        ActionSheetIOS.showActionSheetWithOptions(
-          {
-            options: ['Editar Perfil', 'Cerrar Sesión','Cancelar'],
-            cancelButtonIndex:2,
-            destructiveButtonIndex: 1,
-          },
-          buttonIndex => {
-            if (buttonIndex === 0) {
-               navigation.navigate()
-            } else if (buttonIndex === 1) {
-                deletePushToken(user);
-                signOut();  //REVISAR ASINCRONÍA
-                navigation.navigate('login');
+        if (Platform.OS === 'ios') {
+            ActionSheetIOS.showActionSheetWithOptions(
+                {
+                    options: ['Editar Perfil', 'Cerrar Sesión','Cancelar'],
+                    cancelButtonIndex:2,
+                    destructiveButtonIndex: 1,
+                },
+            buttonIndex => {
+                if (buttonIndex === 0) {
+                    navigation.navigate()
+                } else if (buttonIndex === 1) {
+                    deletePushToken(user);
+                    signOut();  //REVISAR ASINCRONÍA
+                    navigation.navigate('login');
+                }
             }
-          }
-        );
+            )
+        } else {
+            console.log('SHOW ACTION SHEET')
+            showActionSheetWithOptions(
+                {
+                    options: ['Editar Perfil', 'Cerrar Sesión', 'Cancelar'],
+                    cancelButtonIndex: 2,
+                    destructiveButtonIndex: 1,
+                },
+                buttonIndex => {
+                    if (buttonIndex === 0) {
+                        navigation.navigate();
+                    } else if (buttonIndex === 1) {
+                        deletePushToken(user);
+                        signOut();
+                        navigation.navigate('login');
+                    }
+                }
+            )
+        }
     };
 
     const handleFollow = async () => {
@@ -125,7 +149,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         const seguidor = user;
         const seguido = usuario && usuario.slice(1);
         const url = `${SERVER}/users/follow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
-    
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -134,7 +158,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                     'Authorization': `Bearer ${token}`
                 },
             });
-    
+
             if (response.status === 200) {
                 console.log('User followed successfully');
                 setFollowing(true);
@@ -154,7 +178,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         const seguidor = user;
         const seguido = usuario && usuario.slice(1);
         const url = `${SERVER}/users/unfollow/${encodeURIComponent(seguidor)}/${encodeURIComponent(seguido)}`;
-    
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -163,7 +187,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                     'Authorization': `Bearer ${token}`
                 },
             });
-    
+
             if (response.status === 200) {
                 console.log('User unfollowed successfully');
                 setFollowing(false);
@@ -176,8 +200,8 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
             setIsLoadingUnfollow(false);
         }
     }
-    
-      
+
+
       return(
         <View style={styles.container}>
             <View style={styles.optionsContainer}>
@@ -195,7 +219,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 onLoadStart={handleLoadStart}
                 onLoadEnd={handleLoadEnd}
                 onError={handleLoadError}
-                resizeMode='cover' 
+                resizeMode='cover'
                 style = {styles.profilePicture}
             />
             <View style={styles.usernameTextContainer}>
@@ -244,7 +268,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                         imageURL={imagenPerfilURL}
                         handleUnfollow={handleUnfollow}
                     />
-                )}   
+                )}
             </View>
             }
         </View>
@@ -259,7 +283,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         marginTop:130,
         paddingBottom:19
-        
+
     },
     closeStyleAlong:{
         borderColor: "transparent",
@@ -277,7 +301,7 @@ const styles = StyleSheet.create({
         justifyContent:'space-between',
         alignItems:'flex-start',
         marginBottom:40,
-    },  
+    },
     profilePicture: {
         width: 120, // Ajusta el ancho como necesites
         height: 120, // Ajusta la altura como necesites
@@ -287,9 +311,9 @@ const styles = StyleSheet.create({
         paddingTop:20,
         paddingBottom:7
     },
-    raitingContainer:{ 
-        flex: 1, 
-        justifyContent: 'center', 
+    raitingContainer:{
+        flex: 1,
+        justifyContent: 'center',
         alignItems: 'center',
         marginTop:7
     },

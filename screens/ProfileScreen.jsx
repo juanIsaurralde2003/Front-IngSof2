@@ -6,6 +6,7 @@ import ProfileComponent from "../components/ProfileComponent";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from '../utils/utils';
 import { useRoute } from "@react-navigation/native";
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 function ProfileScreen({navigation}){
     const {token} = useAuth()
@@ -156,7 +157,8 @@ function ProfileScreen({navigation}){
       );
   }
 
-    return(
+    return (
+        <ActionSheetProvider>
             <FlatList 
                 style={styles.lista}
                 ListHeaderComponent={()=><ProfileUserInfo 
@@ -185,7 +187,7 @@ function ProfileScreen({navigation}){
                 )}
 
             />
-
+      </ActionSheetProvider>
     )
     
 }
