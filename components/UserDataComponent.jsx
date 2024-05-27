@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
   const today = new Date();
@@ -9,6 +10,7 @@ const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) 
 
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
   const [selectedDate, setSelectedDate] = useState(maximumDate); // Estado para almacenar la fecha seleccionada
+  const [showPassword, setShowPassword] = useState(false);
 
   // Función para manejar el cambio de fecha seleccionada
 const handleDateChange = (event, selectedDate) => {
@@ -16,6 +18,10 @@ const handleDateChange = (event, selectedDate) => {
   setSelectedDate(currentDate);
   const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
   setBirthday(formattedDate);
+};
+
+const handleShowPassword = () => {
+  setShowPassword(!showPassword); // Cambia entre mostrar y ocultar la contraseña
 };
 
 
@@ -78,10 +84,17 @@ const handleDateChange = (event, selectedDate) => {
         </View>
         <TextInput
           style={styles.input}
-          secureTextEntry={true}
+          secureTextEntry={!showPassword}
           onChangeText={text => setPassword(text)}
           maxLength={100}
         />
+        <TouchableOpacity onPress={handleShowPassword} style={styles.eyeIconContainer}>
+          <MaterialCommunityIcons
+            name={showPassword ? 'eye-off' : 'eye'}
+            size={24}
+            color="#575757"
+          />
+        </TouchableOpacity>
       </View>
       <View>
         <Text style={styles.warningcontrasena}>
@@ -155,6 +168,12 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     fontFamily: 'Quicksand-Bold',
     marginBottom: 20,
+  },
+  eyeIconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
   },
 });
 

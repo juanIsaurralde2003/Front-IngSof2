@@ -4,6 +4,7 @@ import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from "../utils/utils";
 import { SessionExpired } from "../components/SessionExpired";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 
 function LoginScreen({navigation}){
@@ -13,12 +14,16 @@ function LoginScreen({navigation}){
   const [credencialesIncorrectas, setCredencialesIncorrectas] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   //const [profilePic, setProfilePic] = useState(null);
 
   const handleForgotPassword = () => {
     navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
-
   }
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword); // Cambia entre mostrar y ocultar la contraseña
+  };
 
   const getProfileUserInfo = async (JWT) => {
     try {
@@ -144,14 +149,32 @@ function LoginScreen({navigation}){
               placeholderTextColor="#575757"
               />
 
-            <TextInput 
+            {/* <TextInput 
                 style={styles.inputText}
                 onChangeText={setPassword}
                 value={password}
                 placeholder="Contraseña"
                 secureTextEntry={true}
                 placeholderTextColor="#575757"
-                />
+                /> */}
+        <View style={styles.passwordContainer}> 
+          <TextInput
+            style={styles.inputText}
+            onChangeText={setPassword}
+            value={password}
+            placeholder="Contraseña"
+            secureTextEntry={!showPassword}
+            placeholderTextColor="#575757"
+          />
+          <TouchableOpacity onPress={handleShowPassword} style={styles.eyeIconContainer}>
+            <MaterialCommunityIcons
+              name={showPassword ? 'eye-off' : 'eye'}
+              size={24}
+              color="#575757"
+              style={styles.icon}
+            />
+          </TouchableOpacity>
+        </View>
             <TouchableOpacity
               onPress={handleForgotPassword}
             >
@@ -253,16 +276,14 @@ const styles = StyleSheet.create({
       shadowRadius: 4.65,
       elevation: 8,
       width:200,
-      alignItems:'center',
-        
+      alignItems:'center',      
     },
     loginText: {
       fontFamily:'Quicksand-Bold',
       color: '#FFFFFF',           // Color del texto
       fontSize: 16,               // Tamaño del texto
       fontWeight: 'bold',         // Negrita para el texto
-      textAlign: 'center',        // Alineación del texto,
-      
+      textAlign: 'center',        // Alineación del texto,  
     },
     signUpText:{
       fontFamily:'Quicksand-Bold',
@@ -277,6 +298,22 @@ const styles = StyleSheet.create({
       alignSelf:'center',
       marginVertical:17
     },
+
+    passwordContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      position: 'relative',
+    },
+    eyeIconContainer: {
+      position: 'absolute',
+      right: 10,
+      top: '60%',
+      transform: [{ translateY: -12 }],
+    },
+    icon: {
+      marginLeft: 10,
+    },
+
     dividerLine: {
       flex: 1,
       height: 1,
