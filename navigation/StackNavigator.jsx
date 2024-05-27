@@ -1,5 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import InitScreen from '../screens/InitScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ChallengeScreen from '../screens/ChallengeScreen';
 import CameraScreen from '../screens/CameraScreen';
@@ -14,7 +15,8 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="init">
+        <Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="init" component={InitScreen}/>
         <Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="login" component={LoginScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="signup" component={SignupScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="challenge" component={ChallengeScreen} />
