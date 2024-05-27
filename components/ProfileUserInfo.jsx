@@ -113,7 +113,6 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                     if (buttonIndex === 0) {
                         navigation.navigate('EditProfile');
                     } else if (buttonIndex === 1) {
-                        deletePushToken(user);
                         signOut();
                         navigation.navigate('login');
                     }
