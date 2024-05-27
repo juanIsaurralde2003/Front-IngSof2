@@ -115,7 +115,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 },
             buttonIndex => {
                 if (buttonIndex === 0) {
-                    navigation.navigate()
+                    navigation.navigate('EditProfile')
                 } else if (buttonIndex === 1) {
                     deletePushToken(user);
                     signOut();  //REVISAR ASINCRONÍA
@@ -133,7 +133,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 },
                 buttonIndex => {
                     if (buttonIndex === 0) {
-                        navigation.navigate();
+                        navigation.navigate('EditProfile');
                     } else if (buttonIndex === 1) {
                         deletePushToken(user);
                         signOut();
