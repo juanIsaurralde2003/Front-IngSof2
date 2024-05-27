@@ -15,7 +15,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const {user} = useAuth();
+  const {user, token} = useAuth();
 
   //const [loadingImage, setLoadingImage] = useState(true);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -67,6 +67,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });

@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SERVER } from '../utils/utils';
+import { useAuth } from './AuthContext';
 
 const CustomRating = ({ maxRating, defaultRating, onRatingChange, readOnly, imageUrl, username}) => {
+
   const [rating, setRating] = useState(defaultRating);
+  const {token} = useAuth();
 
   useEffect(()=>{
     setRating(defaultRating);
@@ -33,6 +36,7 @@ score */
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });
