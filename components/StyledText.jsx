@@ -34,7 +34,6 @@ const styles = {
         color: '#000000',
         fontSize: 13,
         fontFamily: 'Quicksand',
-        fontWeight: '500',
         lineHeight: 16,
     },
     dateText:{

@@ -15,14 +15,7 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => (
     <Stack.Navigator>
-        <Stack.Screen
-            options={{ 
-                headerShown: false,
-                gestureEnabled: false,
-            }} 
-            name="login" component={LoginScreen} 
-            // lo deje para probar la pantalla de la camara
-        />
+        <Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="login" component={LoginScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="signup" component={SignupScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="challenge" component={ChallengeScreen} />
         <Stack.Screen options={{  headerShown: false, animation:'slide_from_bottom', gestureEnabled: false }}  name="profile" component={ProfileScreen}/>
@@ -31,7 +24,7 @@ const StackNavigator = () => (
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="search" component={SearchScreen}  />
         <Stack.Screen options={{  headerShown: false }}  name="followers" component={FollowersScreen}  />
         <Stack.Screen options={{  headerShown: false }}  name="EditProfile" component={EditProfileScreen}  />
-  </Stack.Navigator>
+    </Stack.Navigator>
 );
 
 export default StackNavigator;
