@@ -55,27 +55,6 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
         }
     }
 
-    const deletePushToken = async (username)=>{
-        try{
-            const url = `${SERVER}/pushToken/${encodeURIComponent(username)}`
-            const response = await fetch(url,{
-                method:'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                  }
-            })
-            if(response.status === 200){
-                console.log("ProfileUserInfo: push token borrado correctamente")
-            }
-            else{
-                console.log("hubo un error con la solicitud HTTP")
-            }
-        }
-        catch(e){
-            console.error("ProfileUserIngo: Error borrando el push token",e)
-        }
-    }
-
     useEffect(()=>{
         isFollowing();
         console.log(usuario + '   ' +imagenPerfilURL)
@@ -117,7 +96,6 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 if (buttonIndex === 0) {
                     navigation.navigate('EditProfile')
                 } else if (buttonIndex === 1) {
-                    deletePushToken(user);
                     signOut();  //REVISAR ASINCRONÍA
                     navigation.navigate('login');
                 }

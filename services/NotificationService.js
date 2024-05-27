@@ -94,7 +94,7 @@ export const registerNotificationHandlers = async (navigation,dailyPost) => {
 
 export const deletePushToken = async (username, token) => {
     try {
-        const url = `${SERVER}/pushToken/${encodeURIComponent(username)}`;
+        const url = `${SERVER}/notifications/pushToken/${encodeURIComponent(username)}`;
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
