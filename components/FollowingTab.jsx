@@ -70,15 +70,22 @@ const FollowingTab = ({fromScreen, usuario}) => {
           onTouchStart={Keyboard.dismiss}
           keyboardShouldPersistTaps='handled'
         >
-          {filteredUsuarios.map((item, index) => (
-            <FollowerComponent 
-              key={index}
-              perfil={item.username}
-              imagenPerfilURL={item.profilePicture}
-              fromScreen={fromScreen}
-              follows={true}
-            />
-          ))}
+          {following.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
+                No sigues a ningún usuario.
+              </Text>
+            </View>
+          ) : (
+            filteredUsuarios.map((item, index) => (
+              <FollowerComponent 
+                key={index}
+                perfil={item.username}
+                imagenPerfilURL={item.profilePicture}
+                fromScreen={fromScreen}
+                follows={true}
+              />
+          )))}
         </ScrollView>
       </View>
     </SafeAreaView>
