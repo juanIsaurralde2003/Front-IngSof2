@@ -115,6 +115,15 @@ function LoginScreen({navigation}){
     
   };
 
+  useEffect(() => {
+    if (token) {
+      console.log("el token es: " + token); 
+      console.log("el usuario es: " + user);
+      console.log("la foto de perfil es: " + profilePicture)
+      console.log("hay daily post en Login Screen: " + dailyPost)
+    }
+  }, [token,user,profilePicture]); 
+
   const handleSignUpButton = () => {
     try{
       //setIsSignUpLoading(true);

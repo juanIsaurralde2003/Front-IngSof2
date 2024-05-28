@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export const SessionExpired = () => {
     const [isVisible,setIsVisible] = useState(false);
-    const {token} = useAuth()
+    const {token,signOut} = useAuth()
     const navigator = useNavigation();
     
     useEffect(()=>{
@@ -32,7 +32,8 @@ export const SessionExpired = () => {
         return () => clearInterval(intervalId);
     },[token]);
 
-    const handleLoginPress = ()=>{
+    const handleLoginPress = async ()=>{
+        await signOut();
         navigator.navigate('login');
         setIsVisible(false);
     }
