@@ -59,8 +59,10 @@ export async function registerForPushNotificationsAsync(user,sessionToken) {
 
 export const registerNotificationHandlers = async (navigation,dailyPost) => {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let receivedSubscription;
+    let responseSubscription;
     if(navigation && existingStatus === 'granted'){
-        const receivedSubscription = Notifications.addNotificationReceivedListener((notification) => {
+        receivedSubscription = Notifications.addNotificationReceivedListener((notification) => {
             const type = notification.request.content.data.type;
             switch (type) {
                 case 'daily-prompt':
@@ -74,7 +76,7 @@ export const registerNotificationHandlers = async (navigation,dailyPost) => {
             }
         });
 
-        const responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
+        responseSubscription = Notifications.addNotificationResponseReceivedListener((response) => {
             console.log(JSON.stringify(response));
             const type = response.notification.request.content.data.type;
             switch (type) {
