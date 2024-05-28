@@ -6,12 +6,12 @@
     "version": "1.0.0",
     "projectId": "a7e92cd2-f7c6-4810-9f88-891023c4b37b",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e5e5e5",
+      "resizeMode": "stretch"
     },
     "assetBundlePatterns": [
       "**/*"

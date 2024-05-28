@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet,View,Text} from "react-native";
+import { StyleSheet,View,Text, Image} from "react-native";
 import { CameraIcon } from "./CameraIcon";
 
 
@@ -15,7 +15,7 @@ function TituloLogin(props){
                 </Text>
             </View>
             <View style={styles.cameraContainer}>
-                <CameraIcon/>
+              <Image source={require("../assets/logo.png")} style={styles.cameraIcon} resizeMode='contain'/>
             </View>   
         </View>
     )
@@ -51,6 +51,8 @@ const styles = StyleSheet.create({
         color: '#390294', 
       },
       cameraContainer:{
+        height:50,
+        width:50,
         margin:10
       },
       cameraIcon:{
