@@ -17,31 +17,38 @@ export async function registerForPushNotificationsAsync(user,sessionToken) {
         if(user && sessionToken){
             console.log("NotificationService: el token que llega es: "+sessionToken)
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
             if (existingStatus !== 'granted') {
                 const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
             }
-            const expoToken = (await Notifications.getExpoPushTokenAsync({
-                projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
-            })).data;
-            const data = JSON.stringify({
-                token: expoToken,
-                username:user
-            });
-            console.log(data);
-            const url = `${SERVER}/notifications/register-token`;
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization':`Bearer ${sessionToken}`
-                },
-                body: data
-            });
-            if(response.status === 200){
-                console.log("token registrado correctamente");
+            if(finalStatus === 'granted'){
+                const expoToken = (await Notifications.getExpoPushTokenAsync({
+                    projectId: 'a7e92cd2-f7c6-4810-9f88-891023c4b37b'
+                })).data;
+                const data = JSON.stringify({
+                    token: expoToken,
+                    username:user
+                });
+                console.log(data);
+                const url = `${SERVER}/notifications/register-token`;
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization':`Bearer ${sessionToken}`
+                    },
+                    body: data
+                });
+                if(response.status === 200){
+                    console.log("token registrado correctamente");
+                }
+                else{
+                    console.error("NotificationService: Hubo un error con la solicitud: ",response.status);
+                }
             }
-            else{
-                console.error("NotificationService: Hubo un error con la solicitud: ",response.status);
+            else {
+                console.log("NotificationService: Permisos de notificaciones no concedidos");
             }
         }
         
