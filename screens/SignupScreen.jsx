@@ -196,6 +196,7 @@ function SignupScreen({ navigation }) {
           setPassword={setPassword}
           setEmail={setEmail}
           setBirthday={setBirthday}
+          editing={false}
         />
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-evenly', padding: 10, marginTop: 20, }}>
           <TouchableOpacity

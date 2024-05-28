@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday }) => {
+const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, initialUsername, initialEmail, initialBirthday, editing }) => {
   const today = new Date();
   const maximumDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate() - 1);
 
@@ -28,14 +28,22 @@ const handleShowPassword = () => {
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Usuario:</Text>
-        </View>      
-        <TextInput
-          style={styles.input}
-          onChangeText={text => setUsername(text)}
-          maxLength={25}
-        />
+        {editing ? (
+          <Text  style={{fontFamily: 'Quicksand-Bold', fontSize: 14, marginBottom: 20}}>
+           Usuario
+          </Text>
+        ) : (
+          <>
+          <View style={styles.labelContainer}>
+            <Text style={styles.label}>Usuario:</Text>
+          </View>      
+          <TextInput
+            style={styles.input}
+            onChangeText={text => setUsername(text)}
+            maxLength={25}
+          />
+          </>
+        )}
       </View>
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>

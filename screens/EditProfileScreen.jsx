@@ -30,7 +30,7 @@ function EditProfileScreen({ navigation }) {
       profileImage: null
     };
 
-    setUsername(userData.username);
+    //setUsername(userData.username);
     setEmail(userData.email);
     setBirthday(userData.birthday);
     setProfileImage(userData.profileImage);
@@ -40,6 +40,9 @@ function EditProfileScreen({ navigation }) {
     navigation.goBack();
   };
 
+  const handleEliminarCuenta = () => {
+    console.log('hola')
+  }
 
   const handleDefaultImage = async () => {
     const asset = Asset.fromModule(require("../assets/person.jpg"));
@@ -57,7 +60,7 @@ function EditProfileScreen({ navigation }) {
     let body;
 
     const dataSimple = {
-      username: username,
+      //username: username,
       email: email,
       birthday: birthday,
     }
@@ -65,7 +68,7 @@ function EditProfileScreen({ navigation }) {
     if (profileImage) {
       const data = new FormData();
 
-      data.append('username', username);
+      //data.append('username', username);
       data.append('email', email);
       data.append('birthday', birthday);
 
@@ -143,6 +146,7 @@ function EditProfileScreen({ navigation }) {
           initialUsername={username}
           initialEmail={email}
           initialBirthday={birthday}
+          editing={true}
         />
         <TouchableOpacity onPress={handleDefaultImage}>
           <Text style={styles.resetImageText}>Restablecer imagen predeterminada</Text>
@@ -170,6 +174,13 @@ function EditProfileScreen({ navigation }) {
             <Text style={styles.cancelText}>Cancelar</Text>
           )}
         </TouchableOpacity>
+        <TouchableOpacity
+              onPress={handleEliminarCuenta}
+            >
+              <Text style={styles.deleteCuentaTxt}>
+                ¿Desea Eliminar Su Cuenta?
+              </Text>
+            </TouchableOpacity>
       </View>
       <Modal
         animationType="slide"
@@ -297,6 +308,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
+  deleteCuentaTxt:{
+    fontFamily:'Quicksand',
+    color:'#191970',
+    alignSelf:'center',
+    marginVertical:17
+  }
 });
 
 export default EditProfileScreen;
