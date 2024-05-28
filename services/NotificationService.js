@@ -109,12 +109,12 @@ export const deletePushToken = async (username, token) => {
             }
         });
         if (response.status === 200) {
-            console.log("ProfileUserInfo: push token borrado correctamente");
+            console.log("NotificationService: push token borrado correctamente");
         } else {
             console.error("NotificationService: Hubo un error con la solicitud HTTP",response.status);
         }
     } catch (e) {
-        console.error("ProfileUserInfo: Error borrando el push token", e);
+        console.error("NotificationService: Error borrando el push token", e);
     }
 }
 

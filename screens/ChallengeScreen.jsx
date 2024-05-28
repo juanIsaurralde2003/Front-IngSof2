@@ -66,7 +66,7 @@ const ChallengeScreen = () => {
           };
           setChallengeData(challengeData);
         } else {
-          console.error('Error al obtener challenge');
+          console.error('Error al obtener challenge',response.status);
         }
       } catch (error) {
         console.error('Error de red:', error);
