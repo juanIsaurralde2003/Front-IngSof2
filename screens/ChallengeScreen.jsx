@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'; 
 import { Camera } from 'expo-camera';
 import Header from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
@@ -66,6 +66,11 @@ const ChallengeScreen = () => {
           };
           setChallengeData(challengeData);
         } else {
+          const challengeError = {
+            name: 'Error',
+            description: 'Ha ocurrido un error al obtener el challenge'
+          }
+          setChallengeData(challengeError);
           console.error('Error al obtener challenge',response.status);
         }
       } catch (error) {
@@ -168,6 +173,10 @@ const ChallengeScreen = () => {
     console.log('Navegar al buscador de perfiles');
     navigation.navigate('search', { fromScreen: 'challenge' });
   }
+  
+  const handleNotificationPress = () => {
+    console.log('Bell pressed');
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -183,9 +192,14 @@ const ChallengeScreen = () => {
             <Text style={styles.dontText}>DON'T</Text>
             <Text style={styles.beRealText}> BE REAL</Text>
           </Text>
-          <TouchableOpacity onPress={handleLupaPress}>
-            <MaterialIcons name='search' size={40} color={'black'} />
-          </TouchableOpacity>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={handleNotificationPress}>
+              <MaterialCommunityIcons name='bell-outline' size={35} color={'black'} style={{marginRight: 15}}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLupaPress}>
+              <MaterialIcons name='search' size={35} color={'black'} />
+            </TouchableOpacity>
+          </View>
         </View>
         
         {isCameraOpen ? (
@@ -294,6 +308,7 @@ const styles = StyleSheet.create({
     headerText: {
       fontSize: 18,
       fontWeight: 'bold',
+      marginLeft: 15,
       //fontFamily: 'NotoSansTC-Regular', 
     },
     dontText: {

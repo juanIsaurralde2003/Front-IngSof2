@@ -15,7 +15,7 @@ function TituloLogin(props){
                 </Text>
             </View>
             <View style={styles.cameraContainer}>
-              <Image source={require("../assets/Logo.png")} style={styles.cameraIcon} resizeMode='contain'/>
+              <Image source={require("../assets/logo.png")} style={styles.cameraIcon} resizeMode='contain'/>
             </View>   
         </View>
     )
