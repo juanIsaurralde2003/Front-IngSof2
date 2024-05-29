@@ -9,7 +9,7 @@ const InitScreen = () => {
     const [loading, setLoading] = useState(true);
     const {token,dailyPost} = useAuth();
     useEffect(()=>{
-        /* try{
+         try{
             setLoading(true);
             if(token){
                 if(dailyPost){
@@ -19,16 +19,16 @@ const InitScreen = () => {
                     navigation.navigate('challenge')
                 }
             }
-            else{ */
+            else{ 
                 navigation.navigate('login')
-            /*}
-/*         }
+            }
+        }
         catch(error){
             console.error("InitScreen:error en el proceso de cargar credenciales ",error)
         }
         finally{
             setLoading(false);
-        } */
+        } 
     },[token,dailyPost]);
 
   if (loading) {
