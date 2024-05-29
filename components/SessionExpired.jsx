@@ -14,9 +14,9 @@ export const SessionExpired = () => {
         const checkTokenExpiration = () => {
             if(token){
                 const decodedToken = jwtDecode(token);
-                const currentTime = Math.floor(Date.now/1000);
-                console.log("SessionExpired: la fecha en la que el token expira es: " + decodedToken.exp);
-                if(decodedToken.exp < currentTime){
+                const currentTime = Math.floor(Date.now()/1000);
+                console.log(decodedToken.exp < currentTime);
+                if(decodedToken.exp > currentTime){
                     setIsVisible(true);
                 }
                 else{

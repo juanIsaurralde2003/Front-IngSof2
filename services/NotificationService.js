@@ -31,6 +31,7 @@ export async function registerForPushNotificationsAsync(user,sessionToken) {
                     username:user
                 });
                 console.log(data);
+                console.log("NotificationService: El token de la sesión es: "+sessionToken);
                 const url = `${SERVER}/notifications/register-token`;
                 const response = await fetch(url, {
                     method: 'POST',
