@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Animated, Image, RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FeedComponentWithActionSheet from '../components/FeedComponent';
 import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,6 +15,7 @@ const FeedScreen = () => {
 
   const [feedData, setFeedData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [feedError, setFeedError] = useState(false);
 
   const [reportedImages, setReportedImages] = useState([]);
 
@@ -34,12 +35,13 @@ const FeedScreen = () => {
   
         console.log(data);
         console.log(data.post);
-
+        setFeedError(false);
         setFeedData(data.post);
       } else {
         console.log(response.status);
         console.log(response)
         console.error('Error al obtener posts');
+        setFeedError(true);
       }
     } catch (error) {
       console.error('Error de red:', error);
@@ -137,6 +139,10 @@ const FeedScreen = () => {
     navigation.navigate('search', { fromScreen: 'feed' });
   }
 
+  const handleNotificationPress = () => {
+    console.log('Bell pressed');
+  }
+
   const dynamicHeaderStyle = {
     opacity: scrollOffsetY.interpolate({
       inputRange: [0, 100], // Cambia estos valores según tus necesidades
@@ -155,13 +161,20 @@ const FeedScreen = () => {
               style={styles.profileImage}
             />
           </TouchableOpacity>
-          <Text style={styles.headerText}>
-            <Text style={styles.dontText}>DON'T</Text>
-            <Text style={styles.beRealText}> BE REAL</Text>
-          </Text>
-          <TouchableOpacity onPress={handleLupaPress}>
-            <MaterialIcons name='search' size={40} color={'black'} />
-          </TouchableOpacity>
+          <View style={{marginLeft: 15}}>
+            <Text style={styles.headerText}>
+              <Text style={styles.dontText}>DON'T</Text>
+              <Text style={styles.beRealText}> BE REAL</Text>
+            </Text>
+          </View>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={handleNotificationPress}>
+              <MaterialCommunityIcons name='bell-outline' size={35} color={'black'} style={{marginRight: 15}}/>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLupaPress}>
+              <MaterialIcons name='search' size={35} color={'black'} />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={[styles.dynamicHeader]}>
           <View style={styles.retoContainer}>
@@ -189,7 +202,14 @@ const FeedScreen = () => {
             />
           }
         >
-          {feedData.length === 0 ? (
+          {feedError && (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
+                Ha ocurrido un error al obtener las publicaciones. Por favor, inténtalo más tarde
+              </Text>
+            </View>
+          )}
+          {(feedData.length === 0 && !feedError) ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
                 Las personas que sigues aún no han cumplido el reto. Sigue a más personas o espera a que cumplan el desafío.
