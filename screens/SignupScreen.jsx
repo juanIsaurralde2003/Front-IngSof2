@@ -28,7 +28,8 @@ function SignupScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const newDate = new Date();
-  const [birthday, setBirthday] = useState(format(newDate, 'yyyy-MM-dd'));
+  const maximumDate = new Date(newDate.getFullYear() - 15, newDate.getMonth(), newDate.getDate() - 1);
+  const [birthday, setBirthday] = useState(format(maximumDate, 'yyyy-MM-dd'));
 
 
   const handleCancelButton = async () => {
