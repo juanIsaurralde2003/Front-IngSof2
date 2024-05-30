@@ -15,8 +15,8 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => (
-    <Stack.Navigator initialRouteName="init">
-        <Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="init" component={InitScreen}/>
+    <Stack.Navigator initialRouteName="login">
+        {/*<Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="init" component={InitScreen}/>*/}
         <Stack.Screen options={{ headerShown: false, gestureEnabled: false,}} name="login" component={LoginScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="signup" component={SignupScreen} />
         <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="challenge" component={ChallengeScreen} />

@@ -16,7 +16,7 @@ export const SessionExpired = () => {
                 const decodedToken = jwtDecode(token);
                 const currentTime = Math.floor(Date.now()/1000);
                 console.log(decodedToken.exp < currentTime);
-                if(decodedToken.exp > currentTime){
+                if(decodedToken.exp < currentTime){
                     setIsVisible(true);
                 }
                 else{
