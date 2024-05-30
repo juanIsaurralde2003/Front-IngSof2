@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   challengeDescription: {
-    fontSize: 24,
+    fontSize: 18,
     fontFamily: 'Quicksand',
     textAlign: 'center',
   },

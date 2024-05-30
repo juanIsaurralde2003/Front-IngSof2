@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View, RefreshControl } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
 import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
@@ -15,38 +15,46 @@ const FollowersTab = ({fromScreen, usuario}) => {
 
   const [inputValue, setInputValue] = useState('');
   const [followers, setFollowers] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getFollowers = async () => {
+    setRefreshing(true); // Set refreshing to true when the data is being fetched
+
+    const url = `${SERVER}/users/followerslist/${usuario}`;
+
+    try {
+      const response = await fetch(url, { method: 'GET',         
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFollowers(data);
+        setRefreshing(false); // Set refreshing to false when the data fetching is complete
+        console.log(data);
+      } else {
+        console.error('Error al obtener followers');
+        setRefreshing(false); // Set refreshing to false if there is an error fetching data
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      setRefreshing(false); // Set refreshing to false if there is an error fetching data
+    } 
+  };
 
   useEffect(() => {
-    const getFollowers = async () => {
-
-      const url = `${SERVER}/users/followerslist/${usuario}`;
-
-      try {
-        const response = await fetch(url, { method: 'GET',         
-          headers: { 
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setFollowers(data);
-    
-          console.log(data);
-        } else {
-          console.error('Error al obtener followers');
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
-
     getFollowers();
   }, []);
 
   const filteredUsuarios = followers.filter(usuario =>
     usuario.username.toLowerCase().includes(inputValue.toLowerCase())
   );
+
+  const handleRefresh = () => {
+    getFollowers(); // Call the getFollowers function again when the ScrollView is pulled down to refresh
+  };
 
   return (
     <SafeAreaView style={{backgroundColor: '#e5e5e5', flexGrow: 1}}>
@@ -66,9 +74,15 @@ const FollowersTab = ({fromScreen, usuario}) => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5', width: '100%'}}
+          contentContainerStyle={{height: '100%', paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5', width: '100%'}}
           onTouchStart={Keyboard.dismiss}
           keyboardShouldPersistTaps='handled'
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+            />
+          }
         >
           {followers.length === 0 ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -83,7 +97,7 @@ const FollowersTab = ({fromScreen, usuario}) => {
                 perfil={item.username}
                 imagenPerfilURL={item.profilePicture}
                 fromScreen={fromScreen}
-                follows={false}
+                follows={item.followsBack}
               />
           )))}
         </ScrollView>
@@ -108,17 +122,11 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderColor: 'black',
   },
-  searchHeadingCross: {
-    width: '15%',
-    flexDirection: 'column',
-    height: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   searchBar: {
     alignSelf: 'center',
     paddingHorizontal: 10,
     paddingVertical:5,
+    fontFamily: 'Quicksand',
     fontSize: 14,
     width: '100%',
   },

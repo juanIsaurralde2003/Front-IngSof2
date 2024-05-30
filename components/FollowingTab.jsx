@@ -1,55 +1,60 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View, RefreshControl } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
-import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
-import UserSearchComponent from '../components/UserSearchComponent';
-import { useAuth } from '../components/AuthContext';
 import FollowerComponent from './FollowerComponent';
+import { useAuth } from '../components/AuthContext';
 
-const FollowingTab = ({fromScreen, usuario}) => {
-   
+const FollowingTab = ({ fromScreen, usuario }) => {
   const navigation = useNavigation();
-
-  const {token, user} = useAuth();
+  const { token, user } = useAuth();
 
   const [inputValue, setInputValue] = useState('');
   const [following, setFollowing] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getFollowing = async () => {
+    setRefreshing(true); // Set refreshing to true when the data is being fetched
+
+    const url = `${SERVER}/users/followinglist/${usuario}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setFollowing(data);
+        setRefreshing(false); // Set refreshing to false when the data fetching is complete
+        console.log(data);
+      } else {
+        console.error('Error al obtener following');
+        setRefreshing(false); // Set refreshing to false if there is an error fetching data
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      setRefreshing(false); // Set refreshing to false if there is an error fetching data
+    }
+  };
 
   useEffect(() => {
-    const getFollowing = async () => {
-  
-      const url = `${SERVER}/users/followinglist/${usuario}`;
-
-      try {
-        const response = await fetch(url, { method: 'GET',         
-          headers: { 
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          setFollowing(data);
-    
-          console.log(data);
-        } else {
-          console.error('Error al obtener following');
-        }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
-
     getFollowing();
   }, []);
 
-  const filteredUsuarios = following.filter(usuario =>
+  const filteredUsuarios = following.filter((usuario) =>
     usuario.username.toLowerCase().includes(inputValue.toLowerCase())
   );
 
+  const handleRefresh = () => {
+    getFollowing(); // Call the getFollowing function again when the ScrollView is pulled down to refresh
+  };
+
   return (
-    <SafeAreaView style={{backgroundColor: '#e5e5e5', flexGrow: 1}}>
+    <SafeAreaView style={{ backgroundColor: '#e5e5e5', flexGrow: 1 }}>
       <View>
         <View style={styles.searchHeading}>
           <View style={styles.searchHeadingBar}>
@@ -62,13 +67,16 @@ const FollowingTab = ({fromScreen, usuario}) => {
             />
           </View>
         </View>
-        
+
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5', width: '100%'}}
+          contentContainerStyle={{ height: '100%', paddingBottom: 100, flexGrow: 1, backgroundColor: '#e5e5e5', width: '100%' }}
           onTouchStart={Keyboard.dismiss}
-          keyboardShouldPersistTaps='handled'
+          keyboardShouldPersistTaps="handled"
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
         >
           {following.length === 0 ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -78,14 +86,15 @@ const FollowingTab = ({fromScreen, usuario}) => {
             </View>
           ) : (
             filteredUsuarios.map((item, index) => (
-              <FollowerComponent 
+              <FollowerComponent
                 key={index}
                 perfil={item.username}
                 imagenPerfilURL={item.profilePicture}
                 fromScreen={fromScreen}
                 follows={true}
               />
-          )))}
+            ))
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -118,7 +127,8 @@ const styles = StyleSheet.create({
   searchBar: {
     alignSelf: 'center',
     paddingHorizontal: 10,
-    paddingVertical:5,
+    paddingVertical: 5,
+    fontFamily: 'Quicksand',
     fontSize: 14,
     width: '100%',
   },

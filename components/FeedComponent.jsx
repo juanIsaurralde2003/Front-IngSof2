@@ -93,6 +93,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
         options: options,
         cancelButtonIndex: options.length - 1,
         cancelButtonTintColor: 'red',
+        position: 'bottom',
       },
       (buttonIndex) => {
         if (buttonIndex === 0) {

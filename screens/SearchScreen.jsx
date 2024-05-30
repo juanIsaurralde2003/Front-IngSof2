@@ -5,6 +5,7 @@ import { SERVER } from '../utils/utils';
 import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
 import { useAuth } from '../components/AuthContext';
+import { useFonts } from '@expo-google-fonts/quicksand';
 
 const SearchScreen = () => {
    
@@ -129,6 +130,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical:13,
     fontSize: 14,
+    fontFamily: 'Quicksand',
     height: 40,
     width: '85%',
   },

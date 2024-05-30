@@ -19,6 +19,7 @@ const ChallengeScreen = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [savingImage, setSavingImage] = useState(false);
   const cameraRef = useRef(null);
+  const [errorChallenge, setErrorChallenge] = useState(false);
   const {token} = useAuth();
 
   const {user, profilePicture,setDailyPostDone,dailyPost} = useAuth();
@@ -44,6 +45,7 @@ const ChallengeScreen = () => {
     const getChallenge = async () => {
 
       const url = `${SERVER}/posts/prompt`;
+      setErrorChallenge(false);
 
       try {
         const response = await fetch(url, { 
@@ -72,6 +74,7 @@ const ChallengeScreen = () => {
           }
           setChallengeData(challengeError);
           console.error('Error al obtener challenge',response.status);
+          setErrorChallenge(true);
         }
       } catch (error) {
         console.error('Error de red:', error);
@@ -222,7 +225,7 @@ const ChallengeScreen = () => {
               <View style={styles.challengeDescriptionContainer}>
                 <Text style={styles.challengeDescription} adjustsFontSizeToFit>{challengeData?.description}</Text>
               </View>
-              <TouchableOpacity style={styles.button} onPress={handlePressCamera}>
+              <TouchableOpacity style={styles.button} onPress={handlePressCamera} disabled={errorChallenge}>
                 <FontAwesome name="camera" size={20} color="white" style={styles.cameraIcon} />
                 <Text style={styles.buttonText}>Adelante</Text>
               </TouchableOpacity>

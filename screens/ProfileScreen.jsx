@@ -28,6 +28,14 @@ function ProfileScreen({navigation}){
       
     }
 
+    const calculateDaysBetween = (startDate, endDate) => {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffTime = Math.abs(end - start);
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+    
+
     const getCantidadPosts = async () => {
       try {
         const url = `${SERVER}/users/completedprompts/${encodeURIComponent(userData)}`;
@@ -53,11 +61,46 @@ function ProfileScreen({navigation}){
       }
     }
     
+    // const getPublicacionesUsuario = async () => {
+    //   try {
+    //     const url = `${SERVER}/users/posts/${encodeURIComponent(userData)}`;
+    //     console.log("el usuario es:" + userData);
+    //     const response = await fetch(url, {method: 'GET',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': `Bearer ${token}`
+    //       }
+    //     });
+    
+    //     if (response.ok) {
+    //       const data = await response.json();
+    //       console.log("las publicaciones son: " + JSON.stringify(data, null, 2));
+    //       const publicacionesCom = data.user.map( (item) => {
+    //         const publicacion = {
+    //           fecha: item.prompt.date && convertDate(item.prompt.date),
+    //           //consigna:'Sacar una foto que...', 
+    //           consigna: item.prompt.prompt,
+    //           rating: item.post.score || 0, 
+    //           imagenURL: item.post.imageURL, 
+    //         }
+    //         return publicacion
+    //       });
+    //       setPublicaciones(publicacionesCom);
+    //     } else {
+    //       console.error("Respuesta HTTP no exitosa",response.status);
+    //     }
+    
+    //   } catch (error) {
+    //     console.error('Hubo un problema con la solicitud fetch:', error);
+    //   }
+    // };
+
     const getPublicacionesUsuario = async () => {
       try {
         const url = `${SERVER}/users/posts/${encodeURIComponent(userData)}`;
         console.log("el usuario es:" + userData);
-        const response = await fetch(url, {method: 'GET',
+        const response = await fetch(url, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -67,25 +110,51 @@ function ProfileScreen({navigation}){
         if (response.ok) {
           const data = await response.json();
           console.log("las publicaciones son: " + JSON.stringify(data, null, 2));
-          const publicacionesCom = data.user.map( (item) => {
-            const publicacion = {
-              fecha: item.prompt.date && convertDate(item.prompt.date),
-              //consigna:'Sacar una foto que...', 
-              consigna: item.prompt.prompt,
-              rating: item.post.score && item.post.score.low || 0, 
-              imagenURL: item.post.imageURL, 
+    
+          let totalScore = 0;
+          let firstPostDate = null;
+    
+          const publicacionesCom = data.user.map((item) => {
+            if (!firstPostDate || new Date(item.prompt.date) < new Date(firstPostDate)) {
+              firstPostDate = item.prompt.date;
             }
-            return publicacion
+    
+            totalScore += item.post.score || 0;
+    
+            return {
+              fecha: item.prompt.date && convertDate(item.prompt.date),
+              consigna: item.prompt.prompt,
+              rating: item.post.score || 0,
+              imagenURL: item.post.imageURL,
+            };
           });
+    
+          if (publicacionesCom.length > 0 && firstPostDate) {
+            const today = new Date().toISOString().split('T')[0];
+            const daysOnPlatform = calculateDaysBetween(firstPostDate, today);
+            const averageScore = totalScore / daysOnPlatform;
+            console.log('Ranking promedio del usuario:', averageScore.toFixed(2));
+            setProfileUserInfo((prevInfo) => ({
+              ...prevInfo,
+              rating: averageScore.toFixed(2)
+            }));
+          } else {
+            // Si no hay publicaciones, establecer el ranking promedio en 0
+            setProfileUserInfo((prevInfo) => ({
+              ...prevInfo,
+              rating: 0
+            }));
+          }
+    
           setPublicaciones(publicacionesCom);
         } else {
-          console.error("Respuesta HTTP no exitosa",response.status);
+          console.error("Respuesta HTTP no exitosa", response.status);
         }
-    
       } catch (error) {
         console.error('Hubo un problema con la solicitud fetch:', error);
       }
     };
+    
     
     const getProfileUserInfo = async () => {
       try {
