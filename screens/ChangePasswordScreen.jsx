@@ -1,3 +1,5 @@
+//NO ESTÁ HECHA
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions } from "react-native";
 import UserDataComponent from "../components/UserDataComponent";
@@ -6,7 +8,7 @@ import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { format } from "date-fns";
 import { Asset } from 'expo-asset';
 
-function EditProfileScreen({ navigation }) {
+function ChangePasswordScreen({ navigation }) {
 
   const [isLoading, setIsLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
@@ -332,4 +334,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default EditProfileScreen;
+export default ChangePasswordScreen;
