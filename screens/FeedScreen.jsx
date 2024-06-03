@@ -6,6 +6,7 @@ import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { NotificationCenter } from '../components/NotificationCenter';
 
 const FeedScreen = () => {
    
@@ -139,10 +140,6 @@ const FeedScreen = () => {
     navigation.navigate('search', { fromScreen: 'feed' });
   }
 
-  const handleNotificationPress = () => {
-    console.log('Bell pressed');
-  }
-
   const dynamicHeaderStyle = {
     opacity: scrollOffsetY.interpolate({
       inputRange: [0, 100], // Cambia estos valores según tus necesidades
@@ -168,9 +165,10 @@ const FeedScreen = () => {
             </Text>
           </View>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={handleNotificationPress}>
-              <MaterialCommunityIcons name='bell-outline' size={35} color={'black'} style={{marginRight: 15}}/>
-            </TouchableOpacity>
+            <NotificationCenter
+              fromScreen={'feed'}
+              navigation={navigation}
+            />
             <TouchableOpacity onPress={handleLupaPress}>
               <MaterialIcons name='search' size={35} color={'black'} />
             </TouchableOpacity>

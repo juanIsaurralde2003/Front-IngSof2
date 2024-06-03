@@ -8,6 +8,7 @@ import CameraScreen from './CameraScreen';
 import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { NotificationCenter } from '../components/NotificationCenter';
 
 const ChallengeScreen = () => {
 
@@ -177,9 +178,6 @@ const ChallengeScreen = () => {
     navigation.navigate('search', { fromScreen: 'challenge' });
   }
   
-  const handleNotificationPress = () => {
-    console.log('Bell pressed');
-  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
@@ -196,9 +194,10 @@ const ChallengeScreen = () => {
             <Text style={styles.beRealText}> BE REAL</Text>
           </Text>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={handleNotificationPress}>
-              <MaterialCommunityIcons name='bell-outline' size={35} color={'black'} style={{marginRight: 15}}/>
-            </TouchableOpacity>
+            <NotificationCenter
+              navigation={navigation}
+              fromScreen={'challenge'}
+            />
             <TouchableOpacity onPress={handleLupaPress}>
               <MaterialIcons name='search' size={35} color={'black'} />
             </TouchableOpacity>

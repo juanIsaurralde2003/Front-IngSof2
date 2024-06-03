@@ -12,17 +12,18 @@ const InitScreen = () => {
         try{
             setLoading(true);
             if(token){
-                if(dailyPost){
-                    navigation.navigate('feed')
-                }
-                else{
-                    navigation.navigate('challenge')
-                }
-            }
-            else{
-                navigation.navigate('login')
+                  if(dailyPost){
+                      navigation.navigate('feed')
+                  }
+                  else{
+                      navigation.navigate('challenge')
+                  }
+              }
+              else{
+                  navigation.navigate('login')
             }
          }
+         
         catch(error){
             console.error("InitScreen:error en el proceso de cargar credenciales ",error)
         }
