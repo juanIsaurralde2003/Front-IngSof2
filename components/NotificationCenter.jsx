@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 export const NotificationCenter = ({fromScreen, navigation}) => {
 
     const [notifications,setNotifications] = useState([]);
-    const [unreadCount,setUnreadCount] = useState(0);
+    const [unreadCount,setUnreadCount] = useState(10);
     const socket = io(`${SERVER}/algo`);
     const {token} = useAuth();
 
@@ -52,10 +52,10 @@ export const NotificationCenter = ({fromScreen, navigation}) => {
                 setUnreadCount(unread);
             }
             else{
-                console.error("Hubo un error con la solicitud",response.status);
+                console.error("NotificationCenter: Hubo un error con la solicitud",response.status);
             }
         } catch(error){
-            console.error('Error obteniendo notificaciones',error);
+            console.error('NotificationCenter: Error obteniendo notificaciones',error);
         }
     }
 
