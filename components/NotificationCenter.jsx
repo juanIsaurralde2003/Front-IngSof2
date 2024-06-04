@@ -1,29 +1,30 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState,useEffect,useCallback} from 'react';
 import { StyleSheet, View,TouchableOpacity,Text } from 'react-native';
 import { MaterialCommunityIcons} from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
 import io from 'socket.io-client'
 import {useAuth} from './AuthContext'
-import { err } from 'react-native-svg';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const NotificationCenter = ({fromScreen, navigation}) => {
-
+    
     const [notifications,setNotifications] = useState([]);
-    const [unreadCount,setUnreadCount] = useState(10);
-    const socket = io(`${SERVER}/algo`);
-    const {token} = useAuth();
+    const [unreadCount,setUnreadCount] = useState(0);
+    const {token,user} = useAuth();
 
 
     useEffect(()=>{
-
+        const socket = io(SERVER, {
+            query: {
+                username: user,
+            }
+        });
         socket.on('connect',()=>{
             console.log('Conexion exitosa');
         });
-        socket.on('notification',(data)=>{
-            const newNotification = data;
-            setNotifications((prev)=>([...prev,newNotification]))
-            setUnreadCount((prev)=>(prev+1))
+        socket.on('notification',()=>{
+            console.log("NotificationCenter: entre a sendNotification");
+            setUnreadCount((prev)=>(prev+1));
             
         });
         socket.on('disconnect',()=>{
@@ -34,50 +35,42 @@ export const NotificationCenter = ({fromScreen, navigation}) => {
             socket.disconnect();
         }
 
-    },[])
+    },[]);
 
-    const getNotifications = async () => {
+    const getUnreadNotifications = async ()=>{
         try{
-            const url = `${SERVER}/notifications`;
+            const url = `${SERVER}/notifications/unread/${encodeURIComponent(user)}`
             const response = await fetch(url,{
                 method:'GET',
                 headers:{
-                    'Authentication':`Bearer ${token}`
-                }
-            })
-            if(response.status === '200'){
-                const data = await response.json();
-                setNotifications(data);
-                const unread = notifications.filter((notification)=>(!notification.read)).length;
-                setUnreadCount(unread);
+                    'Authorization':`Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+            });
+            if(response.status === 200){
+                console.log("NotificationCenter:Se recibieron bien uncount nots");
+                const data  = await response.json();
+                console.log(data.data.low)
+                setUnreadCount(data.data.low);
             }
             else{
-                console.error("NotificationCenter: Hubo un error con la solicitud",response.status);
+                console.error("NotificationCenter:Hubo un errror con la solicitud para obtener unread nots",response.status);
             }
         } catch(error){
-            console.error('NotificationCenter: Error obteniendo notificaciones',error);
+            console.error("NotificationCenter:Hubo un error obteniendo unread nots",error)
         }
     }
 
-    useEffect(()=>{
-        getNotifications();
-    },[]);
-
-    const markAllAsRead = () => {
-        try{
-            const updatedNotifications = notifications.map((notification) => (notification.read = true));
-            setNotifications(updatedNotifications);
-            setUnreadCount(0);
-        }catch(error){
-            console.error("NotificationCenter:Error leyendo notificaciones",error);
-        }
-    }
+    useFocusEffect(
+        useCallback(() => {
+            getUnreadNotifications();
+        }, [])
+    );
 
 
     const handleNotificationPress = () => {
-        markAllAsRead();
+        setUnreadCount(0);
         navigation.navigate('notifications',{
-            notifications:notifications,
             fromScreen:fromScreen
         });
 

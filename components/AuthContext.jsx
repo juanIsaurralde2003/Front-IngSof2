@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Image } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { deletePushToken } from "../services/NotificationService";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = React.createContext();
 
@@ -11,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dailyPost, setDailyPost] = useState(false);
+    const [sessionExpired,setSessionExpired] = useState(false);
 
     const loadUserInfo = async () => {
         try {
@@ -26,6 +28,29 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
+
+    useEffect(()=>{
+        const checkTokenExpiration = () => {
+            if(token){
+                const decodedToken = jwtDecode(token);
+                const currentTime = Math.floor(Date.now()/1000);
+                console.log(decodedToken.exp < currentTime);
+                console.log(decodedToken.exp > currentTime);
+                console.log("AuthContext: chequeando sesion");
+                if(decodedToken.exp < currentTime){
+                    setSessionExpired(true);
+                }
+                else{
+                    setSessionExpired(false);
+                }
+            }
+        };
+        checkTokenExpiration();
+        const intervalId = setInterval(checkTokenExpiration, 60*1000);
+
+        return () => clearInterval(intervalId);
+
+    },[token]);
 
     useEffect(() => {
         loadUserInfo();
@@ -119,13 +144,14 @@ export const AuthProvider = ({ children }) => {
             setToken(null);
             setUser(null);
             setProfilePicture(null);
+            setSessionExpired(false);
         } catch (error) {
             console.error('Error al borrar el token:', error);
         }
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone,setProfilePic }}>
+        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone,setProfilePic,sessionExpired }}>
             {children}
         </AuthContext.Provider>
     );
