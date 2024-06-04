@@ -93,7 +93,8 @@ const NotificationScreen = () => {
       const differenceInSeconds = currentTime - epochTime; // Calcular la diferencia en segundos
   
       if (differenceInSeconds < 60) {
-        return `${differenceInSeconds}s`; // Segundos
+        const seconds = Math.floor(differenceInSeconds);
+        return `${seconds}s`; // Segundos
       } 
       else if (differenceInSeconds < 3600) {
         const minutes = Math.floor(differenceInSeconds / 60);
@@ -122,7 +123,7 @@ const NotificationScreen = () => {
     const renderNotification = ({ item }) => (
         <View style={styles.notification}>
           <View style={{flexDirection:'row'}}>
-            <Image style = {styles.profilePicture} source={{uri: "https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/profile_Valedemo.1.jpg"}}/>
+            <Image style = {styles.profilePicture} source={{uri: item.profilePicture}}/>
             <View style={styles.messageContainer}>
               <Text style={styles.message}><Text style={{fontWeight:'bold'}}>{takeUntilSpace(item.message) + " "}</Text>
                 {takeFromSpace(item.message)} 
