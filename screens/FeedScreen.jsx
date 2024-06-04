@@ -9,10 +9,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NotificationCenter } from '../components/NotificationCenter';
 
 const FeedScreen = () => {
-   
+
   const navigation = useNavigation();
 
-  const {user, token, profilePicture} = useAuth();
+  const { user, token, profilePicture } = useAuth();
 
   const [feedData, setFeedData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -25,7 +25,8 @@ const FeedScreen = () => {
     const url = `${SERVER}/posts/feed/${user}`;
 
     try {
-      const response = await fetch(url, { method: 'GET',
+      const response = await fetch(url, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -33,7 +34,7 @@ const FeedScreen = () => {
 
       if (response.ok) {
         const data = await response.json();
-  
+
         console.log(data);
         console.log(data.post);
         setFeedError(false);
@@ -46,7 +47,7 @@ const FeedScreen = () => {
       }
     } catch (error) {
       console.error('Error de red:', error);
-    } 
+    }
   };
 
   const getChallenge = async () => {
@@ -54,7 +55,8 @@ const FeedScreen = () => {
     const url = `${SERVER}/posts/prompt`;
 
     try {
-      const response = await fetch(url, { method: 'GET',
+      const response = await fetch(url, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -62,16 +64,16 @@ const FeedScreen = () => {
 
       if (response.ok) {
         const data = await response.json();
-  
+
         console.log(data);
-  
+
         setReto(data.prompt);
       } else {
         console.error('Error al obtener challenge');
       }
     } catch (error) {
       console.error('Error de red:', error);
-    } 
+    }
   };
 
   const onFocus = () => {
@@ -104,10 +106,10 @@ const FeedScreen = () => {
         console.error('Error al guardar las imágenes reportadas:', error);
       }
     };
-  
+
     // Guardar las imágenes al salir de la pantalla
     const unsubscribe = navigation.addListener('blur', storeReportedImages);
-  
+
     // Limpieza del efecto
     return unsubscribe;
   }, [reportedImages, navigation]);
@@ -121,7 +123,7 @@ const FeedScreen = () => {
 
   }, []);
 
-  const [reto, setReto] = useState('Cargando ...');  
+  const [reto, setReto] = useState('Cargando ...');
 
   const [scrollOffsetY] = useState(new Animated.Value(0));
 
@@ -130,7 +132,7 @@ const FeedScreen = () => {
     console.log('Navegar al perfil');
     navigation.navigate('profile', {
       fromScreen: 'feed',
-      userData:user 
+      userData: user
     });
   }
 
@@ -149,22 +151,22 @@ const FeedScreen = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: '#e5e5e5'}}>
-      <View style={{flex: 1, backgroundColor: '#e5e5e5'}}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
+      <View style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
         <View style={styles.headerContainer}>
           <TouchableOpacity onPress={handleProfilePress}>
             <Image
-              source={{uri: profilePicture}}
+              source={{ uri: profilePicture }}
               style={styles.profileImage}
             />
           </TouchableOpacity>
-          <View style={{marginLeft: 15}}>
+          <View style={{ marginLeft: 15 }}>
             <Text style={styles.headerText}>
               <Text style={styles.dontText}>DON'T</Text>
               <Text style={styles.beRealText}> BE REAL</Text>
             </Text>
           </View>
-          <View style={{flexDirection: 'row'}}>
+          <View style={{ flexDirection: 'row' }}>
             <NotificationCenter
               fromScreen={'feed'}
               navigation={navigation}
@@ -184,10 +186,10 @@ const FeedScreen = () => {
         <ScrollView
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={15}
-          contentContainerStyle={{paddingBottom: 0, flexGrow: 1}}
+          contentContainerStyle={{ paddingBottom: 0, flexGrow: 1 }}
           bounces={false}
           onScroll={Animated.event([
-            {nativeEvent: {contentOffset: {y: scrollOffsetY}}}
+            { nativeEvent: { contentOffset: { y: scrollOffsetY } } }
           ], {
             useNativeDriver: false,
           })}
@@ -230,7 +232,7 @@ const FeedScreen = () => {
                   userScore={item.post.userScore}
                   setReportedImages={setReportedImages}
                 />
-            ))
+              ))
           )}
         </ScrollView>
       </View>
@@ -270,7 +272,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   beRealText: {
-    color: '#390294', 
+    color: '#390294',
   },
   retoContainer: {
     paddingVertical: 20,

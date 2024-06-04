@@ -152,13 +152,13 @@ function EditProfileScreen({ navigation }) {
           initialBirthday={birthday}
           editing={true}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={handleCambiarContrasena}
         >
           <Text style={styles.changePasswordTxt}>
             Cambiar Contraseña
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={handleDefaultImage}>
           <Text style={styles.resetImageText}>Restablecer imagen predeterminada</Text>
         </TouchableOpacity>

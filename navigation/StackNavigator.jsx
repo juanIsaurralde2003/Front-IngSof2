@@ -11,6 +11,7 @@ import SearchScreen from '../screens/SearchScreen';
 import FollowersScreen from '../screens/FollowersScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import NotificationScreen from '../screens/NotificationScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -28,6 +29,7 @@ const StackNavigator = () => (
         <Stack.Screen options={{  headerShown: false }}  name="followers" component={FollowersScreen}  />
         <Stack.Screen options={{  headerShown: false }}  name="EditProfile" component={EditProfileScreen}  />
         <Stack.Screen options={{  headerShown: false }}  name="notifications" component={NotificationScreen}  />
+        <Stack.Screen options={{  headerShown: false, gestureEnabled: false }}  name="changepassword" component={ChangePasswordScreen}  />
     </Stack.Navigator>
 );
 

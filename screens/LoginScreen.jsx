@@ -18,7 +18,7 @@ function LoginScreen({navigation}){
   //const [profilePic, setProfilePic] = useState(null);
 
   const handleForgotPassword = () => {
-    navigation.navigate('login'); //cambiar esto cuando esté pronta la pantalla de forgotPassword
+    navigation.navigate('changepassword', { forgotten: true}); //cambiar esto cuando esté pronta la pantalla de forgotPassword
   }
 
   const handleShowPassword = () => {
