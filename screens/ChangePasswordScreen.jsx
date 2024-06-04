@@ -7,209 +7,414 @@ import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { format } from "date-fns";
 import { Asset } from 'expo-asset';
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function ChangePasswordScreen({ navigation }) {
+function ChangePasswordScreen() {
+
+  const route = useRoute();
+  const { forgotten } = route.params;
+  const [paramsReceived, setParamsReceived] = useState(false);
+
+  const navigation = useNavigation();
+
+  const [forgotPassword, setForgotPassword] = useState(forgotten);
+
+  const [mail, setMail] = useState('');
+
+  const [mailSent, setMailSent] = useState(false);
+
+  const [originalPassword, setOriginalPassword] = useState('');
+  const [showOriginalPassword, setShowOriginalPassword] = useState(false);
+
+  const [firstPassword, setFirstPassword] = useState('');
+  const [secondPassword, setSecondPassword] = useState('');
+  const [differentPassword, setDifferentPassword] = useState(false);
+  const [wrongPasswordType, setWrongPasswordType] = useState(false);
+
+  const [token, setToken] = useState(''); 
+  const [tokenValido, setTokenValido] = useState(false);
+  const [tokenInvalido, setTokenInvalido] = useState(false);
+
+  const [showFirstPassword, setShowFirstPassword] = useState(false);
+  const [showSecondPassword, setShowSecondPassword] = useState(false);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [isLoadingHandle, setIsLoadingHandle] = useState(false);
 
-  const { height, width } = Dimensions.get('window');
-
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState('');
 
   useEffect(() => {
-    loadUserData();
-  }, []);
-
-  const loadUserData = async () => {
-    const userData = {
-      username: ' ',
-      email: ' ',
-      birthday: ' ',
-      profileImage: null
-    };
-
-    //setUsername(userData.username);
-    setEmail(userData.email);
-    setBirthday(userData.birthday);
-    setProfileImage(userData.profileImage);
-  };
+    if (forgotten !== undefined) {
+      setForgotPassword(forgotten);
+      setParamsReceived(true);
+    }
+    console.log('Check params');
+  }, [forgotten]);
 
   const handleCancelButton = () => {
-    navigation.goBack();
-  };
-
-  const handleEliminarCuenta = () => {
-    console.log('hola')
-  }
-
-  const handleCambiarContrasena = () => {
-    console.log('hola')
-  }
-
-  const handleDefaultImage = async () => {
-    const asset = Asset.fromModule(require("../assets/person.jpg"));
-    await asset.downloadAsync();
-    setProfileImage(asset.localUri);
-  };
-
-  const handleSaveButton = async () => {
     setIsLoading(true);
+    navigation.goBack();
+    setIsLoading(false);
+  };
 
-    let url = `${SERVER}/auth/editProfile`;
-    let headers = {
-      'Content-Type': 'multipart/form-data',
-    }
-    let body;
+  const handleShowPassword = (setPassword, showPassword) => {
+    setPassword(!showPassword); // Cambia entre mostrar y ocultar la contraseña
+  };
 
-    const dataSimple = {
-      //username: username,
-      email: email,
-      birthday: birthday,
-    }
+  const handleForgotPassword = () => {
+    setFirstPassword('');
+    setSecondPassword('');
+    setOriginalPassword('');
+    setForgotPassword(true);
+  }
 
-    if (profileImage) {
-      const data = new FormData();
+  const handleSendMail = async () => {
+    setIsLoadingHandle(true);
+    setMail('');
+    console.log('Send Mail');
 
-      //data.append('username', username);
-      data.append('email', email);
-      data.append('birthday', birthday);
+    setMailSent(true);
+    setIsLoadingHandle(false);
 
-      const uriParts = profileImage.split('.');
-      const fileType = uriParts[uriParts.length - 1];
+  };
 
-      const nombreArchivo = `profile_${username}`;
+  const handleSendToken = async () => {
 
-      data.append('file', {
-        uri: profileImage,
-        name: `${nombreArchivo}.${fileType}`,
-        type: `image/${fileType}`,
-      });
+    setIsLoadingHandle(true);
+    setTokenInvalido(false);
+    console.log('Send Token');
 
-      body = data;
+    setTokenValido(true);
+    //setTokenInvalido(true);
+    setToken('');
+    setIsLoadingHandle(false);
+
+  };
+
+  const handleSendPassword = async () => {
+
+    if (forgotPassword) {
+      console.log('Olvidó');
     } else {
-      headers = { 'Content-Type': 'application/json' }
-      body = JSON.stringify(dataSimple);
+      console.log('Cambia sabiendo');
     }
 
-    try {
-      const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: body,
-      });
+    setIsLoadingHandle(true);
+    setDifferentPassword(false);
+    setFirstPassword('');
+    setSecondPassword('');
+    setDifferentPassword(true);
+    setIsLoadingHandle(false);
 
-      if (respuesta.ok) {
-        Alert.alert('Perfil Actualizado', `Tu perfil ha sido actualizado con éxito.`);
-        navigation.navigate('Profile');
-      } else {
-        const errorMessage = await respuesta.text();
-        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
-        Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
-      }
-    } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
-      Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
-    } finally {
-      setIsLoading(false);
-    }
   };
 
-  const handleProfileImagePicker = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (!paramsReceived) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#390294" />
+      </View>
+    );
+  }
 
-    if (permissionResult.granted === false) {
-      alert("Se requiere permiso para acceder a la galería de fotos.");
-      return;
-    }
-
-    const pickerResult = await ImagePicker.launchImageLibraryAsync();
-
-    if (pickerResult.canceled === true) {
-      return;
-    }
-
-    setProfileImage(pickerResult.assets[0].uri);
-  };
+  if (isLoadingHandle) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color="#390294" />
+      </View>
+    );
+  }
 
   return (
-    <ScrollView style={styles.container} keyboardDismissMode="on-drag" bounces={false}>
+    <ScrollView contentContainerStyle={styles.container} keyboardDismissMode="on-drag" bounces={false}>
       <View style={styles.secondContainer}>
-        <TouchableOpacity onPress={handleProfileImagePicker}>
-          {profileImage ? (
-            <Image source={{ uri: profileImage }} style={styles.profileImage} />
-          ) : (
-            <Image source={require("../assets/person.jpg")} style={styles.profileIcon} />
-          )}
-        </TouchableOpacity>
-        <UserDataComponent
-          setUsername={setUsername}
-          setEmail={setEmail}
-          setBirthday={setBirthday}
-          initialUsername={username}
-          initialEmail={email}
-          initialBirthday={birthday}
-          editing={true}
-        />
-        <TouchableOpacity
-          onPress={handleCambiarContrasena}
-        >
-          <Text style={styles.changePasswordTxt}>
-            Cambiar Contraseña
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleDefaultImage}>
-          <Text style={styles.resetImageText}>Restablecer imagen predeterminada</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          disabled={isLoading || (!username || !email)}
-          style={[styles.saveButton, { backgroundColor: (username && email) ? '#390294' : '#6e3aa7' }]}
-          activeOpacity={0.8}
-          onPress={handleSaveButton}
-        >
-          {isLoading ?
-            <ActivityIndicator size="small" color="#FFFFFF" /> :
-            <Text style={styles.saveText}>Guardar</Text>
-          }
-        </TouchableOpacity>
-        <TouchableOpacity
-          disabled={isLoading}
-          style={styles.cancelButton}
-          activeOpacity={0.8}
-          onPress={handleCancelButton}
-        >
-          {isLoading ? (
-            <ActivityIndicator size="small" color='#390294' />
-          ) : (
-            <Text style={styles.cancelText}>Cancelar</Text>
-          )}
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={handleEliminarCuenta}
-        >
-          <Text style={styles.deleteCuentaTxt}>
-            ¿Desea Eliminar Su Cuenta?
-          </Text>
-        </TouchableOpacity>
-      </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={showModal}
-        onRequestClose={() => setShowModal(false)}
-      >
-        <View style={styles.modalContainer}>
-          <ScrollView style={[styles.modalContent, { maxHeight: height * 0.75 }]}>
-            <Text style={styles.modalText}>{TERMINOSCONDICIONES}</Text>
-            <TouchableOpacity onPress={() => setShowModal(false)}>
-              <Text style={styles.closeModalButton}>Cerrar</Text>
+        {forgotPassword ? (
+          <View>
+            <Text>Contraseña Olvidada</Text>
+
+            {mailSent ? (
+              <>
+                {tokenValido ? (
+                  <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
+                    <View style={styles.inputContainer}>
+                      <View style={styles.labelContainer}>
+                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Nueva Contraseña:</Text>
+                      </View>
+                      <TextInput
+                        style={styles.input}
+                        secureTextEntry={!showFirstPassword}
+                        onChangeText={text => setFirstPassword(text)}
+                        maxLength={100}
+                      />
+                      <TouchableOpacity onPress={() => handleShowPassword(setShowFirstPassword, showFirstPassword)} style={styles.eyeIconContainer}>
+                        <MaterialCommunityIcons
+                          name={showFirstPassword ? 'eye-off' : 'eye'}
+                          size={24}
+                          color="#575757"
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <View style={styles.inputContainer}>
+                      <View style={styles.labelContainer}>
+                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Repita la contraseña:</Text>
+                      </View>
+                      <TextInput
+                        style={styles.input}
+                        secureTextEntry={!showSecondPassword}
+                        onChangeText={text => setSecondPassword(text)}
+                        maxLength={100}
+                      />
+                      <TouchableOpacity onPress={() => handleShowPassword(setShowSecondPassword, showSecondPassword)} style={styles.eyeIconContainer}>
+                        <MaterialCommunityIcons
+                          name={showSecondPassword ? 'eye-off' : 'eye'}
+                          size={24}
+                          color="#575757"
+                        />
+                      </TouchableOpacity>
+                    </View>
+
+                    <Text style={styles.warningcontrasena}>
+                      La contraseña debe tener un mínimo de 8 caracteres e incluir al menos una mayúscula, una minúscula, un número y un caracter especial.
+                    </Text>
+
+                    {wrongPasswordType && (
+                      <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña introducida no cumple con los requerimientos</Text>
+                    )}
+
+                    {differentPassword && (
+                      <Text style={{ color: 'red', marginBottom: 10 }}>Las contraseñas no coinciden</Text>
+                    )}
+
+                    <TouchableOpacity
+                      disabled={isLoadingHandle || !firstPassword || !secondPassword}
+                      style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && firstPassword && secondPassword) ? '#390294' : '#6e3aa7'}]}
+                      activeOpacity={0.8}
+                      onPress={handleSendPassword}
+                    >
+                      {isLoadingHandle ? (
+                        <ActivityIndicator size="small" color='#390294' />
+                      ) : (
+                        <Text style={styles.continueText}>Confirmar</Text>
+                      )}
+                    </TouchableOpacity>
+                    
+                      <TouchableOpacity
+                        disabled={isLoading}
+                        style={styles.cancelButton}
+                        activeOpacity={0.8}
+                        onPress={handleCancelButton}
+                      >
+                        {isLoading ? (
+                          <ActivityIndicator size="small" color='#390294' />
+                        ) : (
+                          <Text style={styles.cancelText}>Cancelar</Text>
+                        )}
+                      </TouchableOpacity>
+                    <Text>Token Validado</Text>
+                  </View>
+                ) : (
+                  <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
+                    <>
+                      <Text style={styles.message}>
+                        Se ha enviado un código a su correo electrónico. Por favor, introdúzcalo.
+                      </Text>
+                      <View style={styles.inputContainer}>
+                        <View style={styles.labelContainer}>
+                          <Text style={styles.label}>Código:</Text>
+                        </View>
+                        <TextInput
+                          style={styles.input}
+                          onChangeText={text => setToken(text)}
+                          maxLength={100}
+                          autoCapitalize='none'
+                        />
+                      </View>
+
+                      {tokenInvalido && (
+                        <Text style={{ color: 'red', marginBottom: 10 }}>El código ingresado no es correcto</Text>
+                      )}
+
+                      <TouchableOpacity
+                        disabled={isLoadingHandle || !token}
+                        style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && token) ? '#390294' : '#6e3aa7'}]}
+                        activeOpacity={0.8}
+                        onPress={handleSendToken}
+                      >
+                        {isLoadingHandle ? (
+                          <ActivityIndicator size="small" color='#390294' />
+                        ) : (
+                          <Text style={styles.continueText}>Continuar</Text>
+                        )}
+                      </TouchableOpacity>
+                    
+                      <TouchableOpacity
+                        disabled={isLoading}
+                        style={styles.cancelButton}
+                        activeOpacity={0.8}
+                        onPress={handleCancelButton}
+                      >
+                        {isLoading ? (
+                          <ActivityIndicator size="small" color='#390294' />
+                        ) : (
+                          <Text style={styles.cancelText}>Cancelar</Text>
+                        )}
+                      </TouchableOpacity>
+                    </>
+                    <Text>Token no mandado</Text>
+                  </View>
+                )}
+              </>
+            ) : (
+              <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
+                <View style={[styles.inputContainer, {marginBottom: 10}]}>
+                  <View style={styles.labelContainer}>
+                    <Text style={styles.label}>Ingresa tu correo electrónico:</Text>
+                  </View>
+                  <TextInput
+                    style={styles.input}
+                    keyboardType='email-address'
+                    onChangeText={text => setMail(text)}
+                    maxLength={100}
+                    autoCapitalize='none'
+                  />
+                </View>
+
+                <TouchableOpacity
+                  disabled={isLoadingHandle || !mail}
+                  style={[styles.continueButton, {backgroundColor: (!isLoading && mail) ? '#390294' : '#6e3aa7'}]}
+                  activeOpacity={0.8}
+                  onPress={handleSendMail}
+                >
+                  {isLoadingHandle ? (
+                    <ActivityIndicator size="small" color='#390294' />
+                  ) : (
+                    <Text style={styles.continueText}>Continuar</Text>
+                  )}
+                </TouchableOpacity>
+              
+                <TouchableOpacity
+                  disabled={isLoading}
+                  style={styles.cancelButton}
+                  activeOpacity={0.8}
+                  onPress={handleCancelButton}
+                >
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color='#390294' />
+                  ) : (
+                    <Text style={styles.cancelText}>Cancelar</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            )}
+
+          </View>
+
+        ) : (
+          <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
+            <View style={styles.inputContainer}>
+              <View style={styles.labelContainer}>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Contraseña actual:</Text>
+              </View>
+              <TextInput
+                style={styles.input}
+                secureTextEntry={!showOriginalPassword}
+                onChangeText={text => setOriginalPassword(text)}
+                maxLength={100}
+              />
+              <TouchableOpacity onPress={() => handleShowPassword(setShowOriginalPassword, showOriginalPassword)} style={styles.eyeIconContainer}>
+                <MaterialCommunityIcons
+                  name={showOriginalPassword ? 'eye-off' : 'eye'}
+                  size={24}
+                  color="#575757"
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.inputContainer}>
+              <View style={styles.labelContainer}>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Nueva Contraseña:</Text>
+              </View>
+              <TextInput
+                style={styles.input}
+                secureTextEntry={!showFirstPassword}
+                onChangeText={text => setFirstPassword(text)}
+                maxLength={100}
+              />
+              <TouchableOpacity onPress={() => handleShowPassword(setShowFirstPassword, showFirstPassword)} style={styles.eyeIconContainer}>
+                <MaterialCommunityIcons
+                  name={showFirstPassword ? 'eye-off' : 'eye'}
+                  size={24}
+                  color="#575757"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.inputContainer}>
+              <View style={styles.labelContainer}>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Repita la contraseña:</Text>
+              </View>
+              <TextInput
+                style={styles.input}
+                secureTextEntry={!showSecondPassword}
+                onChangeText={text => setSecondPassword(text)}
+                maxLength={100}
+              />
+              <TouchableOpacity onPress={() => handleShowPassword(setShowSecondPassword, showSecondPassword)} style={styles.eyeIconContainer}>
+                <MaterialCommunityIcons
+                  name={showSecondPassword ? 'eye-off' : 'eye'}
+                  size={24}
+                  color="#575757"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.warningcontrasena}>
+              La contraseña debe tener un mínimo de 8 caracteres e incluir al menos una mayúscula, una minúscula, un número y un caracter especial.
+            </Text>
+
+            {wrongPasswordType && (
+              <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña introducida no cumple con los requerimientos</Text>
+            )}
+
+            {differentPassword && (
+              <Text style={{ color: 'red', marginBottom: 10 }}>Las contraseñas no coinciden</Text>
+            )}
+
+            <TouchableOpacity
+              disabled={isLoadingHandle || !firstPassword || !secondPassword || !originalPassword}
+              style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && firstPassword && secondPassword && originalPassword) ? '#390294' : '#6e3aa7'}]}
+              activeOpacity={0.8}
+              onPress={handleSendPassword}
+            >
+              {isLoadingHandle ? (
+                <ActivityIndicator size="small" color='#390294' />
+              ) : (
+                <Text style={styles.continueText}>Confirmar</Text>
+              )}
             </TouchableOpacity>
-          </ScrollView>
-        </View>
-      </Modal>
+            
+            <TouchableOpacity
+              disabled={isLoading}
+              style={styles.cancelButton}
+              activeOpacity={0.8}
+              onPress={handleCancelButton}
+            >
+              {isLoading ? (
+                <ActivityIndicator size="small" color='#390294' />
+              ) : (
+                <Text style={styles.cancelText}>Cancelar</Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleForgotPassword}
+            >
+              <Text style={styles.forgotPswText}>
+                ¿Olvidaste tu contraseña?
+              </Text>
+            </TouchableOpacity>
+            <Text>Token Validado</Text>
+          </View>
+        )}
+      </View>
     </ScrollView>
   )
 }
@@ -217,6 +422,7 @@ function ChangePasswordScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
   profileIcon: {
     width: 125,
@@ -321,6 +527,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 40,
   },
+  continueButton: {
+    backgroundColor: '#390294', // Color de fondo del botón
+    paddingVertical: 14,        // Espaciado vertical dentro del botón
+    paddingHorizontal: 10,      // Espaciado horizontal dentro del botón
+    borderRadius: 20,           // Bordes redondeados
+    shadowColor: '#000',        // Sombra
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+    width:200,
+    alignItems:'center',
+    marginBottom: 10,     
+  },
+  continueText: {
+    fontFamily:'Quicksand-Bold',
+    color: '#FFFFFF',           // Color del texto
+    fontSize: 16,               // Tamaño del texto
+    fontWeight: 'bold',         // Negrita para el texto
+    textAlign: 'center',        // Alineación del texto,  
+  },
   deleteCuentaTxt: {
     fontFamily: 'Quicksand',
     color: '#191970',
@@ -331,7 +558,61 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand',
     alignSelf: 'center',
     marginVertical: 17
-  }
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  labelContainer: {
+    width: '25%',
+  },
+  label: {
+    //width: 120,
+    marginRight: 10,
+    fontFamily: 'Quicksand-Bold',
+    fontSize: 14,
+  },
+  input: {
+    flex: 1,
+    paddingVertical:13,
+    borderWidth: 1,
+    borderColor: '#505050',
+    borderRadius: 25,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 3, // equivalente a boxShadow en Android para efecto de elevación
+    backgroundColor: '#f2f2f2',
+    paddingHorizontal: 10,
+    fontSize: 14,
+    fontFamily: 'Quicksand',
+  },
+  eyeIconContainer: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -12 }],
+  },
+  message: {
+    fontSize: 14,
+    paddingVertical: 10,
+    color: '#4f4f4f',
+    textAlign: 'center'
+  },
+  warningcontrasena: {
+    fontSize: 10,
+    color: '#4f4f4f',
+    textAlign: 'center',
+    padding: 10
+  },
+  forgotPswText:{
+    fontFamily:'Quicksand',
+    color:'#191970',
+    alignSelf:'center',
+    marginVertical:17
+  },
 });
 
 export default ChangePasswordScreen;

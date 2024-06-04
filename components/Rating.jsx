@@ -43,6 +43,9 @@ score */
     
       if (respuesta.status === 200) {
         console.log('Rating exitoso');
+        updateRating();
+
+
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
          
@@ -51,6 +54,34 @@ score */
       console.error('Error al realizar la solicitud:', error);
     }
   };
+
+  const updateRating = async () => {
+    //const url = `${SERVER}/posts/score`
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'GET', 
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+    
+      if (respuesta.ok) {
+        console.log('Rating nuevo obtenido exitosamente');
+        const data = await response.json();
+        console.log(data);
+        //setRating(data.score);
+
+
+      } else {
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+         
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+
+  }
 
   const renderStars = () => {
     let stars = [];

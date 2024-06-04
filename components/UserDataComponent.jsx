@@ -3,6 +3,7 @@ import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'rea
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { format } from 'date-fns';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, initialUsername, initialEmail, initialBirthday, editing }) => {
   const today = new Date();
@@ -12,17 +13,25 @@ const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, in
   const [selectedDate, setSelectedDate] = useState(maximumDate); // Estado para almacenar la fecha seleccionada
   const [showPassword, setShowPassword] = useState(false);
 
-  // Función para manejar el cambio de fecha seleccionada
-const handleDateChange = (event, selectedDate) => {
-  const currentDate = selectedDate || date;
-  setSelectedDate(currentDate);
-  const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
-  setBirthday(formattedDate);
-};
+  const [isCambiarContrasenaLoading, setIsCambiarContrasenaLoading] = useState(false);
 
-const handleShowPassword = () => {
-  setShowPassword(!showPassword); // Cambia entre mostrar y ocultar la contraseña
-};
+  const navigation = useNavigation();
+
+  // Función para manejar el cambio de fecha seleccionada
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setSelectedDate(currentDate);
+    const formattedDate = format(currentDate, 'yyyy-MM-dd'); // Formato 'yyyy-MM-dd'
+    setBirthday(formattedDate);
+  };
+
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword); // Cambia entre mostrar y ocultar la contraseña
+  };
+
+  const handleCambiarContrasena = () => {
+    navigation.navigate('changepassword', { forgotten: false })
+  }
 
 
   return (
@@ -60,7 +69,7 @@ const handleShowPassword = () => {
       <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(!showDatePicker)}>
         <View style={[styles.inputContainer, {marginBottom: 0}]}>
           <View style={styles.labelContainer}>
-            <Text style={styles.label}>Fecha de nacimiento:</Text>
+            <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Fecha de nacimiento:</Text>
           </View>
           <TextInput
             style={[styles.input, {textAlign: 'center'}]}
@@ -87,28 +96,49 @@ const handleShowPassword = () => {
         </View>
       )}
       <View style={styles.inputContainer}>
-        <View style={styles.labelContainer}>
-          <Text style={styles.label}>Contraseña:</Text>
+        {editing ? (
+          <TouchableOpacity
+            disabled={isCambiarContrasenaLoading}
+            //style={styles.cambiarContrasenaButton}
+            activeOpacity={0.8}
+            onPress={handleCambiarContrasena}
+          >
+            {/* {isCambiarContrasenaLoading ?
+              <ActivityIndicator size="small" color='#390294' /> :
+              <Text style={styles.cambiarContrasenaText}>Cambiar Contraseña</Text>
+            } */}
+            <View style={{marginVertical: 10}}>
+              <Text style={styles.cambiarContrasenaText}>Cambiar Contraseña</Text>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <View style={styles.labelContainer}>
+              <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Contraseña:</Text>
+            </View>
+            <TextInput
+              style={styles.input}
+              secureTextEntry={!showPassword}
+              onChangeText={text => setPassword(text)}
+              maxLength={100}
+            />
+            <TouchableOpacity onPress={handleShowPassword} style={styles.eyeIconContainer}>
+              <MaterialCommunityIcons
+                name={showPassword ? 'eye-off' : 'eye'}
+                size={24}
+                color="#575757"
+              />
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+      {!editing && (
+        <View>
+          <Text style={styles.warningcontrasena}>
+            La contraseña debe tener un mínimo de 8 caracteres e incluir al menos una mayúscula, una minúscula, un número y un caracter especial.
+          </Text>
         </View>
-        <TextInput
-          style={styles.input}
-          secureTextEntry={!showPassword}
-          onChangeText={text => setPassword(text)}
-          maxLength={100}
-        />
-        <TouchableOpacity onPress={handleShowPassword} style={styles.eyeIconContainer}>
-          <MaterialCommunityIcons
-            name={showPassword ? 'eye-off' : 'eye'}
-            size={24}
-            color="#575757"
-          />
-        </TouchableOpacity>
-      </View>
-      <View>
-        <Text style={styles.warningcontrasena}>
-          La contraseña debe tener un mínimo de 8 caracteres e incluir al menos una mayúscula, una minúscula, un número y un caracter especial.
-        </Text>
-      </View>
+      )}
     </View>
   );
 };
@@ -182,6 +212,27 @@ const styles = StyleSheet.create({
     right: 10,
     top: '50%',
     transform: [{ translateY: -12 }],
+  },
+  cambiarContrasenaButton: {
+    backgroundColor: 'white', // Color de fondo del botón
+    paddingVertical: 14,        // Espaciado vertical dentro del botón
+    paddingHorizontal: 10,      // Espaciado horizontal dentro del botón
+    borderRadius: 20,           // Bordes redondeados
+    shadowColor: '#000',        // Sombra
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+    width: 200,
+    alignItems: 'center',
+    marginBottom: 40,
+
+  },
+  cambiarContrasenaText: {
+    color: '#390294',           // Color del texto
+    fontSize: 16,               // Tamaño del texto
+    textAlign: 'center',
+    fontFamily: 'Quicksand-Bold'
   },
 });
 
