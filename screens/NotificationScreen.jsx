@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react';
-import { View, Text, FlatList, StyleSheet,TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, FlatList, StyleSheet,TouchableOpacity, SafeAreaView,Image } from 'react-native';
 import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
@@ -7,12 +7,6 @@ import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
 
 // Ejemplo de datos de notificaciones
-const notificationsHC = [
-  { id: '1', type: 'challenge', message: 'El reto de hoy es: Completar 10,000 pasos.' },
-  { id: '2', type: 'follow', message: 'El usuario @juan ha comenzado a seguirte.' },
-  { id: '3', type: 'challenge', message: 'El reto de hoy es: Leer 30 minutos.' },
-  { id: '4', type: 'follow', message: 'El usuario @maria ha comenzado a seguirte.' },
-];
 
 
 const NotificationScreen = () => {
@@ -21,6 +15,7 @@ const NotificationScreen = () => {
     const [notifications,setNotifications] = useState([]);
     const {fromScreen} = route.params;
     const {user,token} = useAuth();
+    const months = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
     
     const handleClosePress = () => {
         navigation.navigate(fromScreen);
@@ -38,7 +33,7 @@ const NotificationScreen = () => {
           })
           if(response.status === 200){
               const data = await response.json();
-              console.log("NotificationScreen: las notificaciones que llegaron son: "+ data.data);
+              console.log("NotificationScreen: las notificaciones que llegaron son: "+ JSON.stringify(data.data));
               setNotifications(data.data);
               markAllAsRead(data.data);
           }
@@ -78,7 +73,46 @@ const NotificationScreen = () => {
       }
   }
 
-    
+    function takeUntilSpace(str) {
+        let index = str.indexOf(' ');
+        if (index === -1) return str; // Si no hay espacio, retorna el string completo
+        return str.substring(0, index);
+    }
+
+    function takeFromSpace(str) {
+        let index = str.indexOf(' ');
+        if (index === -1) return ''; // Si no hay espacio, retorna una cadena vacía
+        return str.substring(index + 1);
+    }
+
+    const getTimeDifference = (epochTime) => {
+      const currentTime = Math.floor(Date.now()/1000); // Obtener la fecha y hora actual en epoch (segundos)
+      console.log(currentTime);
+      console.log(epochTime);
+      console.log(currentTime - epochTime)
+      const differenceInSeconds = currentTime - epochTime; // Calcular la diferencia en segundos
+  
+      if (differenceInSeconds < 60) {
+        return `${differenceInSeconds}s`; // Segundos
+      } 
+      else if (differenceInSeconds < 3600) {
+        const minutes = Math.floor(differenceInSeconds / 60);
+        return `${minutes}m`; // Minutos
+      } 
+      else if (differenceInSeconds < 86400) {
+        const hours = Math.floor(differenceInSeconds / 3600);
+        return `${hours}h`; // Horas
+      } 
+      else if (differenceInSeconds < 2592000) { // Aproximadamente 30 días
+        const days = Math.floor(differenceInSeconds / 86400);
+        return `${days}d`; // Días
+      } 
+      else {
+        const months = Math.floor(differenceInSeconds / 2592000);
+        return `${months}m`; // Meses
+      }
+    };
+
 
     useEffect(()=>{
         console.log("NotificationScreen: vengo de: " + fromScreen);
@@ -87,8 +121,15 @@ const NotificationScreen = () => {
 
     const renderNotification = ({ item }) => (
         <View style={styles.notification}>
-            <Text style={styles.type}>{item.type === 'challenge' ? 'Reto del día' : 'Nuevo seguidor'}</Text>
-            <Text style={styles.message}>{item.message}</Text>
+          <View style={{flexDirection:'row'}}>
+            <Image style = {styles.profilePicture} source={{uri: "https://bucketeer-b382cbc0-b044-495d-a9ac-7722418d6f3f.s3.amazonaws.com/profile_Valedemo.1.jpg"}}/>
+            <View style={styles.messageContainer}>
+              <Text style={styles.message}><Text style={{fontWeight:'bold'}}>{takeUntilSpace(item.message) + " "}</Text>
+                {takeFromSpace(item.message)} 
+                <Text style={styles.date}> {getTimeDifference(item.date/1000)}</Text>
+              </Text>
+            </View>
+          </View>
         </View>
     );
 
@@ -112,7 +153,7 @@ const NotificationScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding:20,
     backgroundColor: '#fff',
   },
   headerContainer:{
@@ -135,10 +176,36 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  message: {
-    fontSize: 16,
+  messageContainer:{
     marginTop: 5,
   },
+  message: {
+    fontSize: 14,
+  },
+  date:{
+    position:'absolute',
+    top:5,
+    right:40,
+    fontSize: 14,
+    color: '#656262',
+    lineHeight: 16,
+    fontWeight:'300'
+  },
+  time:{
+    position:'absolute',
+    top:5,
+    right:5,
+    fontSize: 14,
+    color: '#656262',
+    lineHeight: 16,
+    fontWeight:'300'
+  },
+  profilePicture:{
+    borderRadius:100,
+    height:45,
+    width:45,
+    marginRight:15
+  }
 });
 
 export default NotificationScreen;

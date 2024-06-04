@@ -5,10 +5,10 @@ import { SERVER } from '../utils/utils';
 import io from 'socket.io-client'
 import {useAuth} from './AuthContext'
 import { useFocusEffect } from '@react-navigation/native';
+import StyledText from './StyledText';
 
 export const NotificationCenter = ({fromScreen, navigation}) => {
     
-    const [notifications,setNotifications] = useState([]);
     const [unreadCount,setUnreadCount] = useState(0);
     const {token,user} = useAuth();
 
