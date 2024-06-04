@@ -137,7 +137,7 @@ function ChangePasswordScreen() {
                   <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                     <View style={styles.inputContainer}>
                       <View style={styles.labelContainer}>
-                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Nueva Contraseña:</Text>
+                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Nueva Contraseña:</Text>
                       </View>
                       <TextInput
                         style={styles.input}
@@ -156,7 +156,7 @@ function ChangePasswordScreen() {
 
                     <View style={styles.inputContainer}>
                       <View style={styles.labelContainer}>
-                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Repita la contraseña:</Text>
+                        <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Repita la contraseña:</Text>
                       </View>
                       <TextInput
                         style={styles.input}
@@ -313,7 +313,7 @@ function ChangePasswordScreen() {
           <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
             <View style={styles.inputContainer}>
               <View style={styles.labelContainer}>
-                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Contraseña actual:</Text>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Contraseña actual:</Text>
               </View>
               <TextInput
                 style={styles.input}
@@ -331,7 +331,7 @@ function ChangePasswordScreen() {
             </View>
             <View style={styles.inputContainer}>
               <View style={styles.labelContainer}>
-                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Nueva Contraseña:</Text>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Nueva Contraseña:</Text>
               </View>
               <TextInput
                 style={styles.input}
@@ -350,7 +350,7 @@ function ChangePasswordScreen() {
 
             <View style={styles.inputContainer}>
               <View style={styles.labelContainer}>
-                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={1}>Repita la contraseña:</Text>
+                <Text style={styles.label} adjustsFontSizeToFit numberOfLines={2}>Repita la contraseña:</Text>
               </View>
               <TextInput
                 style={styles.input}

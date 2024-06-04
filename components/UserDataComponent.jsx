@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
 
   },
   cambiarContrasenaText: {
-    color: '#390294',           // Color del texto
+    color: '#191970',           // Color del texto
     fontSize: 16,               // Tamaño del texto
     textAlign: 'center',
     fontFamily: 'Quicksand-Bold'

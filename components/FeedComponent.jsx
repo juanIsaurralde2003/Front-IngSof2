@@ -22,6 +22,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
   const [error, setError] = useState(false);
   const [rating, setRating] = useState(0);
   const [initialRating, setInitialRating] = useState(3);
+  const [scoreVar, setScoreVar] = useState(score);
 
   let [fontsLoaded] = useFonts({
     'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
@@ -167,8 +168,9 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
             onRatingChange={ratingCompleted}
             imageUrl={imagenURL}
             username={user}
+            setScore={setScoreVar}
           />
-          <Text style={styles.score}>{score}</Text>
+          <Text style={styles.score}>{scoreVar}</Text>
         </View>
         {!isSelfPost && (
           <TouchableOpacity onPress={showActionSheet}>
