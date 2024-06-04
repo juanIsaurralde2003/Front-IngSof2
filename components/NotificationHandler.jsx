@@ -5,12 +5,12 @@ import { registerForPushNotificationsAsync, registerNotificationHandlers} from '
 
 const NotificationHandler = () => {
     const navigation = useNavigation();
-    const { user,token,dailyPost} = useAuth();
+    const { user,token,dailyPost,sessionExpired} = useAuth();
     const unsubscribeRef = useRef();
 
     handleRegisterNotifications = async () => {
         if(user && navigation && token){
-            await registerForPushNotificationsAsync(user,token);
+            await registerForPushNotificationsAsync(user,token,sessionExpired);
             unsubscribeRef.current = await registerNotificationHandlers(navigation, dailyPost);
         }
     }

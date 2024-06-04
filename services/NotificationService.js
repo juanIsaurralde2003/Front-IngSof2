@@ -12,9 +12,9 @@ Notifications.setNotificationHandler({
     }), 
 });
 
-export async function registerForPushNotificationsAsync(user,sessionToken) {
+export async function registerForPushNotificationsAsync(user,sessionToken,sessionExpired) {
     try {
-        if(user && sessionToken){
+        if(user && sessionToken && !sessionExpired){
             console.log("NotificationService: el token que llega es: "+sessionToken)
             const { status: existingStatus } = await Notifications.getPermissionsAsync();
             let finalStatus = existingStatus;
