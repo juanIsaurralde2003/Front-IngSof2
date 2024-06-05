@@ -8,9 +8,12 @@ import { useNavigation } from '@react-navigation/native';
 const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, initialUsername, initialEmail, initialBirthday, editing }) => {
   const today = new Date();
   const maximumDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate() - 1);
+  const initialBirthdayDate = initialBirthday ? new Date(initialBirthday) : null;
+  const initialEmailText = initialEmail;
 
   const [showDatePicker, setShowDatePicker] = useState(false); // Estado para mostrar u ocultar el DatePicker
-  const [selectedDate, setSelectedDate] = useState(maximumDate); // Estado para almacenar la fecha seleccionada
+  const [selectedDate, setSelectedDate] = useState(initialBirthdayDate ? initialBirthdayDate : maximumDate); // Estado para almacenar la fecha seleccionada
+  const [newEmail, setNewEmail] = useState(initialEmailText ? initialEmailText : '')
   const [showPassword, setShowPassword] = useState(false);
 
   const [isCambiarContrasenaLoading, setIsCambiarContrasenaLoading] = useState(false);
@@ -33,13 +36,18 @@ const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, in
     navigation.navigate('changepassword', { forgotten: false })
   }
 
+  const handleEmailChange = (value) => {
+    setNewEmail(value);
+    setEmail(value);
+  }
+
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         {editing ? (
           <Text  style={{fontFamily: 'Quicksand-Bold', fontSize: 14, marginBottom: 20}}>
-           Usuario
+           {initialUsername}
           </Text>
         ) : (
           <>
@@ -59,11 +67,15 @@ const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, in
           <Text style={styles.label}>Email:</Text>
         </View>
         <TextInput
+          value={newEmail}
           style={styles.input}
           keyboardType='email-address'
-          onChangeText={text => setEmail(text)}
+          onChangeText={text => handleEmailChange(text)}
           maxLength={100}
           autoCapitalize='none'
+          autoCorrect={false}
+          autoComplete='off'
+
         />
       </View>
       <TouchableOpacity style={styles.inputContainer} onPress={() => setShowDatePicker(!showDatePicker)}>

@@ -100,6 +100,7 @@ function ProfileScreen({ navigation }) {
   // };
 
   const getPublicacionesUsuario = async () => {
+    setPublicaciones([]);
     try {
       const url = `${SERVER}/users/posts/${encodeURIComponent(userData)}`;
       console.log("el usuario es:" + userData);
@@ -173,14 +174,17 @@ function ProfileScreen({ navigation }) {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log('Profile User Info')
         console.log(data);
         setProfileUserInfo({
-          rating: (data && data.user && data.user.score) || 3,
+          rating: (data && data.user && data.user.score) || 0,
           usuario: '@' + data.user.user.username,
           imagenPerfilURL: data && data.user && data.user.user && data.user.user.profilePicture,
           seguidores: data && data.user && data.user.followers, // pedir seguidores, seguidos, rating y cantidad de retos a back
           seguidos: data && data.user && data.user.following,
-          retos: data && data.user && data.user.retos || 206
+          retos: data && data.user && data.user.retos || 0,
+          email: data && data.user && data.user.user && data.user.user.email,
+          birthday: data && data.user && data.user.user && data.user.user.birthday, 
         })
       }
       else {
@@ -247,6 +251,8 @@ function ProfileScreen({ navigation }) {
           usuario={profileUserInfo.usuario}
           userdata={userData}
           imagenPerfilURL={profileUserInfo.imagenPerfilURL}
+          email={profileUserInfo.email}
+          birthday={profileUserInfo.birthday}
           seguidores={profileUserInfo.seguidores}
           seguidos={profileUserInfo.seguidos}
           retos={retosUser}

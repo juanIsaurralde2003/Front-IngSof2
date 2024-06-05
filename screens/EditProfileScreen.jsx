@@ -5,36 +5,30 @@ import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { format } from "date-fns";
 import { Asset } from 'expo-asset';
+import { useRoute } from "@react-navigation/native";
+import { useAuth } from "../components/AuthContext";
 
 function EditProfileScreen({ navigation }) {
 
+  const route = useRoute();
+  const { usuario, imagenPerfilURLOri, emailOri, birthdayOri } = route.params;
+
   const [isLoading, setIsLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
+
+  const {token} = useAuth();
 
   const { height, width } = Dimensions.get('window');
 
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [birthday, setBirthday] = useState('');
+  const [username, setUsername] = useState(usuario ? `@${usuario}` : 'usuario');
+  const [email, setEmail] = useState(emailOri);
+  const [birthday, setBirthday] = useState(birthdayOri);
 
   useEffect(() => {
-    loadUserData();
+    console.log(imagenPerfilURLOri);
+    console.log(profileImage);
   }, []);
-
-  const loadUserData = async () => {
-    const userData = {
-      username: ' ',
-      email: ' ',
-      birthday: ' ',
-      profileImage: null
-    };
-
-    //setUsername(userData.username);
-    setEmail(userData.email);
-    setBirthday(userData.birthday);
-    setProfileImage(userData.profileImage);
-  };
 
   const handleCancelButton = () => {
     navigation.goBack();
@@ -49,22 +43,23 @@ function EditProfileScreen({ navigation }) {
   }
 
   const handleDefaultImage = async () => {
-    const asset = Asset.fromModule(require("../assets/person.jpg"));
-    await asset.downloadAsync();
-    setProfileImage(asset.localUri);
+    //const asset = Asset.fromModule(require("../assets/person.jpg"));
+    //await asset.downloadAsync();
+    setProfileImage(null);
   };
 
   const handleSaveButton = async () => {
     setIsLoading(true);
 
-    let url = `${SERVER}/auth/editProfile`;
+    const url = `${SERVER}/users/update`;
     let headers = {
       'Content-Type': 'multipart/form-data',
+      'Authorization': `Bearer ${token}`,
     }
     let body;
 
     const dataSimple = {
-      //username: username,
+      username: username,
       email: email,
       birthday: birthday,
     }
@@ -72,7 +67,7 @@ function EditProfileScreen({ navigation }) {
     if (profileImage) {
       const data = new FormData();
 
-      //data.append('username', username);
+      data.append('username', username);
       data.append('email', email);
       data.append('birthday', birthday);
 
@@ -89,7 +84,7 @@ function EditProfileScreen({ navigation }) {
 
       body = data;
     } else {
-      headers = { 'Content-Type': 'application/json' }
+      headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
       body = JSON.stringify(dataSimple);
     }
 

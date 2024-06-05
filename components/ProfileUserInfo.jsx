@@ -15,7 +15,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet';
 
 
 
-function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos,retos,rating, fromScreen, userdata}){
+function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday, seguidores, seguidos, retos, rating, fromScreen, userdata}){
 
     const {token,signOut,user} = useAuth();
     const [loadingImage, setLoadingImage] = useState(true);
@@ -94,7 +94,7 @@ function ProfileUserInfo({navigation,usuario,imagenPerfilURL,seguidores,seguidos
                 },
             buttonIndex => {
                 if (buttonIndex === 0) {
-                    navigation.navigate('EditProfile')
+                    navigation.navigate('EditProfile', {usuario: userdata, imagenPerfilURLOri: imagenPerfilURL, emailOri: email, birthdayOri: birthday})
                 } else if (buttonIndex === 1) {
                     signOut();  //REVISAR ASINCRONÍA
                     navigation.navigate('login');
