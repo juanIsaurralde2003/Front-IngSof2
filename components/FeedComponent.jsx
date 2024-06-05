@@ -244,9 +244,7 @@ const styles = StyleSheet.create({
 });
 
 const FeedComponentWithActionSheet = (props) => (
-  <ActionSheetProvider>
     <FeedComponent {...props} />
-  </ActionSheetProvider>
 );
 
 export default FeedComponentWithActionSheet;

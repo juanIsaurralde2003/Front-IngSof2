@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TouchableOpacity, Image, StyleSheet,Platform } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, Platform } from 'react-native';
 
 
-const FollowerOptions = ({isVisible,setIsVisible, usuarioDelPerfil, imageURL,handleUnfollow}) => {
+const FollowerOptions = ({ isVisible, setIsVisible, usuarioDelPerfil, imageURL, handleUnfollow }) => {
     const [width, setWidth] = useState(0); // Estado inicial para el ancho
-    return(
+    return (
         <View style={styles.bottomView}>
             <Modal
                 animationType="slide"
                 transparent={true}
                 visible={isVisible}
-                onRequestClose={()=>{setIsVisible(false)}}
+                onRequestClose={() => { setIsVisible(false) }}
             >
                 <View style={styles.bottomView}>
-                    <View 
-                    onLayout={(event) => {
-                        const { width } = event.nativeEvent.layout;
-                        setWidth(width);  // Actualizar el estado con el nuevo ancho
-                    }}
-                    style={styles.mainModalView}>
+                    <View
+                        onLayout={(event) => {
+                            const { width } = event.nativeEvent.layout;
+                            setWidth(width);  // Actualizar el estado con el nuevo ancho
+                        }}
+                        style={styles.mainModalView}>
                         <Image
                             style={styles.profileImage}
-                            source={{uri: imageURL}}
+                            source={{ uri: imageURL }}
                         />
-                        <Text style={styles.modalText}>El contenido de <Text style={{fontWeight:'bold'}}>{usuarioDelPerfil}</Text> no se mostrará en el feed</Text>
-                        <View style={[styles.dividerContainer,{ width: '90%'}]}>
-                            <View style={[styles.dividerLine, {width:'%50'}]} />
+                        <Text style={styles.modalText}>El contenido de <Text style={{ fontWeight: 'bold' }}>{usuarioDelPerfil}</Text> no se mostrará en el feed</Text>
+                        <View style={[styles.dividerContainer, { width: '90%' }]}>
+                            <View style={[styles.dividerLine, { width: '50%' }]} />
                         </View>
                         <TouchableOpacity
-                            style={styles.unfollowButton} 
+                            style={styles.unfollowButton}
                             title="Unfollow"
                             onPress={() => handleUnfollow()}
                         >
@@ -64,23 +64,23 @@ const styles = StyleSheet.create({
         marginTop: 22,
     },
 
-    unfollowButton:{
-        marginBottom:-10
+    unfollowButton: {
+        marginBottom: -10
     },
-    
-    unfollowText:{
-        color:'#4402b2',
-        fontSize:'18'
+
+    unfollowText: {
+        color: '#4402b2',
+        fontSize: 18
     },
-      
-    cancelText:{
-        fontSize:'18'
+
+    cancelText: {
+        fontSize: 18
     },
     mainModalView: {
         backgroundColor: 'white',
         borderRadius: 20,
         paddingVertical: 30,
-        paddingHorizontal:10,
+        paddingHorizontal: 10,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -91,14 +91,14 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    
-    secondaryModalView:{
+
+    secondaryModalView: {
         margin: 10,
-        marginBottom:35,
+        marginBottom: 35,
         backgroundColor: 'white',
         borderRadius: 20,
-        paddingVertical:20,
-        width:400,
+        paddingVertical: 20,
+        width: 400,
         alignItems: 'center',
         shadowColor: '#000',
         shadowOffset: {
@@ -109,12 +109,12 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
-    
+
     profileImage: {
         width: 70,
         height: 70,
         borderRadius: 50,
-        marginBottom:30
+        marginBottom: 30
     },
     modalText: {
         marginBottom: 15,
@@ -144,6 +144,6 @@ const styles = StyleSheet.create({
             },
         }),
     }
-  });
+});
 
 export default FollowerOptions

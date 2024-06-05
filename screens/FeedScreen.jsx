@@ -7,6 +7,7 @@ import { SERVER } from '../utils/utils';
 import { useAuth } from '../components/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NotificationCenter } from '../components/NotificationCenter';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
 const FeedScreen = () => {
 
@@ -151,6 +152,7 @@ const FeedScreen = () => {
   };
 
   return (
+    <ActionSheetProvider>
     <SafeAreaView style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
       <View style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
         <View style={styles.headerContainer}>
@@ -237,6 +239,7 @@ const FeedScreen = () => {
         </ScrollView>
       </View>
     </SafeAreaView>
+    </ActionSheetProvider>
   );
 };
 
