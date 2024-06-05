@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   messageContainer:{
-    marginTop: 5,
+    justifyContent:'center',
   },
   message: {
     fontSize: 14,
