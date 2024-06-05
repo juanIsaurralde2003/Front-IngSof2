@@ -17,7 +17,7 @@ function EditProfileScreen({ navigation }) {
   const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
 
-  const {token} = useAuth();
+  const {token, user} = useAuth();
 
   const { height, width } = Dimensions.get('window');
 
@@ -34,8 +34,30 @@ function EditProfileScreen({ navigation }) {
     navigation.goBack();
   };
 
-  const handleEliminarCuenta = () => {
-    console.log('hola')
+  const handleEliminarCuenta = async () => {
+    try {
+      const url = `${SERVER}/users/deleteAccount`
+      console.log("el usuario es:" + username);
+      const response = await fetch(url,{method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization': `Bearer ${token}`
+        },
+        body: {
+          username: user
+        }
+      });
+      if(response.ok){
+        const data = await response.json();
+        console.log(data);
+      }
+      else{
+        console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
+      }
+    }
+    catch (error) {
+      console.error('Hubo un error en la petición',error);
+    }
   }
 
   const handleCambiarContrasena = () => {

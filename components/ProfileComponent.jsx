@@ -19,6 +19,18 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
         'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
     });
 
+    // const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    // const convertDate = (date) => {
+    //     let profileDate = '';
+    //     let month = date.split('-')[1] - 1
+    //     let day = date.split('-')[2]
+    //     let year = date.split('-')[0]
+    //     profileDate = months[month] + " " + day + ", " + year
+    //     return profileDate;
+    
+    //   }
+
     const showActionSheet = () => {
         if (Platform.OS === 'ios') {
             ActionSheetIOS.showActionSheetWithOptions(
@@ -137,11 +149,15 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
                         {perfil}
                     </Text>
                 </TouchableOpacity>
-                <View style={{ flex: 1, flexGrow: 1, flexDirection: 'row', alignContent: 'flex-end' }}>
-                    <TouchableOpacity onPress={showActionSheet}>
-                        <Ionicons name='ellipsis-vertical' size={24} color={'black'} />
-                    </TouchableOpacity>
-                </View>
+                {/* {
+                    fecha===convertDate(new Date()) && ( */}
+                        <View style={{ flex: 1, flexGrow: 1, flexDirection: 'row', alignContent: 'flex-end' }}>
+                            <TouchableOpacity onPress={showActionSheet}>
+                                <Ionicons name='ellipsis-vertical' size={24} color={'black'} />
+                            </TouchableOpacity>
+                        </View>
+                    {/* )
+                }; */}
             </View>
             <View style={{ width: width }}>
                 <Image

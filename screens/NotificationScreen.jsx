@@ -140,7 +140,7 @@ const NotificationScreen = () => {
                 <TouchableOpacity onPress={handleClosePress} style={styles.button}>
                     <MaterialIcons name={'close'} size={30} color={'black'} />
                 </TouchableOpacity>
-                <Text style={styles.header}>Notifications</Text>
+                <Text style={styles.header}>Notificaciones</Text>
             </View>
             <FlatList
                 data={notifications}
@@ -166,7 +166,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 28,
     fontWeight: 'bold',
+    fontFamily: 'Quicksand',
     alignSelf:'center',
+    color: '#390294',
   },
   notification: {
     padding: 15,
