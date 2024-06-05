@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useCallback } from "react";
 import { FlatList, StyleSheet, View, Image, Text, SafeAreaView, ActivityIndicator } from "react-native";
 import ProfileUserInfo from "../components/ProfileUserInfo";
 import FeedComponentWithActionSheet from "../components/FeedComponent";
@@ -7,6 +7,7 @@ import { useAuth } from "../components/AuthContext";
 import { SERVER } from '../utils/utils';
 import { useRoute } from "@react-navigation/native";
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { useFocusEffect } from '@react-navigation/native';
 
 function ProfileScreen({ navigation }) {
   const { token } = useAuth()
@@ -191,23 +192,29 @@ function ProfileScreen({ navigation }) {
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await getProfileUserInfo();
-        console.log("el rating es" + profileUserInfo.rating);
-        await getPublicacionesUsuario();
-        await getCantidadPosts();
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      await getProfileUserInfo();
+      console.log("el rating es" + profileUserInfo.rating);
+      await getPublicacionesUsuario();
+      await getCantidadPosts();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [userData]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const profileUserInfoHC = {
     rating: 3,
