@@ -1,10 +1,9 @@
 
-export const handleDailyPromptNotification = (notification) => {
+export const handleDailyPromptNotification = (notification,setDailyPost) => {
     console.log("Handling message notification:", notification);
-    // Aquí puedes añadir la lógica específica para manejar notificaciones de mensajes
+    setDailyPost(false);
 };
 
 export const handleNewFollowerNotification = (notification) => {
     console.log("Handling system alert notification:", notification);
-    // Lógica para alertas de sistema
 };

@@ -58,7 +58,7 @@ export async function registerForPushNotificationsAsync(user,sessionToken,sessio
     }
 }
 
-export const registerNotificationHandlers = async (navigation,dailyPost) => {
+export const registerNotificationHandlers = async (navigation,dailyPost,setDailyPost) => {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let receivedSubscription;
     let responseSubscription;
@@ -67,7 +67,7 @@ export const registerNotificationHandlers = async (navigation,dailyPost) => {
             const type = notification.request.content.data.type;
             switch (type) {
                 case 'daily-prompt':
-                    NotificationHandlers.handleDailyPromptNotification(notification);
+                    NotificationHandlers.handleDailyPromptNotification(notification,setDailyPost);
                     break;
                 case 'new-follower':
                     NotificationHandlers.handleNewFollowerNotification(notification);

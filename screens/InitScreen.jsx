@@ -10,6 +10,7 @@ const InitScreen = () => {
     const {token,dailyPost} = useAuth();
     useEffect(()=>{
         try{
+            console.log(dailyPost);
             setLoading(true);
             if(token){
                   if(dailyPost){
