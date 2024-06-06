@@ -105,18 +105,18 @@ function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday,
             console.log('SHOW ACTION SHEET')
             showActionSheetWithOptions(
                 {
-                    options: ['Editar Perfil', 'Cerrar Sesión', 'Cancelar'],
-                    cancelButtonIndex: 2,
+                    options: ['Editar Perfil', 'Cerrar Sesión','Cancelar'],
+                    cancelButtonIndex:2,
                     destructiveButtonIndex: 1,
                 },
-                buttonIndex => {
-                    if (buttonIndex === 0) {
-                        navigation.navigate('EditProfile');
-                    } else if (buttonIndex === 1) {
-                        signOut();
-                        navigation.navigate('login');
-                    }
+            buttonIndex => {
+                if (buttonIndex === 0) {
+                    navigation.navigate('EditProfile', {usuario: userdata, imagenPerfilURLOri: imagenPerfilURL, emailOri: email, birthdayOri: birthday})
+                } else if (buttonIndex === 1) {
+                    signOut();  //REVISAR ASINCRONÍA
+                    navigation.navigate('login');
                 }
+            }
             )
         }
     };

@@ -19,25 +19,23 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
         'Quicksand-Regular': require('../assets/fonts/Quicksand-Regular.ttf'),
     });
 
-    // const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+    const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
 
-    // const convertDate = (date) => {
-    //     let profileDate = '';
-    //     let month = date.split('-')[1] - 1
-    //     let day = date.split('-')[2]
-    //     let year = date.split('-')[0]
-    //     profileDate = months[month] + " " + day + ", " + year
-    //     return profileDate;
-    
-    //   }
+    const convertDate = (date) => {
+        let profileDate = '';
+        let [year, month, day] = date.split('-');
+        month = parseInt(month, 10) - 1; // Convert month to zero-based index
+        profileDate = `${months[month]} ${day}, ${year}`;
+        return profileDate;
+    }
 
     const showActionSheet = () => {
         if (Platform.OS === 'ios') {
             ActionSheetIOS.showActionSheetWithOptions(
                 {
                     options: ['Eliminar publicación', 'Cancelar'],
-                    cancelButtonIndex: 2,
-                    destructiveButtonIndex: 1,
+                    cancelButtonIndex: 1,
+                    destructiveButtonIndex: 0,
                 },
                 buttonIndex => {
                     if (buttonIndex === 0) {
@@ -149,15 +147,15 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
                         {perfil}
                     </Text>
                 </TouchableOpacity>
-                {/* {
-                    fecha===convertDate(new Date()) && ( */}
+                {
+                    fecha !== convertDate(new Date().toISOString().split('T')[0]) && (
                         <View style={{ flex: 1, flexGrow: 1, flexDirection: 'row', alignContent: 'flex-end' }}>
                             <TouchableOpacity onPress={showActionSheet}>
                                 <Ionicons name='ellipsis-vertical' size={24} color={'black'} />
                             </TouchableOpacity>
                         </View>
-                    {/* )
-                }; */}
+                    )
+                }
             </View>
             <View style={{ width: width }}>
                 <Image

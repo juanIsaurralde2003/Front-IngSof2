@@ -81,7 +81,7 @@ function EditProfileScreen({ navigation }) {
     let body;
 
     const dataSimple = {
-      username: username,
+      username: usuario,
       email: email,
       birthday: birthday,
     }
@@ -89,7 +89,7 @@ function EditProfileScreen({ navigation }) {
     if (profileImage) {
       const data = new FormData();
 
-      data.append('username', username);
+      data.append('username', usuario);
       data.append('email', email);
       data.append('birthday', birthday);
 
@@ -111,6 +111,7 @@ function EditProfileScreen({ navigation }) {
     }
 
     try {
+      console.log(body);
       const respuesta = await fetch(url, {
         method: 'POST',
         headers: headers,
