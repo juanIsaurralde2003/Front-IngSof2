@@ -123,7 +123,12 @@ const NotificationScreen = () => {
     const renderNotification = ({ item }) => (
         <View style={styles.notification}>
           <View style={{flexDirection:'row'}}>
-            <Image style = {styles.profilePicture} source={{uri: item.profilePicture}}/>
+            {
+              item.profilePicture ?
+              <Image style = {styles.profilePicture} source={{uri: item.profilePicture}}/>
+              :
+              <Image style={styles.profilePicture} source={require("../assets/person.jpg")}/>
+            }
             <View style={styles.messageContainer}>
               <Text style={styles.message}><Text style={{fontWeight:'bold'}}>{takeUntilSpace(item.message) + " "}</Text>
                 {takeFromSpace(item.message)} 
