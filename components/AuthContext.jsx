@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [profilePicture, setProfilePicture] = useState(null);
     const [loading, setLoading] = useState(true);
     const [dailyPost, setDailyPost] = useState(false);
-    const [sessionExpired,setSessionExpired] = useState(false);
+    const [sessionExpired, setSessionExpired] = useState(false);
 
     const loadUserInfo = async () => {
         try {
@@ -29,36 +29,36 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         const checkTokenExpiration = () => {
-            if(token){
+            if (token) {
                 const decodedToken = jwtDecode(token);
-                const currentTime = Math.floor(Date.now()/1000);
+                const currentTime = Math.floor(Date.now() / 1000);
                 console.log(decodedToken.exp < currentTime);
                 console.log(decodedToken.exp > currentTime);
                 console.log("AuthContext: chequeando sesion");
-                if(decodedToken.exp < currentTime){
+                if (decodedToken.exp < currentTime) {
                     setSessionExpired(true);
                 }
-                else{
+                else {
                     setSessionExpired(false);
                 }
             }
         };
         checkTokenExpiration();
-        const intervalId = setInterval(checkTokenExpiration, 60*1000);
+        const intervalId = setInterval(checkTokenExpiration, 60 * 1000);
 
         return () => clearInterval(intervalId);
 
-    },[token]);
+    }, [token]);
 
     useEffect(() => {
         loadUserInfo();
     }, []);
 
-    useEffect (()=>{
+    useEffect(() => {
         loadProfilePicture();
-    },[])
+    }, [])
 
     const loadProfilePicture = async () => {
         try {
@@ -72,12 +72,12 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
-    
+
     const loadDailyPost = async () => {
         try {
             const post = await SecureStore.getItemAsync('dailyPost');
             if (post) {
-                if(post === 'true')
+                if (post === 'true')
                     setDailyPost(true);
                 else
                     setDailyPost(false)
@@ -130,13 +130,13 @@ export const AuthProvider = ({ children }) => {
             await SecureStore.setItemAsync('profilePicture', defaultUrl);
             setProfilePicture(defaultUrl);
         }
-        
+
     }
 
     const signOut = async () => {
         try {
-            if(user && token){
-                await deletePushToken(user,token);
+            if (user && token) {
+                await deletePushToken(user, token);
             }
             await SecureStore.deleteItemAsync('userToken');
             await SecureStore.deleteItemAsync('user');
@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone,setProfilePic,sessionExpired }}>
+        <AuthContext.Provider value={{ user, token, profilePicture, loading, signIn, signOut, dailyPost, setDailyPostDone, setProfilePic, sessionExpired }}>
             {children}
         </AuthContext.Provider>
     );

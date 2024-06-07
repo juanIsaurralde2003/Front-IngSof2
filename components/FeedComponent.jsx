@@ -15,7 +15,7 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
   const { width } = useWindowDimensions();
   const { showActionSheetWithOptions } = useActionSheet();
 
-  const {user, token} = useAuth();
+  const { user, token } = useAuth();
 
   //const [loadingImage, setLoadingImage] = useState(true);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -54,32 +54,32 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
 
   const reportImage = async (reason) => {
     console.log("Imagen reportada por:", reason);
-    
+
     const url = `${SERVER}/posts/report`
-  
+
     const data = {
       imageURL: imagenURL,
       username: user,
       report: reason === 'No cumple con la consigna' ? 'notPrompt' : 'inappropriate',
     }
-  
+
     try {
       const respuesta = await fetch(url, {
-        method: 'POST', 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });
-    
+
       if (respuesta.status === 200) {
         Alert.alert('Éxito', 'Reporte realizado con éxito');
         const reportedImage = { imageURL: imagenURL, username: user };
         setReportedImages(prevReportedImages => [...prevReportedImages, reportedImage]);
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
-         
+
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
@@ -119,14 +119,14 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
     <View style={[styles.container, { width: width }]}>
       <View style={styles.headerContainer}>
         <TouchableOpacity onPress={handleProfilePress}>
-          {imagenPerfilURL === null ? 
+          {imagenPerfilURL === null ?
             <Image
               source={require("../assets/person.jpg")}
               style={styles.profileImage}
             />
-          :
-              <Image
-              source={{uri: imagenPerfilURL}}
+            :
+            <Image
+              source={{ uri: imagenPerfilURL }}
               style={styles.profileImage}
             />
           }
@@ -137,17 +137,17 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
           </Text>
         </TouchableOpacity>
       </View>
-      <View style={{ width: width}}>
+      <View style={{ width: width }}>
         <Image
-          source={{uri: imagenURL}}
-          style={{width: width, aspectRatio: 1}}
+          source={{ uri: imagenURL }}
+          style={{ width: width, aspectRatio: 1 }}
           onLoadStart={handleLoadStart}
           onLoadEnd={handleLoadEnd}
           //onLoadStart={() => console.log('Carga iniciada')}
           //onLoadEnd={() => console.log('Cargada')}
           onError={handleLoadError}
-          //onError={() => console.log('Error')}
-          //resizeMode='contain'
+        //onError={() => console.log('Error')}
+        //resizeMode='contain'
         />
         {loadingImage && (
           <View style={styles.loadingContainer}>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
 });
 
 const FeedComponentWithActionSheet = (props) => (
-    <FeedComponent {...props} />
+  <FeedComponent {...props} />
 );
 
 export default FeedComponentWithActionSheet;
