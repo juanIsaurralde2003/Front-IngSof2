@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import { View, Text, FlatList, StyleSheet,TouchableOpacity, SafeAreaView,Image } from 'react-native';
-import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';

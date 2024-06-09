@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, TouchableOpacity, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { SERVER } from '../utils/utils';
-import { Entypo, EvilIcons, Ionicons, MaterialIcons } from '@expo/vector-icons';
-import UserSearchComponent from '../components/UserSearchComponent';
+import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../components/AuthContext';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import FollowersTab from '../components/FollowersTab';
 import FollowingTab from '../components/FollowingTab';

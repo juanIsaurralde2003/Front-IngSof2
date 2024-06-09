@@ -1,8 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Image } from 'react-native';
-import { FontAwesome, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'; 
-import { Camera } from 'expo-camera';
-import Header from '../components/Header';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 import CameraScreen from './CameraScreen';
 import { SERVER } from '../utils/utils';

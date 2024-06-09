@@ -1,12 +1,7 @@
-//NO ESTÁ HECHA
+//NO ESTÁ PRONTA
 
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions } from "react-native";
-import UserDataComponent from "../components/UserDataComponent";
-import * as ImagePicker from 'expo-image-picker';
-import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
-import { format } from "date-fns";
-import { Asset } from 'expo-asset';
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 

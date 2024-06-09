@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions, Linking } from "react-native";
 import UserDataComponent from "../components/UserDataComponent";
-import CheckBox from '@react-native-community/checkbox';
 import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { format } from "date-fns";
-import * as FileSystem from 'expo-file-system';
 import { Asset } from 'expo-asset';
 
 function SignupScreen({ navigation }) {
@@ -17,7 +15,6 @@ function SignupScreen({ navigation }) {
   const [contrasenaInvalida, setContrasenaInvalida] = useState(false);
   const [usuarioExistente, setUsuarioExistente] = useState(false);
   const [errorGeneral, setErrorGeneral] = useState(false);
-  const [toggleCheckBox, setToggleCheckBox] = useState(false);
   const [terminosCondicionesAceptados, setTerminosCondicionesAceptados] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -39,7 +36,7 @@ function SignupScreen({ navigation }) {
   const handleDefaultImage = async () => {
     const asset = Asset.fromModule(require("../assets/person.jpg"));
     await asset.downloadAsync();
-  
+
     return asset.localUri;
   };
 
@@ -90,13 +87,13 @@ function SignupScreen({ navigation }) {
       data.append('username', username);
       data.append('password', password);
       data.append('email', email);
-      data.append('birthday', birthday);  
+      data.append('birthday', birthday);
 
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
       const nombreArchivo = `profile_${username}`;
-  
+
       data.append('file', {
         uri: profileImage,
         name: `${nombreArchivo}.${fileType}`,
@@ -106,7 +103,7 @@ function SignupScreen({ navigation }) {
       body = data;
     } else {
       // const defaultImageUri = await handleDefaultImage();
-    
+
       // data.append('file', {
       //   uri: defaultImageUri,
       //   name: `profile_${username}.jpg`,
@@ -114,7 +111,7 @@ function SignupScreen({ navigation }) {
       // });
       console.log('Cambio url')
       url = `${SERVER}/auth/signup/nopic`,
-      headers = {'Content-Type': 'application/json'}
+        headers = { 'Content-Type': 'application/json' }
       body = JSON.stringify(dataSimple);
     }
 
@@ -130,7 +127,7 @@ function SignupScreen({ navigation }) {
         // body: JSON.stringify(data),
       });
 
-      if (respuesta.ok) { 
+      if (respuesta.ok) {
         const JWT = await respuesta.json();
         console.log(JWT);
         //signIn(JWT);
@@ -141,14 +138,14 @@ function SignupScreen({ navigation }) {
         const errorMessage = await respuesta.text();
         console.log('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
         if (respuesta.status === 400) {
-            const errorJSON = JSON.parse(errorMessage);
-            if (errorJSON.message.includes('password is not strong enough')) {
-                // Realizar acciones específicas para cuando la contraseña no es lo suficientemente fuerte
-                setContrasenaInvalida(true);
-            } else if (errorJSON.message === 'User already exists') {
-                // Realizar acciones específicas para cuando el usuario ya existe
-                setUsuarioExistente(true);
-            }
+          const errorJSON = JSON.parse(errorMessage);
+          if (errorJSON.message.includes('password is not strong enough')) {
+            // Realizar acciones específicas para cuando la contraseña no es lo suficientemente fuerte
+            setContrasenaInvalida(true);
+          } else if (errorJSON.message === 'User already exists') {
+            // Realizar acciones específicas para cuando el usuario ya existe
+            setUsuarioExistente(true);
+          }
         } else if (respuesta.status === 500 && errorMessage.includes(' already exists with label `User` and property `email` =')) {
           setUsuarioExistente(true);
         } else {
@@ -169,7 +166,14 @@ function SignupScreen({ navigation }) {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("Se requiere permiso para acceder a la galería de fotos.");
+      Alert.alert(
+        'Permisos necesarios',
+        'Se requiere permiso para acceder a la galería de fotos.',
+        [
+          { text: 'Cancelar', onPress: () => console.log('Cancelado') },
+          { text: 'Otorgar permisos', onPress: () => Linking.openSettings() },
+        ]
+      );
       return;
     }
 
@@ -238,7 +242,7 @@ function SignupScreen({ navigation }) {
         }
         <TouchableOpacity
           disabled={isLoginLoading || (!terminosCondicionesAceptados || !username || !email || !password)}
-          style={[styles.loginButton, {backgroundColor: (terminosCondicionesAceptados && username && email && password) ? '#390294' : '#6e3aa7'}]}
+          style={[styles.loginButton, { backgroundColor: (terminosCondicionesAceptados && username && email && password) ? '#390294' : '#6e3aa7' }]}
           activeOpacity={0.8}
           onPress={handleRegistrarButton}
         >
@@ -266,7 +270,7 @@ function SignupScreen({ navigation }) {
         onRequestClose={() => setShowModal(false)}
       >
         <View style={styles.modalContainer}>
-          <ScrollView style={[styles.modalContent, {maxHeight: height * 0.75}]}>
+          <ScrollView style={[styles.modalContent, { maxHeight: height * 0.75 }]}>
             <Text style={styles.modalText}>{TERMINOSCONDICIONES}</Text>
             <TouchableOpacity onPress={() => setShowModal(false)}>
               <Text style={styles.closeModalButton}>Cerrar</Text>

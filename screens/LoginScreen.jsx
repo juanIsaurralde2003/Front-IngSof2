@@ -1,9 +1,8 @@
 import React, {useState, useEffect } from "react";
-import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView, Keyboard, KeyboardAvoidingView} from "react-native";
+import {Platform, StyleSheet,View,Text,TouchableOpacity,TextInput,ActivityIndicator,ScrollView} from "react-native";
 import TituloLogin from "../components/TituloLogin";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from "../utils/utils";
-import { SessionExpired } from "../components/SessionExpired";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 

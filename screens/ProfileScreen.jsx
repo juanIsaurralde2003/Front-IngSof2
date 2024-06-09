@@ -1,7 +1,6 @@
 import React, { useEffect, useState,useCallback } from "react";
-import { FlatList, StyleSheet, View, Image, Text, SafeAreaView, ActivityIndicator } from "react-native";
+import { FlatList, View, ActivityIndicator } from "react-native";
 import ProfileUserInfo from "../components/ProfileUserInfo";
-import FeedComponentWithActionSheet from "../components/FeedComponent";
 import ProfileComponent from "../components/ProfileComponent";
 import { useAuth } from "../components/AuthContext";
 import { SERVER } from '../utils/utils';

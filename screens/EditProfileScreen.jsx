@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, ScrollView, Image, Modal, Alert, Dimensions, Linking } from "react-native";
 import UserDataComponent from "../components/UserDataComponent";
 import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
-import { format } from "date-fns";
-import { Asset } from 'expo-asset';
 import { useRoute } from "@react-navigation/native";
 import { useAuth } from "../components/AuthContext";
 
@@ -138,7 +136,14 @@ function EditProfileScreen({ navigation }) {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert("Se requiere permiso para acceder a la galería de fotos.");
+      Alert.alert(
+        'Permisos necesarios',
+        'Se requiere permiso para acceder a la galería de fotos.',
+        [
+          { text: 'Cancelar', onPress: () => console.log('Cancelado') },
+          { text: 'Otorgar permisos', onPress: () => Linking.openSettings() },
+        ]
+      );
       return;
     }
 

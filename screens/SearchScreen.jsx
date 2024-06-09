@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
-import { Entypo, EvilIcons, MaterialIcons } from '@expo/vector-icons';
+import { Entypo, MaterialIcons } from '@expo/vector-icons';
 import UserSearchComponent from '../components/UserSearchComponent';
 import { useAuth } from '../components/AuthContext';
-import { useFonts } from '@expo-google-fonts/quicksand';
 
 const SearchScreen = () => {
    

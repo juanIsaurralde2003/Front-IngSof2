@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../components/AuthContext';
-import { isLoading } from 'expo-font';
 
 const InitScreen = () => {
     const navigation = useNavigation();
