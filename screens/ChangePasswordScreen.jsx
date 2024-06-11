@@ -1,9 +1,10 @@
 //NO ESTÁ PRONTA
 
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAuth } from "../components/AuthContext";
 
 function ChangePasswordScreen() {
 
@@ -12,6 +13,8 @@ function ChangePasswordScreen() {
   const [paramsReceived, setParamsReceived] = useState(false);
 
   const navigation = useNavigation();
+
+  const {user, token} = useAuth();
 
   const [forgotPassword, setForgotPassword] = useState(forgotten);
 
@@ -27,7 +30,7 @@ function ChangePasswordScreen() {
   const [differentPassword, setDifferentPassword] = useState(false);
   const [wrongPasswordType, setWrongPasswordType] = useState(false);
 
-  const [token, setToken] = useState(''); 
+  const [tokenPass, setTokenPass] = useState(''); 
   const [tokenValido, setTokenValido] = useState(false);
   const [tokenInvalido, setTokenInvalido] = useState(false);
 
@@ -88,9 +91,49 @@ function ChangePasswordScreen() {
 
   const handleSendPassword = async () => {
 
+    setDifferentPassword(false);
+
+    if (firstPassword !== secondPassword) {
+      setDifferentPassword(true);
+      return;
+    }
+
     if (forgotPassword) {
       console.log('Olvidó');
     } else {
+      console.log("Rating: ", rate);
+
+      const url = `${SERVER}/auth/change-password`
+  
+      const data = {
+        username: username,
+        currentPassword: originalPassword,
+        newPassword: firstPassword,
+      }
+  
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (respuesta.ok) {
+          console.log('Rating exitoso');
+          Alert.alert('Contraseña Modificada Exitosamente');
+          navigation.navigate('EditProfile');
+        } else {
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+  
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      }
+
+
       console.log('Cambia sabiendo');
     }
 
@@ -230,8 +273,8 @@ function ChangePasswordScreen() {
                       )}
 
                       <TouchableOpacity
-                        disabled={isLoadingHandle || !token}
-                        style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && token) ? '#390294' : '#6e3aa7'}]}
+                        disabled={isLoadingHandle || !tokenPass}
+                        style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && tokenPass) ? '#390294' : '#6e3aa7'}]}
                         activeOpacity={0.8}
                         onPress={handleSendToken}
                       >
