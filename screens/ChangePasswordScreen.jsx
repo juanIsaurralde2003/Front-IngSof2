@@ -88,12 +88,10 @@ function ChangePasswordScreen() {
       return;
     }
 
-    const url = `${SERVER}/auth/change-password`
+    const url = `${SERVER}/auth/forgotpassword`
   
     const data = {
       username: user,
-      currentPassword: originalPassword,
-      newPassword: firstPassword,
     }
   
       try {
