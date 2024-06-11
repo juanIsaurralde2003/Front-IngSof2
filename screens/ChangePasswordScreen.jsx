@@ -40,6 +40,11 @@ function ChangePasswordScreen() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHandle, setIsLoadingHandle] = useState(false);
 
+  const validarEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
 
   useEffect(() => {
     if (forgotten !== undefined) {
@@ -67,26 +72,99 @@ function ChangePasswordScreen() {
   }
 
   const handleSendMail = async () => {
-    setIsLoadingHandle(true);
-    setMail('');
-    console.log('Send Mail');
 
-    setMailSent(true);
-    setIsLoadingHandle(false);
+    setIsLoadingHandle(true);
+
+    if (!mail) {
+      Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
+      setIsLoadingHandle(false);
+      return;
+    }
+
+    const isValidEmail = validarEmail();
+    if (!isValidEmail) {
+      Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
+      setIsLoadingHandle(false);
+      return;
+    }  
+    
+    setIsLoadingHandle(true);
+
+    const url = `${SERVER}/auth/change-password`
+  
+    const data = {
+      username: username,
+      currentPassword: originalPassword,
+      newPassword: firstPassword,
+    }
+  
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (respuesta.ok) {
+          setMail('');
+          setMailSent(true);
+        } else {
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      } finally {
+        setIsLoadingHandle(false);
+      }
+
+    console.log('Send Mail');
 
   };
 
   const handleSendToken = async () => {
 
-    setIsLoadingHandle(true);
     setTokenInvalido(false);
-    console.log('Send Token');
 
-    setTokenValido(true);
-    //setTokenInvalido(true);
-    setToken('');
-    setIsLoadingHandle(false);
+    if (!tokenPass) {
+      Alert.alert('Error', 'Por favor, ingresa el código')
+      setIsLoadingHandle(false);
+      return;
+    }
+    
+    setIsLoadingHandle(true);
 
+    const url = `${SERVER}/auth/checktoken`
+  
+      const data = {
+        username: user,
+        token: tokenPass
+      }
+  
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (respuesta.ok) {
+          setTokenPass('');
+          setTokenValido(true);
+        } else {
+          setTokenInvalido(true)
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      } finally {
+        setIsLoadingHandle(false);
+      }
   };
 
   const handleSendPassword = async () => {
@@ -99,14 +177,45 @@ function ChangePasswordScreen() {
     }
 
     if (forgotPassword) {
-      console.log('Olvidó');
+      const url = `${SERVER}/auth/changepasswordtoken`
+  
+      const data = {
+        username: user,
+        newPassword: firstPassword,
+        token: tokenPass
+      }
+  
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (respuesta.ok) {
+          console.log('Rating exitoso');
+          Alert.alert('Contraseña Modificada Exitosamente');
+          setFirstPassword('');
+          setSecondPassword('');
+          navigation.navigate('EditProfile');
+        } else {
+          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+  
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
+      } finally {
+        setIsLoadingHandle(false);
+      }
     } else {
-      console.log("Rating: ", rate);
 
       const url = `${SERVER}/auth/change-password`
   
       const data = {
-        username: username,
+        username: user,
         currentPassword: originalPassword,
         newPassword: firstPassword,
       }
@@ -124,6 +233,8 @@ function ChangePasswordScreen() {
         if (respuesta.ok) {
           console.log('Rating exitoso');
           Alert.alert('Contraseña Modificada Exitosamente');
+          setFirstPassword('');
+          setSecondPassword('');
           navigation.navigate('EditProfile');
         } else {
           console.error('Respuesta HTTP no exitosa:', respuesta.status);
@@ -131,19 +242,10 @@ function ChangePasswordScreen() {
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
+      } finally {
+        setIsLoadingHandle(false);
       }
-
-
-      console.log('Cambia sabiendo');
     }
-
-    setIsLoadingHandle(true);
-    setDifferentPassword(false);
-    setFirstPassword('');
-    setSecondPassword('');
-    setDifferentPassword(true);
-    setIsLoadingHandle(false);
-
   };
 
   if (!paramsReceived) {
@@ -254,7 +356,7 @@ function ChangePasswordScreen() {
                   <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                     <>
                       <Text style={styles.message}>
-                        Se ha enviado un código a su correo electrónico. Por favor, introdúzcalo.
+                        Se ha enviado un código a su correo electrónico. Por favor, introdúzcalo. No olvides revisar tu casilla de SPAM
                       </Text>
                       <View style={styles.inputContainer}>
                         <View style={styles.labelContainer}>
@@ -262,7 +364,7 @@ function ChangePasswordScreen() {
                         </View>
                         <TextInput
                           style={styles.input}
-                          onChangeText={text => setToken(text)}
+                          onChangeText={text => setTokenPass(text)}
                           maxLength={100}
                           autoCapitalize='none'
                         />
