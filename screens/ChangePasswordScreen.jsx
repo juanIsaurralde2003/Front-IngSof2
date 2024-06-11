@@ -91,7 +91,7 @@ function ChangePasswordScreen() {
     const url = `${SERVER}/auth/change-password`
   
     const data = {
-      username: username,
+      username: user,
       currentPassword: originalPassword,
       newPassword: firstPassword,
     }
