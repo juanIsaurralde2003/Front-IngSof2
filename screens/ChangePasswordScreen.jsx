@@ -86,9 +86,7 @@ function ChangePasswordScreen() {
       Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
       setIsLoadingHandle(false);
       return;
-    }  
-    
-    setIsLoadingHandle(true);
+    }
 
     const url = `${SERVER}/auth/change-password`
   
@@ -128,123 +126,94 @@ function ChangePasswordScreen() {
 
     setTokenInvalido(false);
 
+    setIsLoadingHandle(true);
+
     if (!tokenPass) {
       Alert.alert('Error', 'Por favor, ingresa el código')
       setIsLoadingHandle(false);
       return;
     }
-    
-    setIsLoadingHandle(true);
 
     const url = `${SERVER}/auth/checktoken`
   
-      const data = {
-        username: user,
-        token: tokenPass
-      }
+    const data = {
+      username: user,
+      token: tokenPass
+    }
   
-      try {
-        const respuesta = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        });
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
   
-        if (respuesta.ok) {
-          setTokenPass('');
-          setTokenValido(true);
-        } else {
-          setTokenInvalido(true)
-          console.error('Respuesta HTTP no exitosa:', respuesta.status);
-        }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
-      } finally {
-        setIsLoadingHandle(false);
+      if (respuesta.ok) {
+        setTokenPass('');
+        setTokenValido(true);
+      } else {
+        setTokenInvalido(true)
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoadingHandle(false);
+    }
   };
 
   const handleSendPassword = async () => {
-
     setDifferentPassword(false);
-
+  
     if (firstPassword !== secondPassword) {
       setDifferentPassword(true);
       return;
     }
-
-    if (forgotPassword) {
-      const url = `${SERVER}/auth/changepasswordtoken`
   
-      const data = {
-        username: user,
-        newPassword: firstPassword,
-        token: tokenPass
-      }
+    const url = forgotPassword 
+      ? `${SERVER}/auth/changepasswordtoken`
+      : `${SERVER}/auth/change-password`;
   
-      try {
-        const respuesta = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        });
-  
-        if (respuesta.ok) {
-          console.log('Rating exitoso');
-          Alert.alert('Contraseña Modificada Exitosamente');
-          setFirstPassword('');
-          setSecondPassword('');
-          navigation.navigate('EditProfile');
-        } else {
-          console.error('Respuesta HTTP no exitosa:', respuesta.status);
-  
+    const data = forgotPassword 
+      ? {
+          username: user,
+          newPassword: firstPassword,
+          token: tokenPass,
         }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
-      } finally {
-        setIsLoadingHandle(false);
+      : {
+          username: user,
+          currentPassword: originalPassword,
+          newPassword: firstPassword,
+        };
+  
+    setIsLoadingHandle(true);
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (respuesta.ok) {
+        console.log('Contraseña modificada exitosamente');
+        Alert.alert('Contraseña Modificada Exitosamente');
+        setFirstPassword('');
+        setSecondPassword('');
+        navigation.navigate('EditProfile');
+      } else {
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
-    } else {
-
-      const url = `${SERVER}/auth/change-password`
-  
-      const data = {
-        username: user,
-        currentPassword: originalPassword,
-        newPassword: firstPassword,
-      }
-  
-      try {
-        const respuesta = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        });
-  
-        if (respuesta.ok) {
-          console.log('Rating exitoso');
-          Alert.alert('Contraseña Modificada Exitosamente');
-          setFirstPassword('');
-          setSecondPassword('');
-          navigation.navigate('EditProfile');
-        } else {
-          console.error('Respuesta HTTP no exitosa:', respuesta.status);
-  
-        }
-      } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
-      } finally {
-        setIsLoadingHandle(false);
-      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoadingHandle(false);
     }
   };
 
