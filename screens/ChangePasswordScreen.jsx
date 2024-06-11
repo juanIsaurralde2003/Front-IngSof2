@@ -42,7 +42,7 @@ function ChangePasswordScreen() {
 
   const validarEmail = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    return emailRegex.test(mail);
   }
 
 
@@ -238,8 +238,6 @@ function ChangePasswordScreen() {
       <View style={styles.secondContainer}>
         {forgotPassword ? (
           <View>
-            <Text>Contraseña Olvidada</Text>
-
             {mailSent ? (
               <>
                 {tokenValido ? (
