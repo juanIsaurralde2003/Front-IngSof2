@@ -1,41 +1,52 @@
 import React, {useState,useEffect,useCallback} from 'react';
-import { StyleSheet, View,TouchableOpacity,Text } from 'react-native';
+import { StyleSheet, View,TouchableOpacity,Text,Alert,Linking} from 'react-native';
 import { MaterialCommunityIcons} from '@expo/vector-icons';
 import { SERVER } from '../utils/utils';
 import io from 'socket.io-client'
 import {useAuth} from './AuthContext'
 import { useFocusEffect } from '@react-navigation/native';
-import StyledText from './StyledText';
+import * as Notifications from 'expo-notifications';
 
 export const NotificationCenter = ({fromScreen, navigation}) => {
     
     const [unreadCount,setUnreadCount] = useState(0);
     const {token,user} = useAuth();
+    const [hasNotificationPermission,setHasNotificationPermission] = useState(false);
 
-
-    useEffect(()=>{
-        const socket = io(SERVER, {
-            query: {
-                username: user,
+    useEffect(() => {
+        const checkPermissionsAndSetupSocket = async () => {
+            const { status } = await Notifications.getPermissionsAsync();
+            if (status !== 'granted') {
+                return;
             }
-        });
-        socket.on('connect',()=>{
-            console.log('Conexion exitosa');
-        });
-        socket.on('notification',()=>{
-            console.log("NotificationCenter: entre a sendNotification");
-            setUnreadCount((prev)=>(prev+1));
-            
-        });
-        socket.on('disconnect',()=>{
-            console.log('Conexion finalizada');
-        })
+            setHasNotificationPermission(true);
 
-        return()=>{
-            socket.disconnect();
-        }
+            const socket = io(SERVER, {
+                query: {
+                    username: user,
+                }
+            });
 
-    },[]);
+            socket.on('connect', () => {
+                console.log('Conexion exitosa');
+            });
+
+            socket.on('notification', () => {
+                console.log("NotificationCenter: entre a sendNotification");
+                setUnreadCount((prev) => (prev + 1));
+            });
+
+            socket.on('disconnect', () => {
+                console.log('Conexion finalizada');
+            });
+
+            return () => {
+                socket.disconnect();
+            };
+        };
+
+        checkPermissionsAndSetupSocket();
+    }, [user]);
 
     const getUnreadNotifications = async ()=>{
         try{
@@ -63,16 +74,30 @@ export const NotificationCenter = ({fromScreen, navigation}) => {
 
     useFocusEffect(
         useCallback(() => {
-            getUnreadNotifications();
-        }, [])
+            if (hasNotificationPermission) {
+                getUnreadNotifications();
+            }
+        }, [hasNotificationPermission])
     );
 
 
     const handleNotificationPress = () => {
         setUnreadCount(0);
-        navigation.navigate('notifications',{
-            fromScreen:fromScreen
-        });
+        if(hasNotificationPermission){
+            navigation.navigate('notifications',{
+                fromScreen:fromScreen
+            });
+        }
+        else{
+            Alert.alert(
+                'Permisos necesarios',
+                'Se requiere permiso para visualizar las notificaciones.',
+                [
+                  { text: 'Cancelar', onPress: () => console.log('Cancelado') },
+                  { text: 'Otorgar permisos', onPress: () => Linking.openSettings() },
+                ]
+              );
+        }
 
     };
     
