@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { useRoute } from "@react-navigation/native";
 import { useAuth } from "../components/AuthContext";
+import { userInfo } from "os";
 
 function EditProfileScreen({ navigation }) {
 
@@ -65,6 +66,32 @@ function EditProfileScreen({ navigation }) {
   const handleDefaultImage = async () => {
     //const asset = Asset.fromModule(require("../assets/person.jpg"));
     //await asset.downloadAsync();
+
+    const url = `${SERVER}/users/deletePicture`
+  
+    const data = {
+      username: user,
+    }
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (respuesta.ok) {
+        console.log('Imagen borrada')
+      } else {
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+
     setProfileImage(null);
   };
 
@@ -72,24 +99,34 @@ function EditProfileScreen({ navigation }) {
     setIsLoading(true);
 
     const url = `${SERVER}/users/update`;
-    let headers = {
-      'Content-Type': 'multipart/form-data',
-      'Authorization': `Bearer ${token}`,
-    }
-    let body;
 
-    const dataSimple = {
+    const data = {
       username: usuario,
       email: email,
       birthday: birthday,
     }
 
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (respuesta.ok) {
+        console.log('Imagen borrada')
+      } else {
+        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+
     if (profileImage) {
       const data = new FormData();
-
-      data.append('username', usuario);
-      data.append('email', email);
-      data.append('birthday', birthday);
 
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
@@ -102,33 +139,36 @@ function EditProfileScreen({ navigation }) {
         type: `image/${fileType}`,
       });
 
-      body = data;
-    } else {
-      headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-      body = JSON.stringify(dataSimple);
-    }
+      const urlPic = `${SERVER}/auth/updatePicture/${user}`
 
-    try {
-      console.log(body);
-      const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: body,
-      });
+      const headersPic = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
+      }
 
-      if (respuesta.ok) {
-        Alert.alert('Perfil Actualizado', `Tu perfil ha sido actualizado con éxito.`);
-        navigation.navigate('Profile');
-      } else {
-        const errorMessage = await respuesta.text();
-        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+      const bodyPic = data;
+
+      try {
+        const respuesta = await fetch(urlPic, {
+          method: 'POST',
+          headers: headersPic,
+          body: bodyPic,
+        });
+  
+        if (respuesta.ok) {
+          console.log('Foto de perfil actualizada');
+        } else {
+          const errorMessage = await respuesta.text();
+          console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+          Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
+        }
+      } catch (error) {
+        console.error('Error al realizar la solicitud:', error);
         Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
       }
-    } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
-      Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
-    } finally {
-      setIsLoading(false);
+
+    } else {
+      console.log('No había foto para guardar')
     }
   };
 

@@ -62,7 +62,6 @@ function SignupScreen({ navigation }) {
     if (!isValidEmail) {
       setEmailInvalido(true);
       return;
-
     }
 
     setIsLoginLoading(true);
