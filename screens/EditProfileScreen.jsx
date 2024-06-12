@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
 import { useRoute } from "@react-navigation/native";
 import { useAuth } from "../components/AuthContext";
-import { userInfo } from "os";
 
 function EditProfileScreen({ navigation }) {
 
@@ -170,6 +169,8 @@ function EditProfileScreen({ navigation }) {
     } else {
       console.log('No había foto para guardar')
     }
+
+    setIsLoading(false);
   };
 
   const handleProfileImagePicker = async () => {

@@ -5,6 +5,7 @@ import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator,
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useAuth } from "../components/AuthContext";
+import { SERVER } from "../utils/utils";
 
 function ChangePasswordScreen() {
 
@@ -76,22 +77,22 @@ function ChangePasswordScreen() {
     setIsLoadingHandle(true);
 
     if (!mail) {
-      Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
+      Alert.alert('Error', 'Por favor, proporciona un usuario válido')
       setIsLoadingHandle(false);
       return;
     }
 
-    const isValidEmail = validarEmail();
-    if (!isValidEmail) {
-      Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
-      setIsLoadingHandle(false);
-      return;
-    }
+    // const isValidEmail = validarEmail();
+    // if (!isValidEmail) {
+    //   Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
+    //   setIsLoadingHandle(false);
+    //   return;
+    // }
 
     const url = `${SERVER}/auth/forgotpassword`
   
     const data = {
-      username: user,
+      username: mail,
     }
   
       try {
@@ -373,11 +374,10 @@ function ChangePasswordScreen() {
               <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                 <View style={[styles.inputContainer, {marginBottom: 10}]}>
                   <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Ingresa tu correo electrónico:</Text>
+                    <Text style={styles.label}>Ingresa tu nombre de usuario:</Text>
                   </View>
                   <TextInput
                     style={styles.input}
-                    keyboardType='email-address'
                     onChangeText={text => setMail(text)}
                     maxLength={100}
                     autoCapitalize='none'
