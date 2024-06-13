@@ -95,18 +95,18 @@ function ChangePasswordScreen() {
       username: mail,
     }
   
+    console.log(data);
       try {
         const respuesta = await fetch(url, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(data),
         });
   
         if (respuesta.ok) {
-          setMail('');
+          //setMail('');
           setMailSent(true);
         } else {
           console.error('Respuesta HTTP no exitosa:', respuesta.status);
@@ -136,22 +136,23 @@ function ChangePasswordScreen() {
     const url = `${SERVER}/auth/checktoken`
   
     const data = {
-      username: user,
+      username: mail,
       token: tokenPass
     }
+
+    console.log(data);
   
     try {
       const respuesta = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(data),
       });
   
       if (respuesta.ok) {
-        setTokenPass('');
+        //setTokenPass('');
         setTokenValido(true);
       } else {
         setTokenInvalido(true)
@@ -178,18 +179,19 @@ function ChangePasswordScreen() {
   
     const data = forgotPassword 
       ? {
-          username: user,
+          username: mail,
           newPassword: firstPassword,
           token: tokenPass,
         }
       : {
-          username: user,
+          username: mail,
           currentPassword: originalPassword,
           newPassword: firstPassword,
         };
   
     setIsLoadingHandle(true);
   
+    console.log(data)
     try {
       const respuesta = await fetch(url, {
         method: 'POST',
@@ -316,7 +318,6 @@ function ChangePasswordScreen() {
                           <Text style={styles.cancelText}>Cancelar</Text>
                         )}
                       </TouchableOpacity>
-                    <Text>Token Validado</Text>
                   </View>
                 ) : (
                   <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
@@ -366,7 +367,6 @@ function ChangePasswordScreen() {
                         )}
                       </TouchableOpacity>
                     </>
-                    <Text>Token no mandado</Text>
                   </View>
                 )}
               </>
