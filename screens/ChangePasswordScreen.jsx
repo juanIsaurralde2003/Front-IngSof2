@@ -184,7 +184,7 @@ function ChangePasswordScreen() {
           token: tokenPass,
         }
       : {
-          username: mail,
+          username: user,
           currentPassword: originalPassword,
           newPassword: firstPassword,
         };
@@ -207,8 +207,19 @@ function ChangePasswordScreen() {
         Alert.alert('Contraseña Modificada Exitosamente');
         setFirstPassword('');
         setSecondPassword('');
-        navigation.navigate('EditProfile');
+        if (forgotPassword) {
+          navigation.navigate('login')
+        } else {
+          navigation.navigate('profile', {
+            fromScreen: 'feed',
+            userData: user
+          });
+        }
+
+
       } else {
+        const data = await respuesta.json();
+        console.log(data);
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
@@ -516,7 +527,6 @@ function ChangePasswordScreen() {
                 ¿Olvidaste tu contraseña?
               </Text>
             </TouchableOpacity>
-            <Text>Token Validado</Text>
           </View>
         )}
       </View>
