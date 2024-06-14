@@ -12,6 +12,7 @@ function EditProfileScreen({ navigation }) {
   const { usuario, imagenPerfilURLOri, emailOri, birthdayOri } = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCancelar, setIsLoadingCancelar] = useState(false);
   const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
 
@@ -29,7 +30,9 @@ function EditProfileScreen({ navigation }) {
   }, []);
 
   const handleCancelButton = () => {
+    setIsLoadingCancelar(true);
     navigation.goBack();
+    setIsLoadingCancelar(false);
   };
 
   const handleEliminarCuenta = async () => {
@@ -243,7 +246,7 @@ function EditProfileScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={handleCancelButton}
         >
-          {isLoading ? (
+          {isLoadingCancelar ? (
             <ActivityIndicator size="small" color='#390294' />
           ) : (
             <Text style={styles.cancelText}>Cancelar</Text>

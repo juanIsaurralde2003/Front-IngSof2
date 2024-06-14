@@ -207,7 +207,7 @@ function ChangePasswordScreen() {
         Alert.alert('Contraseña Modificada Exitosamente');
         setFirstPassword('');
         setSecondPassword('');
-        navigation.navigate('EditProfile');
+        //navigation.navigate('EditProfile');
       } else {
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
