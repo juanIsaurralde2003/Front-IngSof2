@@ -120,54 +120,58 @@ function EditProfileScreen() {
       });
 
       if (respuesta.ok) {
-        console.log('Imagen borrada')
+        Alert.alert('Cambios Guardados Exitosamente')
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        console.log('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      console.log('Error al realizar la solicitud:', error);
     }
 
     if (profileImage) {
-      const data = new FormData();
+      const dataPic = new FormData();
+
+      dataPic.append('username', usuario);
 
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
-      const nombreArchivo = `profile_${username}`;
+      const nombreArchivo = `profile_${usuario}`;
 
-      data.append('file', {
+      dataPic.append('file', {
         uri: profileImage,
         name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
 
-      const urlPic = `${SERVER}/auth/updatePicture/${user}`
+      const urlPic = `${SERVER}/auth/updatePicture/`
 
       const headersPic = {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${token}`,
       }
 
-      const bodyPic = data;
+      console.log(dataPic)
 
       try {
-        const respuesta = await fetch(urlPic, {
+        const respuestaPic = await fetch(urlPic, {
           method: 'POST',
           headers: headersPic,
-          body: bodyPic,
+          body: dataPic,
         });
+
+        console.log(respuestaPic)
   
-        if (respuesta.ok) {
+        if (respuestaPic.ok) {
           console.log('Foto de perfil actualizada');
         } else {
-          const errorMessage = await respuesta.text();
-          console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
+          const errorMessage = await respuestaPic.text();
+          console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
           Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
         }
       } catch (error) {
         console.error('Error al realizar la solicitud:', error);
-        Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
+        Alert.alert('Error', 'Hubo un problema al actualizar la foto de perfil.');
       }
 
     } else {
