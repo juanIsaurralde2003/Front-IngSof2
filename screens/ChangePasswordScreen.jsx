@@ -29,6 +29,7 @@ function ChangePasswordScreen() {
   const [firstPassword, setFirstPassword] = useState('');
   const [secondPassword, setSecondPassword] = useState('');
   const [differentPassword, setDifferentPassword] = useState(false);
+  const [samePassword, setSamePassword] = useState(false);
   const [wrongPasswordType, setWrongPasswordType] = useState(false);
 
   const [tokenPass, setTokenPass] = useState(''); 
@@ -167,10 +168,18 @@ function ChangePasswordScreen() {
 
   const handleSendPassword = async () => {
     setDifferentPassword(false);
+    setSamePassword(false);
   
     if (firstPassword !== secondPassword) {
       setDifferentPassword(true);
       return;
+    }
+
+    if (!forgotPassword) {
+      if (firstPassword === originalPassword) {
+        setSamePassword(true);
+        return;
+      }
     }
   
     const url = forgotPassword 
@@ -184,7 +193,7 @@ function ChangePasswordScreen() {
           token: tokenPass,
         }
       : {
-          username: mail,
+          username: user,
           currentPassword: originalPassword,
           newPassword: firstPassword,
         };
@@ -207,8 +216,23 @@ function ChangePasswordScreen() {
         Alert.alert('Contraseña Modificada Exitosamente');
         setFirstPassword('');
         setSecondPassword('');
+<<<<<<< HEAD
         //navigation.navigate('EditProfile');
+=======
+        if (forgotPassword) {
+          navigation.navigate('login')
+        } else {
+          navigation.navigate('profile', {
+            fromScreen: 'feed',
+            userData: user
+          });
+        }
+
+
+>>>>>>> af0dd295a3b5d9159de83075d8ffc2ce0afd00a1
       } else {
+        const data = await respuesta.json();
+        console.log(data);
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
@@ -374,7 +398,7 @@ function ChangePasswordScreen() {
               <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                 <View style={[styles.inputContainer, {marginBottom: 10}]}>
                   <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Ingresa tu nombre de usuario:</Text>
+                    <Text style={styles.label}>Usuario:</Text>
                   </View>
                   <TextInput
                     style={styles.input}
@@ -480,6 +504,10 @@ function ChangePasswordScreen() {
               <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña introducida no cumple con los requerimientos</Text>
             )}
 
+            {samePassword && (
+              <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña nueva no puede ser igual a la contraseña actual</Text>
+            )}
+
             {differentPassword && (
               <Text style={{ color: 'red', marginBottom: 10 }}>Las contraseñas no coinciden</Text>
             )}
@@ -516,7 +544,6 @@ function ChangePasswordScreen() {
                 ¿Olvidaste tu contraseña?
               </Text>
             </TouchableOpacity>
-            <Text>Token Validado</Text>
           </View>
         )}
       </View>
