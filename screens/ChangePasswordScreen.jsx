@@ -216,9 +216,8 @@ function ChangePasswordScreen() {
         Alert.alert('Contraseña Modificada Exitosamente');
         setFirstPassword('');
         setSecondPassword('');
-<<<<<<< HEAD
+
         //navigation.navigate('EditProfile');
-=======
         if (forgotPassword) {
           navigation.navigate('login')
         } else {
@@ -227,9 +226,7 @@ function ChangePasswordScreen() {
             userData: user
           });
         }
-
-
->>>>>>> af0dd295a3b5d9159de83075d8ffc2ce0afd00a1
+        
       } else {
         const data = await respuesta.json();
         console.log(data);
