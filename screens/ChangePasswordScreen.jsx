@@ -168,6 +168,7 @@ function ChangePasswordScreen() {
 
   const handleSendPassword = async () => {
     setDifferentPassword(false);
+    setWrongPasswordType(false);
     setSamePassword(false);
   
     if (firstPassword !== secondPassword) {
@@ -229,6 +230,12 @@ function ChangePasswordScreen() {
         
       } else {
         const data = await respuesta.json();
+
+        if (respuesta.status === 400) {
+
+          setWrongPasswordType(true);
+        }
+        //
         console.log(data);
         console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
