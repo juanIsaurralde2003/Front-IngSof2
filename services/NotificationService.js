@@ -45,7 +45,7 @@ export async function registerForPushNotificationsAsync(user,sessionToken,sessio
                     console.log("token registrado correctamente");
                 }
                 else{
-                    console.error("NotificationService: Hubo un error con la solicitud: ",response.status);
+                    //console.error("NotificationService: Hubo un error con la solicitud: ",response.status);
                 }
             }
             else {
@@ -54,7 +54,7 @@ export async function registerForPushNotificationsAsync(user,sessionToken,sessio
         }
         
     } catch (error) {
-        console.error("Se produjo un error durante el registro de notificaciones push:  ", error);
+        //console.error("Se produjo un error durante el registro de notificaciones push:  ", error);
     }
 }
 
@@ -114,10 +114,10 @@ export const deletePushToken = async (username, token) => {
         if (response.status === 200) {
             console.log("NotificationService: push token borrado correctamente");
         } else {
-            console.error("NotificationService: Hubo un error con la solicitud HTTP",response.status);
+            //console.error("NotificationService: Hubo un error con la solicitud HTTP",response.status);
         }
     } catch (e) {
-        console.error("NotificationService: Error borrando el push token", e);
+        //console.error("NotificationService: Error borrando el push token", e);
     }
 }
 

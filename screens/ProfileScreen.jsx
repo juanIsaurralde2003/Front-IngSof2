@@ -56,11 +56,11 @@ function ProfileScreen({ navigation }) {
         setRetosUser(data.totalPrompts);
         console.log(data);
       } else {
-        console.error("Respuesta HTTP no exitosa", response.status);
+        //console.error("Respuesta HTTP no exitosa", response.status);
       }
 
     } catch (error) {
-      console.error('Hubo un problema con la solicitud cantidad fetch:', error);
+      //console.error('Hubo un problema con la solicitud cantidad fetch:', error);
     }
   }
 
@@ -90,11 +90,11 @@ function ProfileScreen({ navigation }) {
   //       });
   //       setPublicaciones(publicacionesCom);
   //     } else {
-  //       console.error("Respuesta HTTP no exitosa",response.status);
+  //       //console.error("Respuesta HTTP no exitosa",response.status);
   //     }
 
   //   } catch (error) {
-  //     console.error('Hubo un problema con la solicitud fetch:', error);
+  //     //console.error('Hubo un problema con la solicitud fetch:', error);
   //   }
   // };
 
@@ -152,10 +152,10 @@ function ProfileScreen({ navigation }) {
 
         setPublicaciones(publicacionesCom);
       } else {
-        console.error("Respuesta HTTP no exitosa", response.status);
+        //console.error("Respuesta HTTP no exitosa", response.status);
       }
     } catch (error) {
-      console.error('Hubo un problema con la solicitud fetch:', error);
+      //console.error('Hubo un problema con la solicitud fetch:', error);
     }
   };
 
@@ -187,11 +187,11 @@ function ProfileScreen({ navigation }) {
         })
       }
       else {
-        console.error("Respuesta HTTP no existosa", response.status)
+        //console.error("Respuesta HTTP no existosa", response.status)
       }
     }
     catch (error) {
-      console.error('Hubo un error en la petición', error);
+      //console.error('Hubo un error en la petición', error);
     }
   }
 
@@ -203,7 +203,7 @@ function ProfileScreen({ navigation }) {
       await getPublicacionesUsuario();
       await getCantidadPosts();
     } catch (error) {
-      console.error("Error fetching data:", error);
+      //console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }

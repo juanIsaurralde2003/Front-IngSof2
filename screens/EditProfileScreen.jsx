@@ -61,11 +61,11 @@ function EditProfileScreen() {
       }
       else{
         console.log(data);
-        console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
+        //console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
       }
     }
     catch (error) {
-      console.error('Hubo un error en la petición',error);
+      //console.error('Hubo un error en la petición',error);
     }
   }
 
@@ -92,10 +92,10 @@ function EditProfileScreen() {
       if (respuesta.ok) {
         console.log('Imagen borrada')
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     }
 
     setProfileImage(null);
@@ -169,11 +169,11 @@ function EditProfileScreen() {
           console.log('Foto de perfil actualizada');
         } else {
           const errorMessage = await respuestaPic.text();
-          console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
+          //console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
           Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
         }
       } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
+        //console.error('Error al realizar la solicitud:', error);
         Alert.alert('Error', 'Hubo un problema al actualizar la foto de perfil.');
       }
 

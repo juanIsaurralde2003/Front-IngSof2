@@ -62,10 +62,10 @@ const FollowerComponent = ({ perfil, imagenPerfilURL, fromScreen, follows }) => 
             console.log('User followed successfully');
             setFollow(true);
         } else {
-            console.error('Hubo un problema con la solicitud HTTP:', response.status);
+            //console.error('Hubo un problema con la solicitud HTTP:', response.status);
         }
     } catch (error) {
-        console.error('Error en la operación de follow:', error.message);
+        //console.error('Error en la operación de follow:', error.message);
     } finally {
         setLoading(false);
     }
@@ -91,10 +91,10 @@ const handleUnfollow = async () => {
             console.log('User unfollowed successfully');
             setFollow(false);
         } else {
-            console.error('Hubo un problema con la solicitud HTTP:', response.status);
+            //console.error('Hubo un problema con la solicitud HTTP:', response.status);
         }
     } catch (error) {
-        console.error('Error en la operación de follow:', error.message);
+        //console.error('Error en la operación de follow:', error.message);
     } finally {
         setLoading(false);
     }

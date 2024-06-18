@@ -78,11 +78,11 @@ const FeedComponent = ({ imagenURL, perfil, imagenPerfilURL, isSelfPost, setRepo
         const reportedImage = { imageURL: imagenURL, username: user };
         setReportedImages(prevReportedImages => [...prevReportedImages, reportedImage]);
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        ////console.error('Respuesta HTTP no exitosa:', respuesta.status);
 
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      ////console.error('Error al realizar la solicitud:', error);
     }
   };
 

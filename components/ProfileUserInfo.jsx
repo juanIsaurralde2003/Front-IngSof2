@@ -48,10 +48,10 @@ function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday,
                 setFollowing(data.user);
                 setSeguimientoVerificado(true);
             } else {
-                console.error('No se pudo verificar el estado de seguimiento:', response.status);
+                //console.error('No se pudo verificar el estado de seguimiento:', response.status);
             }
         } catch (error) {
-            console.error('Error al verificar si el usuario está siguiendo:', error.message);
+            //console.error('Error al verificar si el usuario está siguiendo:', error.message);
         }
     }
 
@@ -140,10 +140,10 @@ function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday,
                 console.log('User followed successfully');
                 setFollowing(true);
             } else {
-                console.error('Hubo un problema con la solicitud HTTP:', response.status);
+                //console.error('Hubo un problema con la solicitud HTTP:', response.status);
             }
         } catch (error) {
-            console.error('Error en la operación de follow:', error.message);
+            //console.error('Error en la operación de follow:', error.message);
         } finally {
             setIsLoading(false);
         }
@@ -169,10 +169,10 @@ function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday,
                 console.log('User unfollowed successfully');
                 setFollowing(false);
             } else {
-                console.error('Hubo un problema con la solicitud HTTP:', response.status);
+                //console.error('Hubo un problema con la solicitud HTTP:', response.status);
             }
         } catch (error) {
-            console.error('Error en la operación de follow:', error.message);
+            //console.error('Error en la operación de follow:', error.message);
         } finally {
             setIsLoadingUnfollow(false);
         }

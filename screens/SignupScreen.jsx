@@ -153,7 +153,7 @@ function SignupScreen({ navigation }) {
         }
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      ////console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoginLoading(false);
     }

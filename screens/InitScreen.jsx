@@ -25,7 +25,7 @@ const InitScreen = () => {
          }
          
         catch(error){
-            console.error("InitScreen:error en el proceso de cargar credenciales ",error)
+            //console.error("InitScreen:error en el proceso de cargar credenciales ",error)
         }
         finally{
             setLoading(false);

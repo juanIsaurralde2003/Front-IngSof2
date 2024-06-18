@@ -110,10 +110,10 @@ function ChangePasswordScreen() {
           //setMail('');
           setMailSent(true);
         } else {
-          console.error('Respuesta HTTP no exitosa:', respuesta.status);
+          //console.error('Respuesta HTTP no exitosa:', respuesta.status);
         }
       } catch (error) {
-        console.error('Error al realizar la solicitud:', error);
+        //console.error('Error al realizar la solicitud:', error);
       } finally {
         setIsLoadingHandle(false);
       }
@@ -157,10 +157,10 @@ function ChangePasswordScreen() {
         setTokenValido(true);
       } else {
         setTokenInvalido(true)
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoadingHandle(false);
     }
@@ -237,10 +237,9 @@ function ChangePasswordScreen() {
         }
         //
         console.log(data);
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoadingHandle(false);
     }

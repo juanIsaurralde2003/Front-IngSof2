@@ -17,33 +17,31 @@ const SearchScreen = () => {
   const [inputValue, setInputValue] = useState('');
   const [usuarios, setUsuarios] = useState([]);
 
-  useEffect(() => {
-    const getUsers = async () => {
+  const getUsers = async (text) => {
 
-      const url = `${SERVER}/users`;
+    console.log(text);
 
-      try {
-        const response = await fetch(url, { method: 'GET',         
-          headers: { 
-            'Authorization': `Bearer ${token}`
-          }
-        });
+    const url = `${SERVER}/users`;
 
-        if (response.ok) {
-          const data = await response.json();
-          setUsuarios(data.users);
-    
-          console.log(data);
-        } else {
-          console.error('Error al obtener usuarios');
+    try {
+      const response = await fetch(url, { method: 'GET',         
+        headers: { 
+          'Authorization': `Bearer ${token}`
         }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
+      });
 
-    getUsers();
-  }, []);
+      if (response.ok) {
+        const data = await response.json();
+        setUsuarios(data.users);
+  
+        console.log(data);
+      } else {
+        ////console.error('Error al obtener usuarios');
+      }
+    } catch (error) {
+      ////console.error('Error de red:', error);
+    } 
+  };
 
   const handleClosePress = () => {
     console.log('Lupa pressed');
@@ -65,7 +63,7 @@ const SearchScreen = () => {
               style={styles.searchBar}
               placeholder="Buscar usuarios ..."
               placeholderTextColor={'darkgray'}
-              onChangeText={(text) => setInputValue(text)}
+              onChangeText={(text) => getUsers(text)}
             />
             {inputValue === '' && (
               <View style={styles.searchIcon}>

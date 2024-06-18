@@ -72,11 +72,11 @@ const ChallengeScreen = () => {
             description: 'Ha ocurrido un error al obtener el challenge'
           }
           setChallengeData(challengeError);
-          console.error('Error al obtener challenge',response.status);
+          //console.error('Error al obtener challenge',response.status);
           setErrorChallenge(true);
         }
       } catch (error) {
-        console.error('Error de red:', error);
+        //console.error('Error de red:', error);
       } 
     };
 
@@ -153,10 +153,10 @@ const ChallengeScreen = () => {
         console.log(respuesta.status)
         console.log(respuesta);
         console.log(respuesta.message)
-        console.error('Algo salió mal al guardar la foto');
+        //console.error('Algo salió mal al guardar la foto');
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     }
       
   };

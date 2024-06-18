@@ -41,11 +41,11 @@ function LoginScreen({navigation}){
         console.log('Obtuve foto del usuario');
       }
       else{
-        console.error("Respuesta HTTP no existosa en getProfileUserInfo",response.status)
+        //console.error("Respuesta HTTP no existosa en getProfileUserInfo",response.status)
       }
     }
     catch (error) {
-      console.error('Hubo un error en la petición',error);
+      //console.error('Hubo un error en la petición',error);
     }
   }
   
@@ -99,15 +99,15 @@ function LoginScreen({navigation}){
           setPassword('');
           navigation.navigate('challenge');
         } else {
-          console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
+          //console.error('Respuesta HTTP 2 no exitosa:', respuestaPost.status);
         }
       } else if (respuesta.status === 400){
         setCredencialesIncorrectas(true);
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoginLoading(false);
     }
@@ -129,7 +129,7 @@ function LoginScreen({navigation}){
       navigation.navigate('signup');
     }
     catch(error){
-      console.error('Algo no funciona adecuadamente',error);
+      //console.error('Algo no funciona adecuadamente',error);
     }
   }
   return(
