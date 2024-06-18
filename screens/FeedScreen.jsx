@@ -43,11 +43,11 @@ const FeedScreen = () => {
       } else {
         console.log(response.status);
         console.log(response)
-        console.error('Error al obtener posts');
+        //console.error('Error al obtener posts');
         setFeedError(true);
       }
     } catch (error) {
-      console.error('Error de red:', error);
+      //console.error('Error de red:', error);
     }
   };
 
@@ -70,10 +70,10 @@ const FeedScreen = () => {
 
         setReto(data.prompt);
       } else {
-        console.error('Error al obtener challenge');
+        //console.error('Error al obtener challenge');
       }
     } catch (error) {
-      console.error('Error de red:', error);
+      //console.error('Error de red:', error);
     }
   };
 
@@ -92,7 +92,7 @@ const FeedScreen = () => {
           setReportedImages(JSON.parse(storedImages));
         }
       } catch (error) {
-        console.error('Error al recuperar las imágenes reportadas:', error);
+        //console.error('Error al recuperar las imágenes reportadas:', error);
       }
     };
 
@@ -104,7 +104,7 @@ const FeedScreen = () => {
       try {
         await AsyncStorage.setItem('reportedImages', JSON.stringify(reportedImages));
       } catch (error) {
-        console.error('Error al guardar las imágenes reportadas:', error);
+        //console.error('Error al guardar las imágenes reportadas:', error);
       }
     };
 

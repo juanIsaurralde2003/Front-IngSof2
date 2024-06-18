@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, initialUsername, initialEmail, initialBirthday, editing }) => {
+const UserDataComponent = ({ setUsername, setPassword, setEmail, setBirthday, initialUsername, initialEmail, initialBirthday, editing, fromScreen }) => {
   const today = new Date();
   const maximumDate = new Date(today.getFullYear() - 15, today.getMonth(), today.getDate() - 1);
   const initialBirthdayDate = initialBirthday ? new Date(initialBirthday) : null;

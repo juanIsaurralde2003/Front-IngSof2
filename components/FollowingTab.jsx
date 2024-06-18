@@ -32,11 +32,11 @@ const FollowingTab = ({ fromScreen, usuario }) => {
         setRefreshing(false); // Set refreshing to false when the data fetching is complete
         console.log(data);
       } else {
-        console.error('Error al obtener following');
+        //console.error('Error al obtener following');
         setRefreshing(false); // Set refreshing to false if there is an error fetching data
       }
     } catch (error) {
-      console.error('Error de red:', error);
+      //console.error('Error de red:', error);
       setRefreshing(false); // Set refreshing to false if there is an error fetching data
     }
   };

@@ -38,10 +38,10 @@ const NotificationScreen = () => {
               markAllAsRead(data.data);
           }
           else{
-              console.error("NotificationScreen: Hubo un error con la solicitud",response.status);
+              //console.error("NotificationScreen: Hubo un error con la solicitud",response.status);
           }
       } catch(error){
-          console.error('NotificationScreen: Error obteniendo notificaciones',error);
+          //console.error('NotificationScreen: Error obteniendo notificaciones',error);
       }
     }
 
@@ -65,11 +65,11 @@ const NotificationScreen = () => {
               console.log("NotificationScreen: Estados de not actualizados correctamente")
           }
           else{
-              console.error('NotificationScreen: Hubo un error con la solicitud', response.status)
+              //console.error('NotificationScreen: Hubo un error con la solicitud', response.status)
           }
       
       }catch(error){
-          console.error("NotificationScreen: Error actualizando estado",error);
+          //console.error("NotificationScreen: Error actualizando estado",error);
       }
   }
 

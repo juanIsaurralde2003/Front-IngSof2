@@ -65,10 +65,10 @@ export const NotificationCenter = ({fromScreen, navigation}) => {
                 setUnreadCount(data.data.low);
             }
             else{
-                console.error("NotificationCenter:Hubo un errror con la solicitud para obtener unread nots",response.status);
+                //console.error("NotificationCenter:Hubo un errror con la solicitud para obtener unread nots",response.status);
             }
         } catch(error){
-            console.error("NotificationCenter:Hubo un error obteniendo unread nots",error)
+            //console.error("NotificationCenter:Hubo un error obteniendo unread nots",error)
         }
     }
 

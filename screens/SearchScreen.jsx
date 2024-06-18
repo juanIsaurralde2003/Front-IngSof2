@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
@@ -16,44 +16,49 @@ const SearchScreen = () => {
 
   const [inputValue, setInputValue] = useState('');
   const [usuarios, setUsuarios] = useState([]);
+  const debounceTimeout = useRef(null);
 
-  useEffect(() => {
-    const getUsers = async () => {
+  const getUsers = async (text) => {
 
-      const url = `${SERVER}/users`;
+    console.log(text);
 
-      try {
-        const response = await fetch(url, { method: 'GET',         
-          headers: { 
-            'Authorization': `Bearer ${token}`
-          }
-        });
+    const url = `${SERVER}/users/search/${text}`;
 
-        if (response.ok) {
-          const data = await response.json();
-          setUsuarios(data.users);
-    
-          console.log(data);
-        } else {
-          console.error('Error al obtener usuarios');
+    try {
+      const response = await fetch(url, { method: 'GET',         
+        headers: { 
+          'Authorization': `Bearer ${token}`
         }
-      } catch (error) {
-        console.error('Error de red:', error);
-      } 
-    };
+      });
 
-    getUsers();
-  }, []);
+      if (response.ok) {
+        const data = await response.json();
+        setUsuarios(data.users);
+  
+        console.log(data);
+      } else {
+        console.error('Error al obtener usuarios');
+      }
+    } catch (error) {
+      ////console.error('Error de red:', error);
+    } 
+  };
+
+  const handleInputChange = (text) => {
+    setInputValue(text);
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
+      getUsers(text);
+    }, 1000);
+  };
 
   const handleClosePress = () => {
     console.log('Lupa pressed');
     console.log('Navegar al feed');
     navigation.navigate(fromScreen);
   }
-
-  const filteredUsuarios = usuarios.filter(usuario =>
-    usuario.username.toLowerCase().includes(inputValue.toLowerCase())
-  );
 
   return (
     <SafeAreaView style={{backgroundColor: '#e5e5e5', flexGrow: 1}}>
@@ -65,7 +70,7 @@ const SearchScreen = () => {
               style={styles.searchBar}
               placeholder="Buscar usuarios ..."
               placeholderTextColor={'darkgray'}
-              onChangeText={(text) => setInputValue(text)}
+              onChangeText={(text) => handleInputChange(text)}
             />
             {inputValue === '' && (
               <View style={styles.searchIcon}>
@@ -87,7 +92,7 @@ const SearchScreen = () => {
           onTouchStart={Keyboard.dismiss}
           keyboardShouldPersistTaps='handled'
         >
-          {filteredUsuarios.map((item, index) => (
+          {inputValue !== '' && usuarios.map((item, index) => (
             <UserSearchComponent 
               key={index}
               perfil={item.username}
@@ -95,6 +100,11 @@ const SearchScreen = () => {
               fromScreen={fromScreen}
             />
           ))}
+          {inputValue === '' && (
+            <View>
+              <Text>Busca a nuevos seguidores!</Text>
+            </View> 
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>

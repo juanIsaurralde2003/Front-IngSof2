@@ -3,19 +3,21 @@ import { StyleSheet, View, Text, TouchableOpacity, ActivityIndicator, ScrollView
 import UserDataComponent from "../components/UserDataComponent";
 import * as ImagePicker from 'expo-image-picker';
 import { SERVER, TERMINOSCONDICIONES } from "../utils/utils";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useAuth } from "../components/AuthContext";
 
-function EditProfileScreen({ navigation }) {
+function EditProfileScreen() {
 
   const route = useRoute();
-  const { usuario, imagenPerfilURLOri, emailOri, birthdayOri } = route.params;
+  const navigation = useNavigation();
+  const { usuario, imagenPerfilURLOri, emailOri, birthdayOri, fromScreen } = route.params;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingCancelar, setIsLoadingCancelar] = useState(false);
   const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
 
-  const {token, user} = useAuth();
+  const {token, user, signOut} = useAuth();
 
   const { height, width } = Dimensions.get('window');
 
@@ -29,42 +31,73 @@ function EditProfileScreen({ navigation }) {
   }, []);
 
   const handleCancelButton = () => {
+    setIsLoadingCancelar(true);
     navigation.goBack();
+    setIsLoadingCancelar(false);
   };
 
   const handleEliminarCuenta = async () => {
     try {
       const url = `${SERVER}/users/deleteAccount`
       console.log("el usuario es:" + username);
+
+      const body = {
+        username: user
+      }
       const response = await fetch(url,{method: 'POST',
         headers: {
           'Content-Type': 'application/json', 
           'Authorization': `Bearer ${token}`
         },
-        body: {
-          username: user
-        }
+        body: JSON.stringify(body),
       });
+
+
+      const data = await response.json();
       if(response.ok){
-        const data = await response.json();
         console.log(data);
+        signOut();
+        navigation.navigate('login');
       }
       else{
-        console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
+        console.log(data);
+        //console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
       }
     }
     catch (error) {
-      console.error('Hubo un error en la petición',error);
+      //console.error('Hubo un error en la petición',error);
     }
-  }
-
-  const handleCambiarContrasena = () => {
-    console.log('hola')
   }
 
   const handleDefaultImage = async () => {
     //const asset = Asset.fromModule(require("../assets/person.jpg"));
     //await asset.downloadAsync();
+
+    const url = `${SERVER}/users/deletePicture`
+  
+    const data = {
+      username: user,
+    }
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (respuesta.ok) {
+        console.log('Imagen borrada')
+      } else {
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
+      }
+    } catch (error) {
+      //console.error('Error al realizar la solicitud:', error);
+    }
+
     setProfileImage(null);
   };
 
@@ -72,64 +105,83 @@ function EditProfileScreen({ navigation }) {
     setIsLoading(true);
 
     const url = `${SERVER}/users/update`;
-    let headers = {
-      'Content-Type': 'multipart/form-data',
-      'Authorization': `Bearer ${token}`,
-    }
-    let body;
 
-    const dataSimple = {
+    const data = {
       username: usuario,
       email: email,
       birthday: birthday,
     }
 
-    if (profileImage) {
-      const data = new FormData();
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
-      data.append('username', usuario);
-      data.append('email', email);
-      data.append('birthday', birthday);
+      if (respuesta.ok) {
+        Alert.alert('Cambios Guardados Exitosamente')
+      } else {
+        console.log('Respuesta HTTP no exitosa:', respuesta.status);
+      }
+    } catch (error) {
+      console.log('Error al realizar la solicitud:', error);
+    }
+
+    if (profileImage) {
+      const dataPic = new FormData();
+
+      dataPic.append('username', usuario);
 
       const uriParts = profileImage.split('.');
       const fileType = uriParts[uriParts.length - 1];
 
-      const nombreArchivo = `profile_${username}`;
+      const nombreArchivo = `profile_${usuario}`;
 
-      data.append('file', {
+      dataPic.append('file', {
         uri: profileImage,
         name: `${nombreArchivo}.${fileType}`,
         type: `image/${fileType}`,
       });
 
-      body = data;
-    } else {
-      headers = { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }
-      body = JSON.stringify(dataSimple);
-    }
+      const urlPic = `${SERVER}/auth/updatePicture/`
 
-    try {
-      console.log(body);
-      const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: headers,
-        body: body,
-      });
-
-      if (respuesta.ok) {
-        Alert.alert('Perfil Actualizado', `Tu perfil ha sido actualizado con éxito.`);
-        navigation.navigate('Profile');
-      } else {
-        const errorMessage = await respuesta.text();
-        console.error('Respuesta HTTP no exitosa:', respuesta.status, errorMessage);
-        Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
+      const headersPic = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`,
       }
-    } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
-      Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
-    } finally {
-      setIsLoading(false);
+
+      console.log(dataPic)
+
+      try {
+        const respuestaPic = await fetch(urlPic, {
+          method: 'POST',
+          headers: headersPic,
+          body: dataPic,
+        });
+
+        console.log(respuestaPic)
+  
+        if (respuestaPic.ok) {
+          console.log('Foto de perfil actualizada');
+        } else {
+          const errorMessage = await respuestaPic.text();
+          //console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
+          Alert.alert('Error', 'Hubo un problema al actualizar el perfil.');
+        }
+      } catch (error) {
+        //console.error('Error al realizar la solicitud:', error);
+        Alert.alert('Error', 'Hubo un problema al actualizar la foto de perfil.');
+      }
+
+    } else {
+      console.log('No había foto para guardar')
     }
+
+    setIsLoading(false);
   };
 
   const handleProfileImagePicker = async () => {
@@ -174,6 +226,7 @@ function EditProfileScreen({ navigation }) {
           initialEmail={email}
           initialBirthday={birthday}
           editing={true}
+          fromScreen={fromScreen}
         />
         {/* <TouchableOpacity
           onPress={handleCambiarContrasena}
@@ -202,7 +255,7 @@ function EditProfileScreen({ navigation }) {
           activeOpacity={0.8}
           onPress={handleCancelButton}
         >
-          {isLoading ? (
+          {isLoadingCancelar ? (
             <ActivityIndicator size="small" color='#390294' />
           ) : (
             <Text style={styles.cancelText}>Cancelar</Text>

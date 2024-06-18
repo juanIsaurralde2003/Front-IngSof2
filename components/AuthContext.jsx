@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
                 setUser(username);
             }
         } catch (error) {
-            console.error('Error al cargar la info del usuario:', error);
+            ////console.error('Error al cargar la info del usuario:', error);
         } finally {
             setLoading(false);
         }
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
                 setProfilePicture(url);
             }
         } catch (error) {
-            console.error('Error al cargar la foto de perfil:', error);
+            //console.error('Error al cargar la foto de perfil:', error);
         } finally {
             setLoading(false);
         }
@@ -83,7 +83,7 @@ export const AuthProvider = ({ children }) => {
                     setDailyPost(false)
             }
         } catch (error) {
-            console.error('Error al cargar si se hizo daily post:', error);
+            //console.error('Error al cargar si se hizo daily post:', error);
         }
     };
 
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
             await SecureStore.setItemAsync('dailyPost', boolean.toString());
             setDailyPost(boolean);
         } catch (error) {
-            console.error('Error en daily post done', error);
+            //console.error('Error en daily post done', error);
         }
     };
 
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
             setUser(newUsername);
             console.log("AuthContext: el token nuevo es: " + newToken);
         } catch (error) {
-            console.error('Error en sign-in', error);
+            //console.error('Error en sign-in', error);
         }
     };
 
@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }) => {
             setProfilePicture(null);
             setSessionExpired(false);
         } catch (error) {
-            console.error('Error al borrar el token:', error);
+            //console.error('Error al borrar el token:', error);
         }
     };
 

@@ -62,7 +62,6 @@ function SignupScreen({ navigation }) {
     if (!isValidEmail) {
       setEmailInvalido(true);
       return;
-
     }
 
     setIsLoginLoading(true);
@@ -154,7 +153,7 @@ function SignupScreen({ navigation }) {
         }
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      ////console.error('Error al realizar la solicitud:', error);
     } finally {
       setIsLoginLoading(false);
     }

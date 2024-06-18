@@ -101,11 +101,11 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
     
     
           } else {
-            console.error('Respuesta HTTP no exitosa:', respuesta.status);
+            //console.error('Respuesta HTTP no exitosa:', respuesta.status);
     
           }
         } catch (error) {
-          console.error('Error al realizar la solicitud:', error);
+          //console.error('Error al realizar la solicitud:', error);
         }
         console.log('Delete')
     }

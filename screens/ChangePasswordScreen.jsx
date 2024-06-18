@@ -1,9 +1,11 @@
 //NO ESTÁ PRONTA
 
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, TextInput, ActivityIndicator, ScrollView, Alert } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAuth } from "../components/AuthContext";
+import { SERVER } from "../utils/utils";
 
 function ChangePasswordScreen() {
 
@@ -12,6 +14,8 @@ function ChangePasswordScreen() {
   const [paramsReceived, setParamsReceived] = useState(false);
 
   const navigation = useNavigation();
+
+  const {user, token} = useAuth();
 
   const [forgotPassword, setForgotPassword] = useState(forgotten);
 
@@ -25,9 +29,10 @@ function ChangePasswordScreen() {
   const [firstPassword, setFirstPassword] = useState('');
   const [secondPassword, setSecondPassword] = useState('');
   const [differentPassword, setDifferentPassword] = useState(false);
+  const [samePassword, setSamePassword] = useState(false);
   const [wrongPasswordType, setWrongPasswordType] = useState(false);
 
-  const [token, setToken] = useState(''); 
+  const [tokenPass, setTokenPass] = useState(''); 
   const [tokenValido, setTokenValido] = useState(false);
   const [tokenInvalido, setTokenInvalido] = useState(false);
 
@@ -36,6 +41,11 @@ function ChangePasswordScreen() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingHandle, setIsLoadingHandle] = useState(false);
+
+  const validarEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(mail);
+  }
 
 
   useEffect(() => {
@@ -64,43 +74,175 @@ function ChangePasswordScreen() {
   }
 
   const handleSendMail = async () => {
-    setIsLoadingHandle(true);
-    setMail('');
-    console.log('Send Mail');
 
-    setMailSent(true);
-    setIsLoadingHandle(false);
+    setIsLoadingHandle(true);
+
+    if (!mail) {
+      Alert.alert('Error', 'Por favor, proporciona un usuario válido')
+      setIsLoadingHandle(false);
+      return;
+    }
+
+    // const isValidEmail = validarEmail();
+    // if (!isValidEmail) {
+    //   Alert.alert('Error', 'Por favor, proporciona un mail de correo válido')
+    //   setIsLoadingHandle(false);
+    //   return;
+    // }
+
+    const url = `${SERVER}/auth/forgotpassword`
+  
+    const data = {
+      username: mail,
+    }
+  
+    console.log(data);
+      try {
+        const respuesta = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (respuesta.ok) {
+          //setMail('');
+          setMailSent(true);
+        } else {
+          //console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        }
+      } catch (error) {
+        //console.error('Error al realizar la solicitud:', error);
+      } finally {
+        setIsLoadingHandle(false);
+      }
+
+    console.log('Send Mail');
 
   };
 
   const handleSendToken = async () => {
 
-    setIsLoadingHandle(true);
     setTokenInvalido(false);
-    console.log('Send Token');
 
-    setTokenValido(true);
-    //setTokenInvalido(true);
-    setToken('');
-    setIsLoadingHandle(false);
+    setIsLoadingHandle(true);
 
+    if (!tokenPass) {
+      Alert.alert('Error', 'Por favor, ingresa el código')
+      setIsLoadingHandle(false);
+      return;
+    }
+
+    const url = `${SERVER}/auth/checktoken`
+  
+    const data = {
+      username: mail,
+      token: tokenPass
+    }
+
+    console.log(data);
+  
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (respuesta.ok) {
+        //setTokenPass('');
+        setTokenValido(true);
+      } else {
+        setTokenInvalido(true)
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
+      }
+    } catch (error) {
+      //console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoadingHandle(false);
+    }
   };
 
   const handleSendPassword = async () => {
-
-    if (forgotPassword) {
-      console.log('Olvidó');
-    } else {
-      console.log('Cambia sabiendo');
+    setDifferentPassword(false);
+    setWrongPasswordType(false);
+    setSamePassword(false);
+  
+    if (firstPassword !== secondPassword) {
+      setDifferentPassword(true);
+      return;
     }
 
+    if (!forgotPassword) {
+      if (firstPassword === originalPassword) {
+        setSamePassword(true);
+        return;
+      }
+    }
+  
+    const url = forgotPassword 
+      ? `${SERVER}/auth/changepasswordtoken`
+      : `${SERVER}/auth/change-password`;
+  
+    const data = forgotPassword 
+      ? {
+          username: mail,
+          newPassword: firstPassword,
+          token: tokenPass,
+        }
+      : {
+          username: user,
+          currentPassword: originalPassword,
+          newPassword: firstPassword,
+        };
+  
     setIsLoadingHandle(true);
-    setDifferentPassword(false);
-    setFirstPassword('');
-    setSecondPassword('');
-    setDifferentPassword(true);
-    setIsLoadingHandle(false);
+  
+    console.log(data)
+    try {
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (respuesta.ok) {
+        console.log('Contraseña modificada exitosamente');
+        Alert.alert('Contraseña Modificada Exitosamente');
+        setFirstPassword('');
+        setSecondPassword('');
 
+        //navigation.navigate('EditProfile');
+        if (forgotPassword) {
+          navigation.navigate('login')
+        } else {
+          navigation.navigate('profile', {
+            fromScreen: 'feed',
+            userData: user
+          });
+        }
+        
+      } else {
+        const data = await respuesta.json();
+
+        if (respuesta.status === 400) {
+
+          setWrongPasswordType(true);
+        }
+        //
+        console.log(data);
+      }
+    } catch (error) {
+      //console.error('Error al realizar la solicitud:', error);
+    } finally {
+      setIsLoadingHandle(false);
+    }
   };
 
   if (!paramsReceived) {
@@ -124,8 +266,6 @@ function ChangePasswordScreen() {
       <View style={styles.secondContainer}>
         {forgotPassword ? (
           <View>
-            <Text>Contraseña Olvidada</Text>
-
             {mailSent ? (
               <>
                 {tokenValido ? (
@@ -205,13 +345,12 @@ function ChangePasswordScreen() {
                           <Text style={styles.cancelText}>Cancelar</Text>
                         )}
                       </TouchableOpacity>
-                    <Text>Token Validado</Text>
                   </View>
                 ) : (
                   <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                     <>
                       <Text style={styles.message}>
-                        Se ha enviado un código a su correo electrónico. Por favor, introdúzcalo.
+                        Se ha enviado un código a su correo electrónico. Por favor, introdúzcalo. No olvides revisar tu casilla de SPAM
                       </Text>
                       <View style={styles.inputContainer}>
                         <View style={styles.labelContainer}>
@@ -219,7 +358,7 @@ function ChangePasswordScreen() {
                         </View>
                         <TextInput
                           style={styles.input}
-                          onChangeText={text => setToken(text)}
+                          onChangeText={text => setTokenPass(text)}
                           maxLength={100}
                           autoCapitalize='none'
                         />
@@ -230,8 +369,8 @@ function ChangePasswordScreen() {
                       )}
 
                       <TouchableOpacity
-                        disabled={isLoadingHandle || !token}
-                        style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && token) ? '#390294' : '#6e3aa7'}]}
+                        disabled={isLoadingHandle || !tokenPass}
+                        style={[styles.continueButton, {backgroundColor: (!isLoadingHandle && tokenPass) ? '#390294' : '#6e3aa7'}]}
                         activeOpacity={0.8}
                         onPress={handleSendToken}
                       >
@@ -255,7 +394,6 @@ function ChangePasswordScreen() {
                         )}
                       </TouchableOpacity>
                     </>
-                    <Text>Token no mandado</Text>
                   </View>
                 )}
               </>
@@ -263,11 +401,10 @@ function ChangePasswordScreen() {
               <View style={{flex: 1, justifyContent: 'center', flexDirection: 'column', alignItems: 'center', width: '100%', padding: 15}}>
                 <View style={[styles.inputContainer, {marginBottom: 10}]}>
                   <View style={styles.labelContainer}>
-                    <Text style={styles.label}>Ingresa tu correo electrónico:</Text>
+                    <Text style={styles.label}>Usuario:</Text>
                   </View>
                   <TextInput
                     style={styles.input}
-                    keyboardType='email-address'
                     onChangeText={text => setMail(text)}
                     maxLength={100}
                     autoCapitalize='none'
@@ -370,6 +507,10 @@ function ChangePasswordScreen() {
               <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña introducida no cumple con los requerimientos</Text>
             )}
 
+            {samePassword && (
+              <Text style={{ color: 'red', marginBottom: 10 }}>La contraseña nueva no puede ser igual a la contraseña actual</Text>
+            )}
+
             {differentPassword && (
               <Text style={{ color: 'red', marginBottom: 10 }}>Las contraseñas no coinciden</Text>
             )}
@@ -406,7 +547,6 @@ function ChangePasswordScreen() {
                 ¿Olvidaste tu contraseña?
               </Text>
             </TouchableOpacity>
-            <Text>Token Validado</Text>
           </View>
         )}
       </View>

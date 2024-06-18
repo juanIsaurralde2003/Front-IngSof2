@@ -47,11 +47,11 @@ score */
 
 
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
 
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     }
   };
 
@@ -80,11 +80,11 @@ score */
 
 
       } else {
-        console.error('Respuesta HTTP no exitosa:', respuesta.status);
+        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
 
       }
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      //console.error('Error al realizar la solicitud:', error);
     }
 
   }
