@@ -17,7 +17,7 @@ function EditProfileScreen() {
   const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
 
-  const {token, user, signOut} = useAuth();
+  const {token, user, signOut, setProfilePic} = useAuth();
 
   const { height, width } = Dimensions.get('window');
 
@@ -153,7 +153,8 @@ function EditProfileScreen() {
               });
 
               if (respuesta.ok) {
-                console.log('Imagen borrada')
+                console.log('Imagen borrada');
+                setProfilePic(null);
               } else {
                 //console.error('Respuesta HTTP no exitosa:', respuesta.status);
               }
@@ -247,6 +248,7 @@ function EditProfileScreen() {
   
         if (respuestaPic.ok) {
           console.log('Foto de perfil actualizada');
+          setProfilePic(profileImage)
         } else {
           const errorMessage = await respuestaPic.text();
           //console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
