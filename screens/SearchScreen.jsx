@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Keyboard, SafeAreaView, ScrollView, StyleSheet, TextInput, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { SERVER } from '../utils/utils';
 import { Entypo, MaterialIcons } from '@expo/vector-icons';
