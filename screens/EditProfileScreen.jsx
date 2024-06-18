@@ -124,32 +124,49 @@ function EditProfileScreen() {
     //const asset = Asset.fromModule(require("../assets/person.jpg"));
     //await asset.downloadAsync();
 
-    const url = `${SERVER}/users/deletePicture`
-  
-    const data = {
-      username: user,
-    }
-  
-    try {
-      const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+    Alert.alert(
+      'Confirmar eliminación',
+      '¿Estás seguro de que quieres borrar tu foto de perfil? Esta acción no se puede deshacer.',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
         },
-        body: JSON.stringify(data),
-      });
+        {
+          text: 'Eliminar',
+          style: 'destructive',
+          onPress: async () => {
+            const url = `${SERVER}/users/deletePicture`
+  
+            const data = {
+              username: user,
+            }
+          
+            try {
+              const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+              });
 
-      if (respuesta.ok) {
-        console.log('Imagen borrada')
-      } else {
-        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
-      }
-    } catch (error) {
-      //console.error('Error al realizar la solicitud:', error);
-    }
+              if (respuesta.ok) {
+                console.log('Imagen borrada')
+              } else {
+                //console.error('Respuesta HTTP no exitosa:', respuesta.status);
+              }
+            } catch (error) {
+              //console.error('Error al realizar la solicitud:', error);
+            }
 
-    setProfileImage(null);
+            setProfileImage(null);
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const handleSaveButton = async () => {
