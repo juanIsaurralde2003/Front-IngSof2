@@ -222,6 +222,7 @@ function ChangePasswordScreen() {
         if (forgotPassword) {
           navigation.navigate('login')
         } else {
+          console.log('Redirigir a perfil')
           navigation.navigate('profile', {
             fromScreen: 'feed',
             userData: user
