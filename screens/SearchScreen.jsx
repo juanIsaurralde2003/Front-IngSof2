@@ -22,7 +22,7 @@ const SearchScreen = () => {
 
     console.log(text);
 
-    const url = `${SERVER}/search/${text}`;
+    const url = `${SERVER}/users/search/${text}`;
 
     try {
       const response = await fetch(url, { method: 'GET',         
@@ -37,7 +37,7 @@ const SearchScreen = () => {
   
         console.log(data);
       } else {
-        ////console.error('Error al obtener usuarios');
+        console.error('Error al obtener usuarios');
       }
     } catch (error) {
       ////console.error('Error de red:', error);
