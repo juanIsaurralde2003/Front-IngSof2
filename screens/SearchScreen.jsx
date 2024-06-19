@@ -37,7 +37,7 @@ const SearchScreen = () => {
   
         console.log(data);
       } else {
-        console.error('Error al obtener usuarios');
+        //console.error('Error al obtener usuarios');
       }
     } catch (error) {
       ////console.error('Error de red:', error);
@@ -101,8 +101,8 @@ const SearchScreen = () => {
             />
           ))}
           {inputValue === '' && (
-            <View>
-              <Text>Busca a nuevos seguidores!</Text>
+            <View style={{alignItems: 'center', flexDirection: 'column', height: '100%',  flex: 1}}>
+              <Text style={styles.warningcontrasena}>Busca a nuevos seguidores!</Text>
             </View> 
           )}
         </ScrollView>
@@ -149,6 +149,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '15%',
     padding: 5,
+  },
+  warningcontrasena: {
+    fontSize: 10,
+    color: '#4f4f4f',
+    textAlign: 'center',
+    padding: 10
   },
 });
 

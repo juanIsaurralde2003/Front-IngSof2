@@ -17,13 +17,18 @@ function EditProfileScreen() {
   const [profileImage, setProfileImage] = useState(imagenPerfilURLOri ? imagenPerfilURLOri : null);
   const [showModal, setShowModal] = useState(false);
 
-  const {token, user, signOut} = useAuth();
+  const {token, user, signOut, setProfilePic} = useAuth();
 
   const { height, width } = Dimensions.get('window');
 
   const [username, setUsername] = useState(usuario ? `@${usuario}` : 'usuario');
   const [email, setEmail] = useState(emailOri);
   const [birthday, setBirthday] = useState(birthdayOri);
+
+  const validarEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
 
   useEffect(() => {
     console.log(imagenPerfilURLOri);
@@ -37,71 +42,143 @@ function EditProfileScreen() {
   };
 
   const handleEliminarCuenta = async () => {
-    try {
-      const url = `${SERVER}/users/deleteAccount`
-      console.log("el usuario es:" + username);
+    // try {
+    //   const url = `${SERVER}/users/deleteAccount`
+    //   console.log("el usuario es:" + username);
 
-      const body = {
-        username: user
-      }
-      const response = await fetch(url,{method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', 
-          'Authorization': `Bearer ${token}`
+    //   const body = {
+    //     username: user
+    //   }
+    //   const response = await fetch(url,{method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json', 
+    //       'Authorization': `Bearer ${token}`
+    //     },
+    //     body: JSON.stringify(body),
+    //   });
+
+
+    //   const data = await response.json();
+    //   if(response.ok){
+    //     console.log(data);
+    //     signOut();
+    //     navigation.navigate('login');
+    //   }
+    //   else{
+    //     console.log(data);
+    //     //console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
+    //   }
+    // }
+    // catch (error) {
+    //   //console.error('Hubo un error en la petición',error);
+    // }
+    Alert.alert(
+      'Confirmar eliminación',
+      '¿Estás seguro de que quieres borrar tu cuenta? Esta acción no se puede deshacer.',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
         },
-        body: JSON.stringify(body),
-      });
+        {
+          text: 'Eliminar',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const url = `${SERVER}/users/deleteAccount`;
+              console.log("El usuario es: " + username);
 
+              const body = {
+                username: user
+              };
 
-      const data = await response.json();
-      if(response.ok){
-        console.log(data);
-        signOut();
-        navigation.navigate('login');
-      }
-      else{
-        console.log(data);
-        //console.error("Respuesta HTTP no existosa en eliminarCuenta",response.status)
-      }
-    }
-    catch (error) {
-      //console.error('Hubo un error en la petición',error);
-    }
+              const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(body),
+              });
+
+              const data = await response.json();
+              if (response.ok) {
+                console.log(data);
+                signOut();
+                navigation.navigate('login');
+              } else {
+                console.log(data);
+                //console.error("Respuesta HTTP no existosa en eliminarCuenta", response.status)
+              }
+            } catch (error) {
+              //console.error('Hubo un error en la petición', error);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   }
 
   const handleDefaultImage = async () => {
     //const asset = Asset.fromModule(require("../assets/person.jpg"));
     //await asset.downloadAsync();
 
-    const url = `${SERVER}/users/deletePicture`
-  
-    const data = {
-      username: user,
-    }
-  
-    try {
-      const respuesta = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+    Alert.alert(
+      'Confirmar eliminación',
+      '¿Estás seguro de que quieres borrar tu foto de perfil? Esta acción no se puede deshacer.',
+      [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
         },
-        body: JSON.stringify(data),
-      });
+        {
+          text: 'Eliminar',
+          style: 'destructive',
+          onPress: async () => {
+            const url = `${SERVER}/users/deletePicture`
+  
+            const data = {
+              username: user,
+            }
+          
+            try {
+              const respuesta = await fetch(url, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify(data),
+              });
 
-      if (respuesta.ok) {
-        console.log('Imagen borrada')
-      } else {
-        //console.error('Respuesta HTTP no exitosa:', respuesta.status);
-      }
-    } catch (error) {
-      //console.error('Error al realizar la solicitud:', error);
-    }
+              if (respuesta.ok) {
+                console.log('Imagen borrada');
+                setProfilePic(null);
+              } else {
+                //console.error('Respuesta HTTP no exitosa:', respuesta.status);
+              }
+            } catch (error) {
+              //console.error('Error al realizar la solicitud:', error);
+            }
 
-    setProfileImage(null);
+            setProfileImage(null);
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const handleSaveButton = async () => {
+
+    const validarMail = validarEmail();
+
+    if (!validarMail) {
+      Alert.alert('Error', 'El mail no es válido');
+      return;
+    }
+
     setIsLoading(true);
 
     const url = `${SERVER}/users/update`;
@@ -124,6 +201,10 @@ function EditProfileScreen() {
 
       if (respuesta.ok) {
         Alert.alert('Cambios Guardados Exitosamente')
+        navigation.navigate('profile', {
+          fromScreen: fromScreen,
+          userData: user
+        })
       } else {
         console.log('Respuesta HTTP no exitosa:', respuesta.status);
       }
@@ -167,6 +248,7 @@ function EditProfileScreen() {
   
         if (respuestaPic.ok) {
           console.log('Foto de perfil actualizada');
+          setProfilePic(profileImage)
         } else {
           const errorMessage = await respuestaPic.text();
           //console.error('Respuesta HTTP no exitosa:', respuestaPic.status, errorMessage);
