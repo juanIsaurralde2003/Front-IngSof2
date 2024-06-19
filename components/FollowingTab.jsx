@@ -81,7 +81,7 @@ const FollowingTab = ({ fromScreen, usuario }) => {
           {following.length === 0 ? (
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
-                No sigues a ningún usuario.
+                No sigue a ningún usuario.
               </Text>
             </View>
           ) : (
