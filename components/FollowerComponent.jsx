@@ -129,15 +129,17 @@ const handleUnfollow = async () => {
             </Text>
           </View>
         </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: 'flex-end' }}>
-          <TouchableOpacity style={styles.followButton} onPress={handleFollowPress}>
-            {loading ? 
-              <ActivityIndicator size="small" color='white' /> 
-            : 
-              <Text style={styles.buttonText}>{follow ? 'Eliminar' : 'Seguir'}</Text>
-            }
-          </TouchableOpacity>
-        </View>
+        {perfil !== user && (
+          <View style={{ flex: 1, alignItems: 'flex-end' }}>
+            <TouchableOpacity style={styles.followButton} onPress={handleFollowPress}>
+              {loading ? 
+                <ActivityIndicator size="small" color='white' /> 
+              : 
+                <Text style={styles.buttonText}>{follow ? 'Eliminar' : 'Seguir'}</Text>
+              }
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </View>
   );
