@@ -63,6 +63,10 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
         }
     };
 
+    const extractName = (value) => {
+        return value.startsWith('@') ? value.slice(1) : value;
+    };
+
     const handleLoadStart = () => {
         setLoadingImage(true);
         setError(false);
@@ -149,7 +153,7 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
                 </TouchableOpacity>
                 <View style={{flexGrow: 1, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', flex: 1}}>
                 {
-                    fecha !== convertDate(new Date().toISOString().split('T')[0]) && perfil === user && (
+                    fecha !== convertDate(new Date().toISOString().split('T')[0]) && extractName(perfil) === user && (
                         <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity onPress={showActionSheet}>
                                 <Ionicons name='ellipsis-vertical' size={24} color={'black'} />
