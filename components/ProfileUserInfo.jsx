@@ -111,7 +111,7 @@ function ProfileUserInfo({navigation, usuario, imagenPerfilURL, email, birthday,
                 },
             buttonIndex => {
                 if (buttonIndex === 0) {
-                    navigation.navigate('EditProfile', {usuario: userdata, imagenPerfilURLOri: imagenPerfilURL, emailOri: email, birthdayOri: birthday})
+                    navigation.navigate('EditProfile', {usuario: userdata, imagenPerfilURLOri: imagenPerfilURL, emailOri: email, birthdayOri: birthday, fromScreen: fromScreen})
                 } else if (buttonIndex === 1) {
                     signOut();  //REVISAR ASINCRONÍA
                     navigation.navigate('login');
