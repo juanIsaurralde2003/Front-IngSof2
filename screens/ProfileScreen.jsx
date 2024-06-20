@@ -261,7 +261,7 @@ function ProfileScreen({ navigation }) {
         data={publicaciones}
         renderItem={({ item, index }) => (
           <ProfileComponent
-            key={index}
+            key={item.imagenURL}
             imagenURL={item.imagenURL}
             perfil={profileUserInfo.usuario}
             imagenPerfilURL={profileUserInfo.imagenPerfilURL}

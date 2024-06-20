@@ -7,9 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import { registerForPushNotificationsAsync, registerNotificationHandlers } from './services/NotificationService';
 import 'react-native-reanimated';
-
+import { LogBox } from 'react-native';
 
 const Stack = createNativeStackNavigator();
+
+
+LogBox.ignoreAllLogs(true);
+
 
 export default function App() {
   useEffect(() => {
@@ -18,21 +22,21 @@ export default function App() {
   }, []);
   const [fontsLoaded] = useFonts({
     'Quicksand': require('./assets/fonts/Quicksand-VariableFont_wght.ttf'),
-    'Quicksand-Bold':require('./assets/fonts/Quicksand-Bold.ttf'),
-    'Quicksand-bold':require('./assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-Bold': require('./assets/fonts/Quicksand-Bold.ttf'),
+    'Quicksand-bold': require('./assets/fonts/Quicksand-Bold.ttf'),
     'Noto-Sans': require('./assets/fonts/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf'),
     'Roboto': require('./assets/fonts/Roboto/Roboto-Bold.ttf')
-     
+
   });
   if (!fontsLoaded) {
     return null;
   }
   return (
-    <SafeAreaView style={{flex: 1}}>
-    <AuthProvider>
-      <AppNavigationContainer/>
-    </AuthProvider>
-    </SafeAreaView>  
+    <SafeAreaView style={{ flex: 1 }}>
+      <AuthProvider>
+        <AppNavigationContainer />
+      </AuthProvider>
+    </SafeAreaView>
   );
 }
 

@@ -149,7 +149,7 @@ const ProfileComponent = ({ imagenURL, perfil, imagenPerfilURL, consigna, fecha,
                 </TouchableOpacity>
                 <View style={{flexGrow: 1, paddingHorizontal: 10, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', flex: 1}}>
                 {
-                    fecha !== convertDate(new Date().toISOString().split('T')[0]) && (
+                    fecha !== convertDate(new Date().toISOString().split('T')[0]) && perfil === user && (
                         <View style={{flexDirection: 'row'}}>
                             <TouchableOpacity onPress={showActionSheet}>
                                 <Ionicons name='ellipsis-vertical' size={24} color={'black'} />

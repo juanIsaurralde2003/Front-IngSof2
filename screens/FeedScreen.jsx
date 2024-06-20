@@ -42,12 +42,12 @@ const FeedScreen = () => {
         setFeedData(data.post);
       } else {
         console.log(response.status);
-        console.log(response)
-        //console.error('Error al obtener posts');
+        console.log(response);
         setFeedError(true);
       }
     } catch (error) {
-      //console.error('Error de red:', error);
+      console.error('Network error:', error);
+      setFeedError(true);
     }
   };
 
@@ -70,17 +70,17 @@ const FeedScreen = () => {
 
         setReto(data.prompt);
       } else {
-        //console.error('Error al obtener challenge');
+        console.error('Error fetching challenge');
       }
     } catch (error) {
-      //console.error('Error de red:', error);
+      console.error('Network error:', error);
     }
   };
 
-  const onFocus = () => {
+  const onFocus = async () => {
     setRefreshing(true);
-    getChallenge();
-    getPosts();
+    await getChallenge();
+    await getPosts();
     setRefreshing(false);
   };
 
@@ -92,7 +92,7 @@ const FeedScreen = () => {
           setReportedImages(JSON.parse(storedImages));
         }
       } catch (error) {
-        //console.error('Error al recuperar las imágenes reportadas:', error);
+        console.error('Error retrieving reported images:', error);
       }
     };
 
@@ -104,22 +104,22 @@ const FeedScreen = () => {
       try {
         await AsyncStorage.setItem('reportedImages', JSON.stringify(reportedImages));
       } catch (error) {
-        //console.error('Error al guardar las imágenes reportadas:', error);
+        console.error('Error storing reported images:', error);
       }
     };
 
-    // Guardar las imágenes al salir de la pantalla
+    // Save reported images when the screen loses focus
     const unsubscribe = navigation.addListener('blur', storeReportedImages);
 
-    // Limpieza del efecto
+    // Cleanup effect
     return unsubscribe;
   }, [reportedImages, navigation]);
 
   useEffect(() => {
-    // Agregar evento de enfoque al documento
+    // Add focus event to the document
     const unsubscribe = navigation.addListener('focus', onFocus);
 
-    // Limpieza del efecto
+    // Cleanup effect
     return unsubscribe;
 
   }, []);
@@ -130,7 +130,7 @@ const FeedScreen = () => {
 
   const handleProfilePress = () => {
     console.log('Image pressed');
-    console.log('Navegar al perfil');
+    console.log('Navigate to profile');
     navigation.navigate('profile', {
       fromScreen: 'feed',
       userData: user
@@ -139,106 +139,106 @@ const FeedScreen = () => {
 
   const handleLupaPress = () => {
     console.log('Lupa pressed');
-    console.log('Navegar al buscador de perfiles');
+    console.log('Navigate to search');
     navigation.navigate('search', { fromScreen: 'feed' });
   }
 
   const dynamicHeaderStyle = {
     opacity: scrollOffsetY.interpolate({
-      inputRange: [0, 100], // Cambia estos valores según tus necesidades
-      outputRange: [1, 0], // Cambia estos valores según tus necesidades
+      inputRange: [0, 100], // Adjust these values as needed
+      outputRange: [1, 0], // Adjust these values as needed
       extrapolate: 'clamp',
     }),
   };
 
   return (
     <ActionSheetProvider>
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
-      <View style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={handleProfilePress}>
-            <Image
-              source={{ uri: profilePicture }}
-              style={styles.profileImage}
-            />
-          </TouchableOpacity>
-          <View style={{ marginLeft: 15 }}>
-            <Text style={styles.headerText}>
-              <Text style={styles.dontText}>DON'T</Text>
-              <Text style={styles.beRealText}> BE REAL</Text>
-            </Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <NotificationCenter
-              fromScreen={'feed'}
-              navigation={navigation}
-            />
-            <TouchableOpacity onPress={handleLupaPress}>
-              <MaterialIcons name='search' size={35} color={'black'} />
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
+        <View style={{ flex: 1, backgroundColor: '#e5e5e5' }}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity onPress={handleProfilePress}>
+              <Image
+                source={{ uri: profilePicture }}
+                style={styles.profileImage}
+              />
             </TouchableOpacity>
-          </View>
-        </View>
-        <View style={[styles.dynamicHeader]}>
-          <View style={styles.retoContainer}>
-            <Text style={styles.challengeDescription} numberOfLines={6} adjustsFontSizeToFit>
-              {reto}
-            </Text>
-          </View>
-        </View>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          scrollEventThrottle={15}
-          contentContainerStyle={{ paddingBottom: 0, flexGrow: 1 }}
-          bounces={false}
-          onScroll={Animated.event([
-            { nativeEvent: { contentOffset: { y: scrollOffsetY } } }
-          ], {
-            useNativeDriver: false,
-          })}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onFocus}
-              colors={['#9Bd35A', '#689F38']}
-              progressBackgroundColor="#FFFFFF"
-            />
-          }
-        >
-          {feedError && (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
-                Ha ocurrido un error al obtener las publicaciones. Por favor, inténtalo más tarde
+            <View style={{ marginLeft: 15 }}>
+              <Text style={styles.headerText}>
+                <Text style={styles.dontText}>DON'T</Text>
+                <Text style={styles.beRealText}> BE REAL</Text>
               </Text>
             </View>
-          )}
-          {(feedData.length === 0 && !feedError) ? (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
-                Las personas que sigues aún no han cumplido el reto. Sigue a más personas o espera a que cumplan el desafío.
+            <View style={{ flexDirection: 'row' }}>
+              <NotificationCenter
+                fromScreen={'feed'}
+                navigation={navigation}
+              />
+              <TouchableOpacity onPress={handleLupaPress}>
+                <MaterialIcons name='search' size={35} color={'black'} />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View style={[styles.dynamicHeader]}>
+            <View style={styles.retoContainer}>
+              <Text style={styles.challengeDescription} numberOfLines={6} adjustsFontSizeToFit>
+                {reto}
               </Text>
             </View>
-          ) : (
-            feedData
-              .filter(item => {
-                // Verificar si la lista de imágenes reportadas contiene la URL de la imagen y el usuario actual
-                return !reportedImages.some(reportedImage => reportedImage.imageURL === item.post.imageURL && reportedImage.username === user);
-              })
-              .map((item, index) => (
-                <FeedComponentWithActionSheet
-                  key={index}
-                  imagenURL={item.post.imageURL}
-                  perfil={item.author}
-                  imagenPerfilURL={item.profilePicture}
-                  isSelfPost={item.author === user}
-                  score={item.post.score}
-                  userScore={item.post.userScore}
-                  setReportedImages={setReportedImages}
-                />
-              ))
-          )}
-        </ScrollView>
-      </View>
-    </SafeAreaView>
+          </View>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={15}
+            contentContainerStyle={{ paddingBottom: 0, flexGrow: 1 }}
+            //bounces={false}
+            onScroll={Animated.event([
+              { nativeEvent: { contentOffset: { y: scrollOffsetY } } }
+            ], {
+              useNativeDriver: false,
+            })}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onFocus}
+                colors={['#390294', '#390294']}
+                progressBackgroundColor="#390294"
+              />
+            }
+          >
+            {feedError && (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
+                  Ha ocurrido un error al obtener las publicaciones. Por favor, inténtalo más tarde
+                </Text>
+              </View>
+            )}
+            {(feedData.length === 0 && !feedError) ? (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={{ fontSize: 16, textAlign: 'center', color: 'gray', padding: 20 }}>
+                  Las personas que sigues aún no han cumplido el reto. Sigue a más personas o espera a que cumplan el desafío.
+                </Text>
+              </View>
+            ) : (
+              feedData
+                .filter(item => {
+                  // Verify if the reported images list contains the image URL and the current user
+                  return !reportedImages.some(reportedImage => reportedImage.imageURL === item.post.imageURL && reportedImage.username === user);
+                })
+                .map((item, index) => (
+                  <FeedComponentWithActionSheet
+                    key={item.author}
+                    imagenURL={item.post.imageURL}
+                    perfil={item.author}
+                    imagenPerfilURL={item.profilePicture}
+                    isSelfPost={item.author === user}
+                    score={item.post.score}
+                    userScore={item.post.userScore}
+                    setReportedImages={setReportedImages}
+                  />
+                ))
+            )}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
     </ActionSheetProvider>
   );
 };
@@ -269,7 +269,6 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
-    //fontFamily: 'NotoSansTC-Regular', 
   },
   dontText: {
     color: '#000',
