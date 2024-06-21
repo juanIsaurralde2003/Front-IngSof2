@@ -27,27 +27,27 @@
 
    5.1. **Crear o Iniciar Sesión en una Cuenta de Expo:**
 
-      Si aún no tienes una cuenta de Expo, ve a Expo Sign Up y crea una cuenta.
-      Si ya tienes una cuenta, ve a Expo Login e inicia sesión con tus credenciales.
+      -Si aún no tienes una cuenta de Expo, ve a Expo Sign Up y crea una cuenta.
+      -Si ya tienes una cuenta, ve a Expo Login e inicia sesión con tus credenciales.
    
    5.2. **Iniciar Sesión desde la Terminal:**
 
-      En la terminal, ejecuta el siguiente comando para iniciar sesión en tu cuenta de Expo:
-      ```sh
-     npx expo login
-     ```
-      Ingresa tu nombre de usuario y contraseña cuando se te solicite.
+      -En la terminal, ejecuta el siguiente comando para iniciar sesión en tu cuenta de Expo:
+       ```sh
+      npx expo login
+      ```
+      -Ingresa tu nombre de usuario y contraseña cuando se te solicite.
 
    5.3. **Unirte a la Organización:**
 
-      El equipo pedirá tu nombre de usuario de expo para enviarte invitación a la organización.
-      Una vez que hayas recibido la invitación, acéptala desde tu cuenta en Expo.
+      -El equipo pedirá tu nombre de usuario de expo para enviarte invitación a la organización.
+      -Una vez que hayas recibido la invitación, acéptala desde tu cuenta en Expo.
    
    5.4. **Configurar EAS (Expo Application Services):**
       
-      Asegúrate de que tu proyecto esté configurado para usar EAS si necesitas funcionalidades avanzadas como notificaciones push.
-      En la terminal, ejecuta:
+      -Asegúrate de que tu proyecto esté configurado para usar EAS para poder utilizar las push notifications.
+      -En la terminal, ejecuta:
       ```sh
-     npx eas login
-     ```
-      Ingresa tus credenciales de Expo.
+      npx eas login
+      ```
+      -Ingresa tus credenciales de Expo.
